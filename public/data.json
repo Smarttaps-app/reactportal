@@ -1,0 +1,92 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "Admin Tester",
+      "email": "admin@example.com",
+      "password": "pass123",
+      "role": "admin"
+    },
+    {
+      "id": 2,
+      "name": "Agent Tester",
+      "email": "agent@example.com",
+      "password": "pass123",
+      "role": "agent"
+    },
+    {
+      "id": 3,
+      "name": "customer1 Tester",
+      "email": "customer1@example.com",
+      "password": "pass123",
+      "role": "customer"
+    },
+    {
+      "id": 4,
+      "name": "customer2 Tester",
+      "email": "customer2@example.com",
+      "password": "pass123",
+      "role": "customer"
+    },
+    {
+      "id": 5,
+      "name": "customer3 Tester",
+      "email": "customer3@example.com",
+      "password": "pass123",
+      "role": "customer"
+    }
+  ],
+  "customers": [],
+  "payments": [],
+  "products": [
+    {
+      "id": 1,
+      "image": "car.png",
+      "name": "Third-party insurance",
+      "price": "15000",
+      "priceModel": "fixed",
+      "percent": "0",
+      "description": "Third-party insurance is essentially a form of liability insurance. The first party is responsible for their damages or losses, regardless of the cause of those damages. One of the most common types is third-party insurance is automobile insurance."
+    }
+  ],
+  "policies": [],
+  "claims": [],
+  "categories": [
+    { "id": 1, "name": "Cars/Jeeps/SUVs", "price": "15000" },
+    { "id": 2, "name": "Tricycles", "price": "5000" },
+    { "id": 3, "name": "Motorcycles", "price": "3000" },
+    { "id": 4, "name": "Staff Bus, School Bus, Pick up", "price": "20000" },
+    {
+      "id": 5,
+      "name": "Ambulances/Fire trucks/ Bullion vans/Tractors",
+      "price": "20000"
+    },
+    {
+      "id": 6,
+      "name": "Trucks/Heavy Duty Vehicles/ Luxurious Passenger Carrying Vehicles",
+      "price": "100000"
+    }
+  ],
+  "providers": [
+    {
+      "id": 1,
+      "name": "NSIA",
+      "image": "https://res.cloudinary.com/heazyconcept/image/upload/v1613638695/Nsia/NSIA-new-website-logo_2_lrney5.png"
+    },
+    {
+      "id": 2,
+      "name": "AIICO",
+      "image": "https://www.aiicoplc.com/images/logo.png"
+    },
+    {
+      "id": 3,
+      "name": "Cornerstone",
+      "image": "https://cornerstone.com.ng/assets/images/my-img/logo.png"
+    },
+    {
+      "id": 4,
+      "name": "Axa Mansard",
+      "image": "https://www.axamansard.com/images/axa-logo.png"
+    }
+  ]
+}
