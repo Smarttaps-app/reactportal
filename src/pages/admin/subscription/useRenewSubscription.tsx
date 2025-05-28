@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { renewSubscriptionAction } from "../../../reducers/MenuActions";
+import { renewSubscriptionAction } from "../../../serviceAction/MenuActions";
 import { toast } from "react-toastify";
 import { Common } from "../../../utils/Common";
 

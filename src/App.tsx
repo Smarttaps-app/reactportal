@@ -17,6 +17,23 @@ function App() {
           <UserProvider>
             <ConfigProvider
               theme={{
+                components: {
+                  Table: {
+                    cellPaddingBlock: 10,
+                    cellFontSize: 10,
+                    headerBg: "#ff9900",
+                    headerColor: "#ffffff",
+                  },
+                  Card: {
+                    borderRadius: 12,
+                    bodyPadding: 16,
+                    bodyPaddingSM: 8,
+                  },
+                  Statistic: {
+                    contentFontSize: 16,
+                    titleFontSize: 14,
+                  },
+                },
                 token: {
                   // Seed Token
                   colorPrimary: "#ff9900",

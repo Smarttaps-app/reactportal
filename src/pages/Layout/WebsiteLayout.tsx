@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
-import FAQs from "../websitescreen/faqs";
-import Home from "../websitescreen/home";
-import HowToPlay from "../websitescreen/howtoplay";
+import FAQs from "../frontpage/faqs";
+import Home from "../frontpage/home";
+import HowToPlay from "../frontpage/howtoplay";
 import g2 from "../../assets/logo.png";
 import google from "../../assets/Google_Play_Store_badge_EN.svg.webp";
 import apple from "../../assets/png-transparent-itunes-app-store-apple-logo-apple-text-rectangle-logo.png";

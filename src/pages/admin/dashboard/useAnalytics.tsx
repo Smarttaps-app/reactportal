@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getAnalyticsAction } from "../../../reducers/MenuActions";
+import { getAnalyticsAction } from "../../../serviceAction/MenuActions";
 import { toast } from "react-toastify";
 import { Common } from "../../../utils/Common";
 

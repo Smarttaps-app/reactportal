@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getPlayerAction } from "../../../reducers/MenuActions";
+import { getPlayerAction } from "../../../serviceAction/MenuActions";
 import { useParams } from "react-router-dom";
 
 export function useSinglePlayer() {

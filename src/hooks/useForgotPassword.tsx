@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { message } from "antd";
 import { Common } from "../utils/Common";
-import { forgotPasswordAction } from "../reducers/AuthActions";
+import { forgotPasswordAction } from "../serviceAction/AuthActions";
 
 export const useForgotPassword = () => {
   const { mutate: forgotPassword, isPending } = useMutation({

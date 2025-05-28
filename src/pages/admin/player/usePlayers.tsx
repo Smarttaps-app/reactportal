@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getAllPayers } from "../../../reducers/MenuActions";
+import { getAllPayers } from "../../../serviceAction/MenuActions";
 
 export function usePlayers() {
   const { isPending, data, error } = useQuery({

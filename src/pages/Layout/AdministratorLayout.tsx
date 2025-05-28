@@ -24,7 +24,6 @@ import {
 import type { GetProp, MenuProps } from "antd";
 import { useUser } from "../../context/useUser";
 import { protectedRoutes } from "../../routes/routes";
-const { Title } = Typography;
 const { Header, Sider, Content } = Layout;
 // image
 type MenuItem = GetProp<MenuProps, "items">[number];
@@ -48,13 +47,39 @@ const AdministratorLayout: React.FC = () => {
   console.log(user);
   //const d = new Date();
   if (isPending) return <Spin />;
-  const items: MenuItem[] = protectedRoutes
+  /* const items: MenuItem[] = protectedRoutes
     .filter((route) => route.title)
     .map((route, index) => ({
       key: String(index + 1),
       label: <Link to={`/admin/${route.path}`}>{route.title}</Link>,
       icon: route.icon,
-    }));
+    }));*/
+  const items: MenuItem[] = protectedRoutes
+    .filter((route) => route.title)
+    .map((route, index) => {
+      if (route.children && route.children.length > 0) {
+        // Has nested routes – create submenu
+        return {
+          key: String(index + 1),
+          label: route.title,
+          icon: route.icon,
+          children: route.children.map((child, cIndex) => ({
+            key: `${index + 1}-${cIndex + 1}`,
+            label: (
+              <Link to={`/admin/${route.path}/${child.path}`}>
+                {child.path.charAt(0).toUpperCase() + child.path.slice(1)}
+              </Link>
+            ),
+          })),
+        };
+      } else {
+        return {
+          key: String(index + 1),
+          label: <Link to={`/admin/${route.path}`}>{route.title}</Link>,
+          icon: route.icon,
+        };
+      }
+    });
   return (
     <Layout hasSider>
       <ConfigProvider

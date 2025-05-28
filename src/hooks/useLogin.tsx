@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { Common } from "../utils/Common";
-import { loginAction } from "../reducers/AuthActions";
+import { loginAction } from "../serviceAction/AuthActions";
 import { message } from "antd";
 
 export const useLogin = () => {

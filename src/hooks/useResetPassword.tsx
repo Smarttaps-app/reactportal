@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { resetPasswordAction } from "../reducers/AuthActions";
+import { resetPasswordAction } from "../serviceAction/AuthActions";
 
 export const useResetPassword = () => {
   const { mutate: resetPassword, isPending } = useMutation({

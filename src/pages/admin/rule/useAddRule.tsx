@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { addRuleAction } from "../../../reducers/MenuActions";
+import { addRuleAction } from "../../../serviceAction/MenuActions";
 import { toast } from "react-toastify";
 import { Common } from "../../../utils/Common";
 

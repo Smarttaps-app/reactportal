@@ -7,39 +7,38 @@ import {
   Flex,
   Row,
   Space,
-  Spin,
-  Statistic,
   Table,
   Tag,
 } from "antd";
+import { usePayments } from "../../../hooks/usePayments";
 import dayjs, { Dayjs } from "dayjs";
 import { useMemo, useState } from "react";
 import { Common } from "../../../utils/Common";
-import {
-  DeleteOutlined,
-  EditOutlined,
-  RedoOutlined,
-  SearchOutlined,
-} from "@ant-design/icons";
-import { ICustomer, IPayment } from "../../../utils/type";
-import { useNavigate } from "react-router-dom";
-import { useCustomers } from "../../../hooks/useCustomers";
+import { EyeOutlined, RedoOutlined, SearchOutlined } from "@ant-design/icons";
+import { IPayment } from "../../../utils/type";
+import PaymentCard from "./TicketCard";
+import ShowPayment from "./ShowTicket";
+import { useTicket } from "../../../hooks/useTicket";
 const { RangePicker } = DatePicker;
 
-export default function CustomersScreen() {
-  const navigate = useNavigate();
+export default function TicketsScreen() {
+  const [show, setShow] = useState(false);
+  const [payment, setPayment] = useState<IPayment>();
   const [selectedDates, setSelectedDates] = useState<
     [dayjs.Dayjs, dayjs.Dayjs]
   >([dayjs().subtract(30, "day"), dayjs()]);
   const {
     loading,
-    customers,
+    tickets,
     error,
-    refetch: refetchCustomers,
-  } = useCustomers(selectedDates);
-  const handleDateChange = (dates: [Dayjs, Dayjs] | null) => {
-    if (dates) {
-      setSelectedDates(dates);
+    refetch: refetchPayments,
+  } = useTicket(selectedDates);
+  const handleDateChange = (
+    dates: [Dayjs | null, Dayjs | null] | null
+    // dateStrings: [string, string]
+  ) => {
+    if (dates && dates[0] && dates[1]) {
+      setSelectedDates([dates[0], dates[1]]);
     }
   };
 
@@ -97,12 +96,15 @@ export default function CustomersScreen() {
       {
         title: "Actions",
         dataIndex: "",
-        render: (key: string, data: ICustomer) => (
+        render: (key: string, payment: IPayment) => (
           <Flex gap="small" align="center" wrap>
             <Button
               type="primary"
-              icon={<EditOutlined />}
-              // onClick={() => showDeleteConfirm(data)}
+              icon={<EyeOutlined />}
+              onClick={() => {
+                setPayment(payment);
+                setShow(true);
+              }}
             />
             <Button
               type="primary"
@@ -123,59 +125,46 @@ export default function CustomersScreen() {
       </Row>
     );
 
-  const data: ICustomer[] = customers || [];
+  const data: IPayment[] = tickets || [];
 
   return (
     <>
       <Row className="pb-8" gutter={[{ xs: 8, sm: 16, md: 24, lg: 32 }, 8]}>
         <Col span={6}>
-          <Card className="rounded-lg shadow-lg">
-            <Statistic
-              title="Total Customer"
-              loading={loading}
-              value={
-                data.length < 0
-                  ? Common.formatAsCurrency(0)
-                  : Common.formatAsCurrency(
-                      Common.sumTotalByKey(data, "amount")
-                    )
-              }
-              valueStyle={{ color: "#3f8600" }}
-            />
-          </Card>
+          <PaymentCard
+            title="Total Credits"
+            sessionKey="credit"
+            loading={loading}
+            data={data}
+            error={error ? true : false}
+          />
         </Col>
         <Col span={6}>
-          <Card className="rounded-lg shadow-lg">
-            <Statistic
-              title="Total Debit"
-              className="!bg-orange"
-              loading={loading}
-              value={
-                data.length < 0
-                  ? Common.formatAsCurrency(0)
-                  : Common.formatAsCurrency(
-                      Common.sumTotalByKey(data, "amount")
-                    )
-              }
-              valueStyle={{ color: "#3f8600" }}
-            />
-          </Card>
+          <PaymentCard
+            title="Total Debit"
+            sessionKey="debit"
+            loading={loading}
+            data={data}
+            error={error ? true : false}
+          />
         </Col>
         <Col span={6}>
-          <Card className="rounded-lg shadow-lg">
-            <Statistic
-              title="Total Pending"
-              loading={loading}
-              value={
-                data.length < 0
-                  ? Common.formatAsCurrency(0)
-                  : Common.formatAsCurrency(
-                      Common.sumTotalByKey(data, "amount")
-                    )
-              }
-              valueStyle={{ color: "#3f8600" }}
-            />
-          </Card>
+          <PaymentCard
+            title="Total Failed"
+            sessionKey="failed"
+            loading={loading}
+            data={data}
+            error={error ? true : false}
+          />
+        </Col>
+        <Col span={6}>
+          <PaymentCard
+            title="Total Pending"
+            sessionKey="pending"
+            loading={loading}
+            data={data}
+            error={error ? true : false}
+          />
         </Col>
       </Row>
       <Card
@@ -188,7 +177,7 @@ export default function CustomersScreen() {
             <Button
               type="primary"
               icon={<SearchOutlined />}
-              onClick={() => refetchCustomers()}
+              onClick={() => refetchPayments()}
               htmlType="submit"
               loading={loading}
               disabled={loading}
@@ -203,6 +192,11 @@ export default function CustomersScreen() {
           dataSource={data}
         />
       </Card>
+      <ShowPayment
+        payment={payment}
+        isOpen={show}
+        onCancel={() => setShow(false)}
+      />
     </>
   );
 }

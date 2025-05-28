@@ -1,11 +1,6 @@
 import Dashboard from "../pages/admin/dashboard/dashboard";
-import Subscriptions from "../pages/admin/subscription/subscriptions";
-import Games from "../pages/admin/game/games";
 import Settings from "../pages/admin/settings/settings";
 import Profile from "../pages/admin/profile/profile";
-import SinglePlayer from "../pages/admin/player/singlePlayer";
-import Instructions from "../pages/admin/instruction/instructions";
-import Rules from "../pages/admin/rule/rules";
 import {
   DashboardOutlined,
   ImportOutlined,
@@ -15,10 +10,14 @@ import {
   SwapOutlined,
   TagsOutlined,
   TeamOutlined,
-  UserAddOutlined,
 } from "@ant-design/icons";
 import PaymentsScreen from "../pages/admin/payment/paymentsScreen";
-import CustomersScreen from "../pages/admin/customer/customersScreen";
+import TicketsScreen from "../pages/admin/ticket/Index";
+import CustomersScreen from "../pages/admin/customer/Index";
+import TransportScreen from "../pages/admin/transport/Index";
+import ProductsScreen from "../pages/admin/product/Index";
+import StationScreen from "../pages/admin/transport/Stations";
+import RoutesScreen from "../pages/admin/transport/TransportRoutes";
 
 export const protectedRoutes = [
   {
@@ -41,27 +40,35 @@ export const protectedRoutes = [
   },
   {
     path: "products",
-    Component: Games,
+    Component: ProductsScreen,
     title: "Products",
     icon: <RocketOutlined />,
   },
   {
     path: "ticketing",
-    Component: Rules,
+    Component: TicketsScreen,
     title: "Tickets",
     icon: <ImportOutlined />,
   },
   {
-    path: "parks",
-    Component: Instructions,
-    title: "Parks",
+    path: "services",
+    Component: TransportScreen,
+    title: "Services",
     icon: <SwapOutlined />,
+    children: [
+      { path: "station", Component: StationScreen },
+      { path: "route", Component: RoutesScreen },
+    ],
   },
   {
     path: "settings",
     Component: Settings,
     title: "Settings",
     icon: <SettingOutlined />,
+    children: [
+      { path: "add", Component: Profile },
+      { path: "view", Component: Profile },
+    ],
   },
   {
     path: "profile",

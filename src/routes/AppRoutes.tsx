@@ -17,7 +17,7 @@ export default function AppRouted() {
         <Route path="reset-password" element={<ResetPassword />} />
       </Route>
       <Route path="/admin" element={<AdministratorLayout />}>
-        {protectedRoutes.map(({ path, Component }) => (
+        {protectedRoutes.map(({ path, Component, children }) => (
           <Route
             key={path}
             path={path}
@@ -26,7 +26,16 @@ export default function AppRouted() {
                 <Component />
               </ProtectedRouted>
             }
-          />
+          >
+            {children &&
+              children.map(({ path: childPath, Component: ChildComp }) => (
+                <Route
+                  key={childPath}
+                  path={childPath}
+                  element={<ChildComp />}
+                />
+              ))}
+          </Route>
         ))}
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />

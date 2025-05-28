@@ -1,5 +1,4 @@
 import { message } from "antd";
-import { toast } from "react-toastify";
 export class Common {
   static formatPhoneNumber(phoneNumber: string) {
     let pNumber;
@@ -83,7 +82,7 @@ export class Common {
       hour: "numeric",
       minute: "numeric",
     };
-    if (date === null)
+    if (date === null || date === undefined || date === "")
       return new Intl.DateTimeFormat("en", options).format(Date.now());
     return new Intl.DateTimeFormat("en", options).format(Date.parse(date));
   };
@@ -143,10 +142,18 @@ export class Common {
     }
   };
 
-  static sumTotalByKey<T>(array: T[], key: keyof T): number {
+  static sumTotalByKey<T extends Record<string, any>>(
+    array: T[],
+    key: keyof T
+  ): number {
     console.log(array);
     if (array.length < 1) return 0;
-    return array.reduce((sum, item) => sum + (item[key] as number), 0);
+    return array.reduce((sum, item) => {
+      const value = item?.[key];
+      const num = typeof value === "number" ? value : Number(value);
+      console.log(num);
+      return sum + (isNaN(num) ? 0 : num);
+    }, 0);
   }
   static counter(arr: any[], status: string) {
     return arr.reduce((acc, item) => {
@@ -156,9 +163,37 @@ export class Common {
       return acc;
     }, 0);
   }
+  static countByStatus<T extends { payment_type?: string }>(
+    arr: T[],
+    status: string
+  ): number {
+    return arr.reduce(
+      (acc, item) =>
+        acc +
+        (item?.payment_type?.toLowerCase() === status.toLowerCase() ? 1 : 0),
+      0
+    );
+  }
   static activeCount(arr: any[], status: boolean) {
     return arr.reduce((acc, item) => {
       if (item?.status === status) {
+        acc += 1;
+      }
+      return acc;
+    }, 0);
+  }
+  static countByKey<T extends Record<string, any>>(
+    array: T[],
+    key: keyof T,
+    val: string | number
+  ): number {
+    console.log(array);
+    if (array.length < 1) return 0;
+    return array.reduce((acc, item) => {
+      const value = item?.[key];
+      if (value === val) {
+        acc += 1;
+      } else if (val === "all") {
         acc += 1;
       }
       return acc;

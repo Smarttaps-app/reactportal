@@ -10,32 +10,29 @@ import {
   Table,
   Tag,
 } from "antd";
-import { usePayments } from "../../../hooks/usePayments";
 import dayjs, { Dayjs } from "dayjs";
 import { useMemo, useState } from "react";
 import { Common } from "../../../utils/Common";
 import { EyeOutlined, RedoOutlined, SearchOutlined } from "@ant-design/icons";
-import { IPayment } from "../../../utils/type";
-import PaymentCard from "./PaymentCard";
-import ShowPayment from "./ShowPayment";
+import { ICustomer, IWallet } from "../../../utils/type";
+import CustomerCard from "./CustomerCard";
+import { useCustomers } from "../../../hooks/useCustomers";
+import CustomerScreen from "./Customer";
 const { RangePicker } = DatePicker;
 
-export default function PaymentsScreen() {
+export default function CustomersScreen() {
   const [show, setShow] = useState(false);
-  const [payment, setPayment] = useState<IPayment>();
+  const [customer, setCustomer] = useState<ICustomer>();
   const [selectedDates, setSelectedDates] = useState<
     [dayjs.Dayjs, dayjs.Dayjs]
   >([dayjs().subtract(30, "day"), dayjs()]);
   const {
     loading,
-    payments,
+    customers,
     error,
     refetch: refetchPayments,
-  } = usePayments(selectedDates);
-  const handleDateChange = (
-    dates: [Dayjs | null, Dayjs | null] | null
-    // dateStrings: [string, string]
-  ) => {
+  } = useCustomers(selectedDates);
+  const handleDateChange = (dates: [Dayjs | null, Dayjs | null] | null) => {
     if (dates && dates[0] && dates[1]) {
       setSelectedDates([dates[0], dates[1]]);
     }
@@ -49,59 +46,76 @@ export default function PaymentsScreen() {
         key: "id",
       },
       {
-        title: "Wallet",
-        dataIndex: "recipient",
-        key: "recipient",
+        title: "Full Name",
+        dataIndex: "firstname",
+        key: "firstname",
+        render: (firstname: string, record: ICustomer) => (
+          <span className="text-xs text-gray-500">
+            {firstname} {record.lastname}
+          </span>
+        ),
       },
       {
-        title: "Amount",
-        dataIndex: "amount",
-        key: "amount",
-        render: (amount: string) => Common.formatAsCurrency(Number(amount)),
+        title: "Email Address",
+        dataIndex: "email",
+        key: "email",
+        render: (email: string) => (
+          <span className="text-xs text-gray-500">{email}</span>
+        ),
       },
       {
-        title: "Payment",
-        dataIndex: "payment_type",
-        key: "payment_type",
-        render: (payment_type: string) => (
+        title: "Phone Number",
+        dataIndex: "phonenumber",
+        key: "phonenumber",
+        render: (phonenumber: string) => (
+          <span className="text-xs text-gray-500">
+            {Common.formatPhoneNumber(phonenumber)}
+          </span>
+        ),
+      },
+      {
+        title: "Balance",
+        dataIndex: "wallet",
+        key: "wallet",
+        render: (wallet: IWallet) =>
+          Common.formatAsCurrency(Number(wallet?.availableBalance)),
+      },
+      {
+        title: "Account Status",
+        dataIndex: "account_status",
+        key: "account_status",
+        render: (account_status: string) => (
           <Tag
             color={`${
-              payment_type.toLowerCase() === "credit" ? "green" : "red"
+              account_status.toLowerCase() === "active" ? "green" : "red"
             }`}
           >
-            {payment_type}
+            {account_status}
           </Tag>
         ),
       },
       {
-        title: "Channel",
-        dataIndex: "channel",
-        key: "channel",
+        title: "Account Type",
+        dataIndex: "account_type",
+        key: "account_type",
       },
       {
-        title: "Date",
+        title: "Date Joined",
         dataIndex: "created_at",
         key: "created_at",
         render: (created: string) => Common.formatDate(created),
         ellipsis: true,
       },
       {
-        title: "Updated",
-        dataIndex: "updated_at",
-        key: "updated_at",
-        render: (updated: string) => Common.formatDate(updated),
-        ellipsis: true,
-      },
-      {
         title: "Actions",
         dataIndex: "",
-        render: (key: string, payment: IPayment) => (
+        render: (key: string, customer: ICustomer) => (
           <Flex gap="small" align="center" wrap>
             <Button
               type="primary"
               icon={<EyeOutlined />}
               onClick={() => {
-                setPayment(payment);
+                setCustomer(customer);
                 setShow(true);
               }}
             />
@@ -124,42 +138,46 @@ export default function PaymentsScreen() {
       </Row>
     );
 
-  const data: IPayment[] = payments || [];
+  const data: ICustomer[] = customers || [];
 
   return (
     <>
       <Row className="pb-8" gutter={[{ xs: 8, sm: 16, md: 24, lg: 32 }, 8]}>
         <Col span={6}>
-          <PaymentCard
-            title="Total Credits"
-            sessionKey="credit"
+          <CustomerCard
+            title="All Customers"
+            valueKey="all"
+            sessionKey="all"
             loading={loading}
             data={data}
             error={error ? true : false}
           />
         </Col>
         <Col span={6}>
-          <PaymentCard
-            title="Total Debit"
-            sessionKey="debit"
+          <CustomerCard
+            title="Active"
+            valueKey="account_status"
+            sessionKey="active"
             loading={loading}
             data={data}
             error={error ? true : false}
           />
         </Col>
         <Col span={6}>
-          <PaymentCard
-            title="Total Failed"
-            sessionKey="failed"
+          <CustomerCard
+            title="Individual"
+            valueKey="account_type"
+            sessionKey="individual"
             loading={loading}
             data={data}
             error={error ? true : false}
           />
         </Col>
         <Col span={6}>
-          <PaymentCard
-            title="Total Pending"
-            sessionKey="pending"
+          <CustomerCard
+            title="Merchant"
+            valueKey="account_type"
+            sessionKey="merchant"
             loading={loading}
             data={data}
             error={error ? true : false}
@@ -191,8 +209,8 @@ export default function PaymentsScreen() {
           dataSource={data}
         />
       </Card>
-      <ShowPayment
-        payment={payment}
+      <CustomerScreen
+        customer={customer}
         isOpen={show}
         onCancel={() => setShow(false)}
       />
