@@ -4,6 +4,7 @@ import Profile from "../pages/admin/profile/profile";
 import {
   DashboardOutlined,
   ImportOutlined,
+  InfoCircleOutlined,
   ProfileOutlined,
   RocketOutlined,
   SettingOutlined,
@@ -18,6 +19,8 @@ import TransportScreen from "../pages/admin/transport/Index";
 import ProductsScreen from "../pages/admin/product/Index";
 import StationScreen from "../pages/admin/transport/Stations";
 import RoutesScreen from "../pages/admin/transport/TransportRoutes";
+import ParksScreen from "../pages/admin/transport/Parks";
+import NotificationScreen from "../pages/admin/notification/notification";
 
 export const protectedRoutes = [
   {
@@ -56,9 +59,18 @@ export const protectedRoutes = [
     title: "Services",
     icon: <SwapOutlined />,
     children: [
-      { path: "station", Component: StationScreen },
-      { path: "route", Component: RoutesScreen },
+      { path: "Parks", Component: ParksScreen },
+      { path: "stations", Component: StationScreen },
+      { path: "routes", Component: RoutesScreen },
+      { path: "trains", Component: RoutesScreen },
+      { path: "buses", Component: RoutesScreen },
     ],
+  },
+  {
+    path: "notification",
+    Component: NotificationScreen,
+    title: "Notifications",
+    icon: <InfoCircleOutlined />,
   },
   {
     path: "settings",
@@ -66,8 +78,8 @@ export const protectedRoutes = [
     title: "Settings",
     icon: <SettingOutlined />,
     children: [
-      { path: "add", Component: Profile },
-      { path: "view", Component: Profile },
+      { path: "Mail Setting", Component: Profile },
+      { path: "Api Setting", Component: Profile },
     ],
   },
   {

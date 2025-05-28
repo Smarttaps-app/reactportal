@@ -1,27 +1,21 @@
-import {
-  Button,
-  Card,
-  Col,
-  Form,
-  FormProps,
-  Input,
-  Modal,
-  Row,
-  Select,
-} from "antd";
-import { IAddProps, IInstruction } from "../../../utils/type";
-import { useAddInstruction } from "./useAddInstruction";
+import { Button, Card, Col, Form, FormProps, Input, Modal, Row } from "antd";
+import { IAddProps, INotification } from "../../../utils/type";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useAddNotification } from "../../../hooks/useNotification";
 
 const { TextArea } = Input;
 
-const AddInstruction: React.FC<IAddProps> = ({ isOpen = false, onCancel }) => {
+const AddNotification: React.FC<IAddProps<INotification>> = ({
+  payload,
+  isOpen = false,
+  onCancel,
+}) => {
   const navigate = useNavigate();
-  const { isAdding, addInstruction } = useAddInstruction();
-  const onFinish: FormProps<IInstruction>["onFinish"] = (values) => {
+  const { isAdding, addNotification } = useAddNotification();
+  const onFinish: FormProps<INotification>["onFinish"] = (values) => {
     console.log("Success:", values);
-    addInstruction(values, {
+    addNotification(values, {
       onSuccess: (data) => {
         toast.success(data.statusDescription);
       },
@@ -41,7 +35,7 @@ const AddInstruction: React.FC<IAddProps> = ({ isOpen = false, onCancel }) => {
     >
       <Row>
         <Col span={12} offset={6}>
-          <Card className="px-16" title="Add new Instruction">
+          <Card className="px-16" title="Add new Notification">
             <Form
               name="basic"
               layout="vertical"
@@ -52,37 +46,18 @@ const AddInstruction: React.FC<IAddProps> = ({ isOpen = false, onCancel }) => {
               //onFinishFailed={onFinishFailed}
               autoComplete="off"
             >
-              <Form.Item<IInstruction>
+              <Form.Item<INotification>
                 label="Title"
                 name="title"
+                initialValue={payload?.title}
                 rules={[{ required: true, message: "Please input title!" }]}
               >
                 <Input size="large" />
               </Form.Item>
-
-              <Form.Item<IInstruction>
-                label="Code"
-                name="code"
-                rules={[{ required: true, message: "Please input code!" }]}
-              >
-                <Input size="large" />
-              </Form.Item>
-              <Form.Item<IInstruction>
-                label="Mode"
-                name="mode"
-                rules={[{ required: true, message: "Please input!" }]}
-              >
-                <Select
-                  size="large"
-                  options={[
-                    { value: "arranged", label: "arranged" },
-                    { value: "matched", label: "matched" },
-                  ]}
-                />
-              </Form.Item>
-              <Form.Item<IInstruction>
+              <Form.Item<INotification>
                 label="Description"
                 name="message"
+                initialValue={payload?.message}
                 rules={[{ required: true, message: "Please input message!" }]}
               >
                 <TextArea autoSize={{ minRows: 3, maxRows: 5 }} />
@@ -99,4 +74,4 @@ const AddInstruction: React.FC<IAddProps> = ({ isOpen = false, onCancel }) => {
     </Modal>
   );
 };
-export default AddInstruction;
+export default AddNotification;

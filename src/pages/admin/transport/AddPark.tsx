@@ -6,45 +6,50 @@ import {
   Modal,
   Space,
 } from "antd";
-import { ITicket } from "../../../utils/type";
+import { IPark } from "../../../utils/type";
 import { CloseOutlined, PrinterOutlined } from "@ant-design/icons";
 import { Common } from "../../../utils/Common";
-interface ITicketProps {
-  ticket?: ITicket;
+interface IStationProps {
+  park?: IPark;
   isOpen?: boolean;
   onCancel: () => void;
   onOK?: () => void;
 }
-const ShowTicket: React.FC<ITicketProps> = ({
-  ticket,
+const AddPark: React.FC<IStationProps> = ({
+  park,
   isOpen = false,
   onCancel,
 }) => {
   const items: DescriptionsProps["items"] = [
     {
-      label: "Ticket Number",
-      children: ticket?.ticket_number,
+      label: "Receipt",
+      children: park?.recipient,
     },
     {
       label: "Amount",
       span: "filled",
       children: Common.formatAsCurrency(
-        ticket?.price ? Number(ticket.price) : 0
+        park?.amount ? Number(station.amount) : 0
       ),
     },
     {
-      label: "Ticket Type",
-      children: ticket?.mode || "No remarks provided",
+      label: "Transaction Type",
+      children: park?.station_type || "No remarks provided",
     },
     {
       label: "Transaction Date",
       span: "filled",
-      children: Common.formatDate(ticket?.created_at),
+      children: Common.formatDate(park?.created_at),
     },
     {
       label: "Transaction Status",
       span: "filled",
-      children: ticket?.status || "No remarks provided",
+      children: park?.status || "No remarks provided",
+    },
+    {
+      label: "Remark",
+      span: "filled",
+      children: park?.statusMessage || "No remarks provided",
     },
   ];
   return (
@@ -77,4 +82,4 @@ const ShowTicket: React.FC<ITicketProps> = ({
     </Modal>
   );
 };
-export default ShowTicket;
+export default AddPark;

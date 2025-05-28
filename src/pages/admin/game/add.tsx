@@ -13,7 +13,7 @@ import { IAddProps, IGame, IInstruction } from "../../../utils/type";
 import { useAddGame } from "./useAddGame";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { useInstructions } from "../instruction/useInstruction";
+import { useInstructions } from "../../../hooks/useNotification";
 import { useRules } from "../rule/useRule";
 const { Option } = Select;
 

@@ -1,27 +1,22 @@
 import { Card, Statistic, Typography } from "antd";
-import { Common } from "../../../utils/Common";
-import { ITicket } from "../../../utils/type";
-interface TicketCardProps {
+import { Common } from "../utils/Common";
+interface StatCardProps<T> {
   title: string;
   sessionKey: string;
   loading: boolean;
   valueKey: string;
-  data: ITicket[];
+  data: T[];
   error: boolean;
 }
-const TicketCard: React.FC<TicketCardProps> = ({
+const StatCard = <T,>({
   title,
   sessionKey,
   valueKey,
   loading,
   data,
   error,
-}) => {
-  const totalSum = Common.countByKey(
-    data,
-    sessionKey as keyof ITicket,
-    valueKey
-  );
+}: StatCardProps<T>) => {
+  const totalSum = Common.countByKey(data, sessionKey as keyof T, valueKey);
 
   return (
     <Card
@@ -40,4 +35,4 @@ const TicketCard: React.FC<TicketCardProps> = ({
   );
 };
 
-export default TicketCard;
+export default StatCard;

@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import {
   getStationsAction,
   getRoutesAction,
+  getParksAction,
 } from "../serviceAction/TrainActions";
 export function useRoutes() {
   const {
@@ -26,4 +27,16 @@ export function useStations() {
     refetchOnWindowFocus: false,
   });
   return { loading, stations, error };
+}
+export function useParks() {
+  const {
+    isPending: loading,
+    data: parks = [],
+    error,
+  } = useQuery({
+    queryKey: ["parks"],
+    queryFn: getParksAction,
+    refetchOnWindowFocus: false,
+  });
+  return { loading, parks, error };
 }

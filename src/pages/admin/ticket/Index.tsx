@@ -10,20 +10,19 @@ import {
   Table,
   Tag,
 } from "antd";
-import { usePayments } from "../../../hooks/usePayments";
 import dayjs, { Dayjs } from "dayjs";
 import { useMemo, useState } from "react";
 import { Common } from "../../../utils/Common";
 import { EyeOutlined, RedoOutlined, SearchOutlined } from "@ant-design/icons";
-import { IPayment } from "../../../utils/type";
-import PaymentCard from "./TicketCard";
-import ShowPayment from "./ShowTicket";
+import { ITicket } from "../../../utils/type";
+import TicketCard from "./TicketCard";
 import { useTicket } from "../../../hooks/useTicket";
+import ShowTicket from "./ShowTicket";
 const { RangePicker } = DatePicker;
 
 export default function TicketsScreen() {
   const [show, setShow] = useState(false);
-  const [payment, setPayment] = useState<IPayment>();
+  const [ticket, setTicket] = useState<ITicket>();
   const [selectedDates, setSelectedDates] = useState<
     [dayjs.Dayjs, dayjs.Dayjs]
   >([dayjs().subtract(30, "day"), dayjs()]);
@@ -31,7 +30,7 @@ export default function TicketsScreen() {
     loading,
     tickets,
     error,
-    refetch: refetchPayments,
+    refetch: refetched,
   } = useTicket(selectedDates);
   const handleDateChange = (
     dates: [Dayjs | null, Dayjs | null] | null
@@ -48,61 +47,60 @@ export default function TicketsScreen() {
         title: "ID",
         dataIndex: "id",
         key: "id",
+        width: "5%",
       },
       {
-        title: "Wallet",
-        dataIndex: "recipient",
-        key: "recipient",
+        title: "Ticket Number",
+        dataIndex: "ticket_number",
+        key: "ticket_number",
+        width: "15%",
       },
       {
-        title: "Amount",
-        dataIndex: "amount",
-        key: "amount",
+        title: "Price",
+        dataIndex: "price",
+        key: "price",
+        width: "10%",
         render: (amount: string) => Common.formatAsCurrency(Number(amount)),
       },
       {
-        title: "Payment",
-        dataIndex: "payment_type",
-        key: "payment_type",
-        render: (payment_type: string) => (
-          <Tag
-            color={`${
-              payment_type.toLowerCase() === "credit" ? "green" : "red"
-            }`}
-          >
-            {payment_type}
-          </Tag>
+        title: "Status",
+        dataIndex: "status",
+        key: "status",
+        width: "10%",
+        render: (status: string) => (
+          <Tag color={`${Common.getcolorcode(status)}`}>{status}</Tag>
         ),
       },
       {
-        title: "Channel",
-        dataIndex: "channel",
-        key: "channel",
+        title: "Mode",
+        dataIndex: "mode",
+        key: "mode",
+        width: "7%",
       },
       {
         title: "Date",
-        dataIndex: "created_at",
-        key: "created_at",
+        dataIndex: "booked_at",
+        key: "booked_at",
         render: (created: string) => Common.formatDate(created),
         ellipsis: true,
       },
       {
-        title: "Updated",
-        dataIndex: "updated_at",
-        key: "updated_at",
+        title: "Expired",
+        dataIndex: "expired_at",
+        key: "expired_at",
         render: (updated: string) => Common.formatDate(updated),
         ellipsis: true,
       },
       {
         title: "Actions",
         dataIndex: "",
-        render: (key: string, payment: IPayment) => (
+        render: (key: string, ticket: ITicket) => (
           <Flex gap="small" align="center" wrap>
             <Button
               type="primary"
               icon={<EyeOutlined />}
               onClick={() => {
-                setPayment(payment);
+                setTicket(ticket);
                 setShow(true);
               }}
             />
@@ -125,42 +123,60 @@ export default function TicketsScreen() {
       </Row>
     );
 
-  const data: IPayment[] = tickets || [];
+  const data: ITicket[] = tickets || [];
 
   return (
     <>
-      <Row className="pb-8" gutter={[{ xs: 8, sm: 16, md: 24, lg: 32 }, 8]}>
-        <Col span={6}>
-          <PaymentCard
-            title="Total Credits"
-            sessionKey="credit"
+      <Row
+        className="pb-4"
+        align="middle"
+        gutter={[{ xs: 8, sm: 16, md: 24, lg: 32 }, 8]}
+      >
+        <Col span={4}>
+          <TicketCard
+            title="Total All"
+            sessionKey="status"
+            valueKey="all"
             loading={loading}
             data={data}
             error={error ? true : false}
           />
         </Col>
-        <Col span={6}>
-          <PaymentCard
-            title="Total Debit"
-            sessionKey="debit"
+        <Col span={4}>
+          <TicketCard
+            title="Total Booked"
+            sessionKey="status"
+            valueKey="booked"
             loading={loading}
             data={data}
             error={error ? true : false}
           />
         </Col>
-        <Col span={6}>
-          <PaymentCard
-            title="Total Failed"
-            sessionKey="failed"
+        <Col span={4}>
+          <TicketCard
+            title="Total Used"
+            sessionKey="status"
+            valueKey="used"
             loading={loading}
             data={data}
             error={error ? true : false}
           />
         </Col>
-        <Col span={6}>
-          <PaymentCard
-            title="Total Pending"
-            sessionKey="pending"
+        <Col span={4}>
+          <TicketCard
+            title="Total Expired"
+            sessionKey="status"
+            valueKey="expired"
+            loading={loading}
+            data={data}
+            error={error ? true : false}
+          />
+        </Col>
+        <Col span={4}>
+          <TicketCard
+            title="Total Cancelled"
+            sessionKey="status"
+            valueKey="cancelled"
             loading={loading}
             data={data}
             error={error ? true : false}
@@ -177,23 +193,26 @@ export default function TicketsScreen() {
             <Button
               type="primary"
               icon={<SearchOutlined />}
-              onClick={() => refetchPayments()}
+              onClick={() => refetched()}
               htmlType="submit"
               loading={loading}
               disabled={loading}
-            ></Button>
+            >
+              Search
+            </Button>
           </Space>
         }
       >
         <Table
           rowKey="id"
+          size="small"
           loading={loading}
           columns={columns}
           dataSource={data}
         />
       </Card>
-      <ShowPayment
-        payment={payment}
+      <ShowTicket
+        ticket={ticket}
         isOpen={show}
         onCancel={() => setShow(false)}
       />

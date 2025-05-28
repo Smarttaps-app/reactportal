@@ -5,7 +5,17 @@ import {
   getRoute,
   getStations,
   getStation,
+  getParks,
 } from "../services/TrainService";
+// action for Park
+export async function getParksAction() {
+  const response = await getParks();
+  if (response.status == 200) {
+    console.log(response.data.data);
+    return response.data.data;
+  }
+  throw new Error(response.data);
+}
 // action for Routes
 export async function getRoutesAction() {
   const response = await getRoutes();

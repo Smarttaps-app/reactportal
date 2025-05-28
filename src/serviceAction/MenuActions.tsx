@@ -1,20 +1,14 @@
 import {
-  addGame,
-  addInstruction,
-  addRule,
-  deleteGame,
-  deleteInstruction,
-  deleteRule,
+  addNotification,
+  deleteNotification,
   getAnalytics,
-  getGames,
-  getInstructions,
+  getNotifications,
   getPlayer,
   getPlayers,
-  getRules,
   getSubscriptions,
   renewSubscription,
 } from "../services/MenuService";
-import { IGame, IInstruction, IRule } from "../utils/type";
+import { INotification } from "../utils/type";
 
 // action for dashboard
 export async function getAnalyticsAction() {
@@ -59,77 +53,26 @@ export async function getPlayerAction(id: string) {
   }
   throw new Error(response.data);
 }
-// action for games
-export async function getAllGames() {
-  const response = await getGames();
-  if (response.status == 200) {
-    console.log(response.data.data);
-    return response.data.data;
-  }
-  throw new Error(response.data);
-}
-export async function addGameAction(payload: IGame) {
-  const response = await addGame(payload);
-  if (response.status == 200) {
-    console.log(response.data);
-    return response.data;
-  }
-  throw new Error(response.data);
-}
-export async function deleteGameAction(id: number) {
-  const response = await deleteGame(id);
-  if (response.status == 200) {
-    console.log(response.data);
-    return response.data;
-  }
-  throw new Error(response.data);
-}
 
-// action for rules
-export async function getAllRules() {
-  const response = await getRules();
+export async function getAllNotifications(startDate = "", endDate = "") {
+  console.log(startDate, endDate);
+  const response = await getNotifications(startDate, endDate);
   if (response.status == 200) {
     console.log(response.data.data);
     return response.data.data;
   }
   throw new Error(response.data);
 }
-export async function addRuleAction(payload: IRule) {
-  const response = await addRule(payload);
+export async function addNotificationAction(payload: INotification) {
+  const response = await addNotification(payload);
   if (response.status == 200) {
     console.log(response.data);
     return response.data;
   }
   throw new Error(response.data);
 }
-export async function deleteRuleAction(id: number) {
-  const response = await deleteRule(id);
-  if (response.status == 200) {
-    console.log(response.data);
-    return response.data;
-  }
-  throw new Error(response.data);
-}
-
-// action for Instructions
-export async function getAllInstructions() {
-  const response = await getInstructions();
-  if (response.status == 200) {
-    console.log(response.data.data);
-    return response.data.data;
-  }
-  throw new Error(response.data);
-}
-export async function addInstructionAction(payload: IInstruction) {
-  const response = await addInstruction(payload);
-  if (response.status == 200) {
-    console.log(response.data);
-    return response.data;
-  }
-  throw new Error(response.data);
-}
-export async function deleteInstructionAction(id: number) {
-  const response = await deleteInstruction(id);
+export async function deleteNotificationAction(id: number) {
+  const response = await deleteNotification(id);
   if (response.status == 200) {
     console.log(response.data);
     return response.data;

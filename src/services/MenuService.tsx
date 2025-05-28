@@ -1,5 +1,5 @@
 import { api } from "../utils/AxiosInstance";
-import { IAddRequest, IGame, IInstruction, IRule } from "../utils/type";
+import { IAddRequest, INotification } from "../utils/type";
 
 export function getProfileService() {
   return api.get(`admin/profile`);
@@ -17,26 +17,24 @@ export const getPlayers = () => api.get(`admin/players`);
 export const getPlayer = async (id: string) =>
   await api.get(`admin/player/${id}`);
 
-// service for games
-export const getGames = () => api.get(`admin/games`);
-export const addGame = async (payload: IGame) =>
-  await api.post(`admin/game/add`, payload);
-export const deleteGame = async (id: number) =>
-  await api.delete(`admin/game/${id}/delete`);
+// service for Notification
+export function getNotifications(
+  startDate?: string | null,
+  endDate?: string | null
+) {
+  console.log(startDate, endDate);
+  const params: { [key: string]: string } = {};
+  if (startDate) params.startDate = startDate;
+  if (endDate) params.endDate = endDate;
 
-// service for Rules
-export const getRules = () => api.get(`admin/rules`);
-export const addRule = async (payload: IRule) =>
-  await api.post(`admin/rule/add`, payload);
-export const deleteRule = async (id: number) =>
-  await api.delete(`admin/rule/${id}/delete`);
-
-// service for Instruction
-export const getInstructions = () => api.get(`admin/instructions`);
-export const addInstruction = async (payload: IInstruction) =>
-  await api.post(`admin/instruction/add`, payload);
-export const deleteInstruction = async (id: number) =>
-  await api.delete(`admin/instruction/${id}/delete`);
+  return api.get(`admin/notifications`, {
+    params,
+  });
+}
+export const addNotification = async (payload: INotification) =>
+  await api.post(`admin/notifications/add`, payload);
+export const deleteNotification = async (id: number) =>
+  await api.delete(`admin/notifications/${id}/delete`);
 
 // service for admins
 export const getAdmins = () => api.get(`admin`);

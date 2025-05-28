@@ -61,11 +61,15 @@ export class Common {
     const now = new Date().getFullYear();
     return now - selected > 15 || "You must be at least 15 years old";
   };
-  static getWinnerColor = (position: number) => {
-    if (position == 1) return "#D6AF36";
-    if (position == 2) return "#D7D7D7";
-    if (position == 3) return "#824A02";
-    if (position == 4) return "#4B5966";
+  static getcolorcode = (position: string) => {
+    if (position == "all") return "#66cc66";
+    if (position == "used") return "#64748B";
+    if (position == "pending") return "#ffc61a";
+    if (position == "active") return "#D7D7D7";
+    if (position == "booked") return "#3B82F6";
+    if (position == "expired") return "#9CA3AF";
+    if (position == "failed") return "#ff4000";
+    if (position == "cancelled") return "#EF4444";
     return "#4B5966";
   };
   static getPackage = (frequency: string) => {

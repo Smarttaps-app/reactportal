@@ -66,13 +66,6 @@ export interface CustomerCardProps {
   data: ICustomer[];
   error: boolean;
 }
-export interface IStation {
-  id: number;
-  stationName: string;
-  location: string;
-  updated_at: string;
-  created_at: string;
-}
 export interface IWallet {
   walletAccount: string;
   availableBalance: string;
@@ -98,33 +91,19 @@ export interface IUser {
   created_at: string;
   updated_at: string;
 }
-export interface IRoute {
+export interface IRole {
   id: string;
-  routeName: string;
-  sourceStation: IStation;
-  destinationStation: IStation;
-  trains: any[];
-  buses: any[];
-}
-export interface ISubscription {
-  id: number;
-  msisdn: string;
+  name: string;
+  tag: string;
   status: boolean;
-  frequency: string;
-  created_at: string;
-  expired_at: string;
 }
-export interface IGame {
-  id: number;
-  question: string;
-  answers: string;
-  status: boolean;
-  duration: string;
-  created_at: string;
-  mode: string;
-  instructions: number;
-  rule: number;
-  length: string | "0";
+export interface IForgotPasswordRequest {
+  email: string;
+}
+export interface IResetPasswordRequest {
+  otp: string;
+  password: string;
+  confirmPassword: string;
 }
 export interface IProduct {
   created_at: string;
@@ -172,31 +151,126 @@ export interface IPackage {
   updated_at: string;
   validity: string;
 }
-export interface ITicket {
-  question: string;
-  duration: string;
-  len: string | null;
+export interface IBeneficiary {
+  id: number;
+  nickname: string;
+  customerId: string;
+  transaction_type: string;
+  logo: string;
+  billercode: string;
+  billername: string;
+  updated_at: string;
+  created_at: string;
+}
+export interface IStation {
+  id: number;
+  stationName: string;
+  location: string;
+  updated_at: string;
+  created_at: string;
+}
+export interface ITrain {
+  trainName: string;
+  trainNumber: string;
+  image: string;
+  name: string;
+  schedules: ISchedule[];
+  seats: ISeat[];
+  created_at: string;
+  updated_at: string;
+}
+export interface IBus {
+  name: string;
+  tv: string;
+  camera: string;
+  base_price: string;
+  seatCount: string;
+  types: string | null;
+  bus_number: string | null;
+  busImage: string | null;
+  description: string | null;
+  created_at: string;
+  updated_at: string;
+}
+export interface ISchedule {
+  daysOfOperation: string | null;
+  timeOfOperation: string | null;
+  departureTime: string;
+  arrivalTime: string;
 }
 export interface ITicket {
-  question: string;
-  duration: string;
-  len: string | null;
+  booked_at: string;
+  bus: IBus;
+  created_at: string;
+  updated_at: string;
+  expired_at: string;
+  id: number;
+  mode: string;
+  price: string;
+  qr_code: string;
+  route: IRoute;
+  schedule: ISchedule;
+  status: string;
+  ticket_number: string;
+}
+export interface IRoute {
+  id: string;
+  routeName: string;
+  sourceStation: IStation;
+  destinationStation: IStation;
+  trains: ITrain[];
+  buses: IBus[];
+}
+export interface ISeat {
+  id: string;
+  seatNumber: string;
+  classType: string;
+  availabilityStatus: string;
+  price: string;
+  created_at: string;
+  updated_at: string;
+}
+export interface IPark {
+  id: number;
+  name: string;
+  parkImage: string;
+  address: string;
+  contact: string;
+  startingPoint: string;
+  estimatedDeparture: string;
+  estimatedArrival: string;
+  destination: string;
+  description: string;
+  status: string;
+  policy: string;
+  created_at: string;
+  expired_at: string;
 }
 export interface INotification {
-  question: string;
-  duration: string;
-  len: string | null;
+  id: number;
+  title: string;
+  type: string;
+  message: string;
+  created_at: string;
+  updated_at: string;
+  isRead: boolean;
 }
-export interface IAddProps {
+export interface ISetting {
+  access_token_expire_minutes: number;
+  secret_key: string;
+  algorithm: string;
+  mail_username: string;
+  mail_password: string;
+  mail_from: string;
+  mail_port: string;
+  mail_server: string;
+  mail_from_name: string;
+  paystack_url: string;
+  paystack_token: string;
+}
+export interface IAddProps<T> {
+  payload?: T;
   isOpen?: boolean;
   onCancel: () => void;
   onOK?: () => void;
-}
-export interface IForgotPasswordRequest {
-  email: string;
-}
-export interface IResetPasswordRequest {
-  otp: string;
-  password: string;
-  confirmPassword: string;
 }
