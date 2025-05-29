@@ -12,6 +12,7 @@ import {
   Space,
   Spin,
   theme,
+  Tooltip,
   Typography,
 } from "antd";
 
@@ -44,34 +45,35 @@ const AdministratorLayout: React.FC = () => {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
   const { user, loading: isPending, logout } = useUser();
-  console.log(user);
-  //const d = new Date();
   if (isPending) return <Spin />;
-  /* const items: MenuItem[] = protectedRoutes
-    .filter((route) => route.title)
-    .map((route, index) => ({
-      key: String(index + 1),
-      label: <Link to={`/admin/${route.path}`}>{route.title}</Link>,
-      icon: route.icon,
-    }));*/
   const items: MenuItem[] = protectedRoutes
     .filter((route) => route.title)
     .map((route, index) => {
       if (route.children && route.children.length > 0) {
-        // Has nested routes – create submenu
-        return {
-          key: String(index + 1),
-          label: route.title,
-          icon: route.icon,
-          children: route.children.map((child, cIndex) => ({
-            key: `${index + 1}-${cIndex + 1}`,
-            label: (
-              <Link to={`/admin/${route.path}/${child.path}`}>
-                {child.path.charAt(0).toUpperCase() + child.path.slice(1)}
-              </Link>
-            ),
-          })),
-        };
+        const visibleChildren = route.children?.filter(
+          (child) => child.showInMenu
+        );
+        if (visibleChildren?.length > 0) {
+          return {
+            key: String(index + 1),
+            label: route.title,
+            icon: route.icon,
+            children: visibleChildren.map((child, cIndex) => ({
+              key: `${index + 1}-${cIndex + 1}`,
+              label: (
+                <Link to={`/admin/${route.path}/${child.path}`}>
+                  {child.path.charAt(0).toUpperCase() + child.path.slice(1)}
+                </Link>
+              ),
+            })),
+          };
+        } else {
+          return {
+            key: String(index + 1),
+            label: <Link to={`/admin/${route.path}`}>{route.title}</Link>,
+            icon: route.icon,
+          };
+        }
       } else {
         return {
           key: String(index + 1),
@@ -144,7 +146,14 @@ const AdministratorLayout: React.FC = () => {
               <Link to="profile">
                 <Avatar src={profile} />
               </Link>
-              <LogoutOutlined onClick={logout} />
+              <Tooltip title="Logout">
+                <Button
+                  type="text"
+                  icon={<LogoutOutlined />}
+                  onClick={logout}
+                  danger
+                />
+              </Tooltip>
             </Space>
           </Flex>
         </Header>

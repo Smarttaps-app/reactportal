@@ -21,6 +21,9 @@ import StationScreen from "../pages/admin/transport/Stations";
 import RoutesScreen from "../pages/admin/transport/TransportRoutes";
 import ParksScreen from "../pages/admin/transport/Parks";
 import NotificationScreen from "../pages/admin/notification/notification";
+import Changepassword from "../pages/admin/profile/changepassword";
+import CashOutScreen from "../pages/admin/profile/cashout";
+import ProductDetailScreen from "../pages/admin/product/productdetails";
 
 export const protectedRoutes = [
   {
@@ -46,6 +49,13 @@ export const protectedRoutes = [
     Component: ProductsScreen,
     title: "Products",
     icon: <RocketOutlined />,
+    children: [
+      {
+        path: ":id",
+        Component: ProductDetailScreen,
+        showInMenu: false,
+      },
+    ],
   },
   {
     path: "ticketing",
@@ -59,11 +69,11 @@ export const protectedRoutes = [
     title: "Services",
     icon: <SwapOutlined />,
     children: [
-      { path: "Parks", Component: ParksScreen },
-      { path: "stations", Component: StationScreen },
-      { path: "routes", Component: RoutesScreen },
-      { path: "trains", Component: RoutesScreen },
-      { path: "buses", Component: RoutesScreen },
+      { path: "Parks", Component: ParksScreen, showInMenu: true },
+      { path: "stations", Component: StationScreen, showInMenu: true },
+      { path: "routes", Component: RoutesScreen, showInMenu: true },
+      { path: "trains", Component: RoutesScreen, showInMenu: true },
+      { path: "buses", Component: RoutesScreen, showInMenu: true },
     ],
   },
   {
@@ -78,8 +88,8 @@ export const protectedRoutes = [
     title: "Settings",
     icon: <SettingOutlined />,
     children: [
-      { path: "Mail Setting", Component: Profile },
-      { path: "Api Setting", Component: Profile },
+      { path: "mail-setting", Component: Profile, showInMenu: true },
+      { path: "api-setting", Component: Profile, showInMenu: true },
     ],
   },
   {
@@ -87,5 +97,9 @@ export const protectedRoutes = [
     Component: Profile,
     title: "Profile",
     icon: <ProfileOutlined />,
+    children: [
+      { path: "change-password", Component: Changepassword, showInMenu: false },
+      { path: "cash-out", Component: CashOutScreen, showInMenu: false },
+    ],
   },
 ];

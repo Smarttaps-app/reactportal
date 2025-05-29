@@ -1,27 +1,25 @@
-import {
-  BankOutlined,
-  EditOutlined,
-  EllipsisOutlined,
-  LockOutlined,
-  SettingOutlined,
-} from "@ant-design/icons";
+import { BankOutlined, LockOutlined } from "@ant-design/icons";
 import {
   Avatar,
   Button,
   Card,
   Descriptions,
   DescriptionsProps,
+  Flex,
   Tag,
 } from "antd";
 import { useUser } from "../../../context/useUser";
 import { Common } from "../../../utils/Common";
+import { Outlet, useNavigate } from "react-router-dom";
 const { Meta } = Card;
 
 export default function Profile() {
+  const navigate = useNavigate();
   const { user } = useUser();
   const items: DescriptionsProps["items"] = [
     {
       label: "Full Name",
+      span: "filled",
       children:
         user?.firstname && user?.lastname
           ? `${user.firstname} ${user.lastname}`
@@ -35,9 +33,11 @@ export default function Profile() {
     {
       label: "Phone Number",
       children: user?.phonenumber || "No phone number provided",
+      span: "filled",
     },
     {
       label: "Status",
+      span: "filled",
       children: (
         <Tag color={user?.status ? "green" : "red"}>
           {user?.status ? "Active" : "Inactive"}
@@ -46,6 +46,7 @@ export default function Profile() {
     },
     {
       label: "Role",
+      span: "filled",
       children: <Tag color={user?.tag ? "green" : "red"}>{user?.tag}</Tag>,
     },
     {
@@ -55,37 +56,48 @@ export default function Profile() {
     },
   ];
   return (
-    <Card
-      style={{ width: "100%" }}
-      title="User Details"
-      actions={[
-        <Button type="primary" icon={<LockOutlined />}>
-          Change Password
-        </Button>,
-        <Button variant="solid" color="cyan" icon={<BankOutlined />}>
-          Cash Out
-        </Button>,
-        <SettingOutlined key="setting" />,
-        <EditOutlined key="edit" />,
-        <EllipsisOutlined key="ellipsis" />,
-      ]}
-    >
-      <Meta
-        avatar={
-          <Avatar
-            src={user?.avatar || "https://via.placeholder.com/150"}
-            size={72}
-          />
-        }
-        title={
-          user?.firstname && user?.lastname
-            ? `${user.firstname} ${user.lastname}`
-            : "No name provided"
-        }
-        description={user?.email || "No email provided"}
-        style={{ marginBottom: 16 }}
-      />
-      <Descriptions size="small" bordered items={items} />
-    </Card>
+    <Flex>
+      <Card
+        style={{ width: "100%" }}
+        title="User Details"
+        actions={[
+          <Button
+            type="primary"
+            icon={<LockOutlined />}
+            onClick={() => navigate("change-password")}
+          >
+            Change Password
+          </Button>,
+          <Button
+            variant="solid"
+            color="cyan"
+            icon={<BankOutlined />}
+            onClick={() => navigate("cash-out")}
+          >
+            Cash Out
+          </Button>,
+        ]}
+      >
+        <Meta
+          avatar={
+            <Avatar
+              src={user?.avatar || "https://via.placeholder.com/150"}
+              size={72}
+            />
+          }
+          title={
+            user?.firstname && user?.lastname
+              ? `${user.firstname} ${user.lastname}`
+              : "No name provided"
+          }
+          description={user?.email || "No email provided"}
+          style={{ marginBottom: 16 }}
+        />
+        <Descriptions size="small" bordered items={items} />
+      </Card>
+      <Card style={{ width: "100%" }}>
+        <Outlet />
+      </Card>
+    </Flex>
   );
 }

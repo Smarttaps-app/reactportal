@@ -14,3 +14,9 @@ export const useLogin = () => {
   });
   return { login, isPending };
 };
+export const useChangePassword = () => {
+  const { mutate: changePassword, isPending } = useMutation({
+    mutationFn: loginAction,
+  });
+  return { changePassword, isPending };
+};

@@ -1,15 +1,21 @@
 import { Button, Card, Col, Empty, Flex, Row, Space, Table, Tag } from "antd";
 import { useMemo, useState } from "react";
 import { Common } from "../../../utils/Common";
-import { EyeOutlined, PlusOutlined, RedoOutlined } from "@ant-design/icons";
-import { IProduct } from "../../../utils/type";
+import {
+  DeleteOutlined,
+  EyeOutlined,
+  PlusOutlined,
+  RedoOutlined,
+} from "@ant-design/icons";
+import { IBiller, IProduct } from "../../../utils/type";
 import ProductCard from "./ProductCard";
 import { useProducts } from "../../../hooks/useProduct";
 import Product from "./Product";
+import { useNavigate } from "react-router-dom";
 
 export default function ProductsScreen() {
+  const navigate = useNavigate();
   const [show, setShow] = useState(false);
-  const [product, setProduct] = useState<IProduct>();
   const { loading, products, error } = useProducts();
 
   const columns = useMemo(
@@ -18,6 +24,7 @@ export default function ProductsScreen() {
         title: "ID",
         dataIndex: "id",
         key: "id",
+        width: "5%",
       },
       {
         title: "Product Name",
@@ -28,11 +35,13 @@ export default function ProductsScreen() {
         title: "Vas Type",
         dataIndex: "vasType",
         key: "vasType",
+        width: "10%",
       },
       {
         title: "Status",
         dataIndex: "status",
         key: "status",
+        width: "8%",
         render: (status: boolean) => (
           <Tag color={`${status ? "green" : "red"}`}>
             {status ? "Active" : "Inactive"}
@@ -40,9 +49,17 @@ export default function ProductsScreen() {
         ),
       },
       {
-        title: "Channel",
-        dataIndex: "channel",
-        key: "channel",
+        title: "Billers",
+        dataIndex: "billers",
+        key: "billers",
+        width: "8%",
+        render: (billers: IBiller[]) => (
+          <span className="text-xs text-gray-500">
+            {billers?.length > 0
+              ? ` ${billers?.length} biller(s)`
+              : ` No billers`}
+          </span>
+        ),
       },
       {
         title: "Date",
@@ -61,19 +78,30 @@ export default function ProductsScreen() {
       {
         title: "Actions",
         dataIndex: "",
+        width: "12%",
         render: (key: string, product: IProduct) => (
           <Flex gap="small" align="center" wrap>
             <Button
               type="primary"
               icon={<EyeOutlined />}
-              onClick={() => {
-                setProduct(product);
-                setShow(true);
-              }}
+              onClick={() =>
+                navigate(`/admin/product/${product.id}`, {
+                  state: {
+                    sproduct: product,
+                  },
+                })
+              }
             />
             <Button
               type="primary"
               icon={<RedoOutlined />}
+              // loading={loadings[2]}
+              //onClick={() => enterLoading(2)}
+            />
+            <Button
+              type="primary"
+              danger
+              icon={<DeleteOutlined />}
               // loading={loadings[2]}
               //onClick={() => enterLoading(2)}
             />
@@ -137,7 +165,7 @@ export default function ProductsScreen() {
               icon={<PlusOutlined />}
               title="New Product"
               type="primary"
-              //onClick={() => setOpen(true)}
+              onClick={() => setShow(true)}
             >
               New Product
             </Button>
@@ -146,16 +174,13 @@ export default function ProductsScreen() {
       >
         <Table
           rowKey="id"
+          size="small"
           loading={loading}
           columns={columns}
           dataSource={data}
         />
+        <Product isOpen={show} onCancel={() => setShow(false)} />
       </Card>
-      <Product
-        product={product}
-        isOpen={show}
-        onCancel={() => setShow(false)}
-      />
     </>
   );
 }

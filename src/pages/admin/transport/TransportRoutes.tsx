@@ -52,8 +52,8 @@ export default function RoutesScreen() {
           <span className="text-xs text-gray-500">
             {routeName}
             {record.buses.length > 0
-              ? ` ${record.buses.length}Buses`
-              : ` ${record.trains.length}Trains`}
+              ? ` ${record.buses.length} Buses`
+              : ` ${record.trains.length} Trains`}
           </span>
         ),
       },

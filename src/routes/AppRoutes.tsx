@@ -7,6 +7,8 @@ import AuthenticationLayout from "../pages/Layout/AuthLayout";
 import WebsiteLayout from "../pages/Layout/WebsiteLayout";
 import ForgotPassword from "../pages/auth/ForgotPassword";
 import ResetPassword from "../pages/auth/ResetPassword";
+import ProductDetailScreen from "../pages/admin/product/productdetails";
+import BillerDetailScreen from "../pages/admin/product/billerScreen";
 export default function AppRouted() {
   return (
     <Routes>
@@ -37,6 +39,8 @@ export default function AppRouted() {
               ))}
           </Route>
         ))}
+        <Route path="product/:id" element={<ProductDetailScreen />} />
+        <Route path="biller/:id" element={<BillerDetailScreen />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

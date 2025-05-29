@@ -274,3 +274,9 @@ export interface IAddProps<T> {
   onCancel: () => void;
   onOK?: () => void;
 }
+
+export interface IChangePassword {
+  oldPassword: string;
+  password: string;
+  confirmPassword: string;
+}
