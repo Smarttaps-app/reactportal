@@ -33,11 +33,21 @@ function App() {
                     contentFontSize: 16,
                     titleFontSize: 14,
                   },
+                  Input: {
+                    paddingBlock: 4,
+                    paddingBlockLG: 8,
+                    paddingBlockSM: 8,
+                  },
+                  Form: {
+                    verticalLabelPadding: "0 0 5px",
+                    labelHeight: 24,
+                    itemMarginBottom: 12,
+                  },
                 },
                 token: {
                   // Seed Token
                   colorPrimary: "#ff9900",
-                  borderRadius: 2,
+                  borderRadius: 5,
                 },
               }}
             >
