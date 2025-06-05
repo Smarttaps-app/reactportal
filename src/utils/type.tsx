@@ -92,7 +92,7 @@ export interface IUser {
   updated_at: string;
 }
 export interface IRole {
-  id: string;
+  id: number;
   name: string;
   tag: string;
   status: boolean;
@@ -274,7 +274,6 @@ export interface IAddProps<T> {
   onCancel: () => void;
   onOK?: () => void;
 }
-
 export interface IChangePassword {
   oldPassword: string;
   password: string;

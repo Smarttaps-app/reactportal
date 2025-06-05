@@ -20,8 +20,10 @@ import {
   PlusOutlined,
   RedoOutlined,
 } from "@ant-design/icons";
-import { IPackage, IPackage, IBiller } from "../../../utils/type";
+import { IBiller, IPackage } from "../../../utils/type";
 import { useLocation, useNavigate } from "react-router-dom";
+
+import Package from "./Package";
 
 export default function BillerDetailScreen() {
   const location = useLocation();
@@ -37,67 +39,44 @@ export default function BillerDetailScreen() {
         width: "6%",
       },
       {
-        title: "Biller Name",
-        dataIndex: "billerName",
-        key: "billerName",
-        width: "9%",
+        title: "Description",
+        dataIndex: "description",
+        key: "description",
+        width: "20%",
       },
       {
-        title: "Biller Type",
-        dataIndex: "billerType",
-        key: "billerType",
-        width: "9%",
-      },
-      {
-        title: "Customer Field",
-        dataIndex: "customerField",
-        key: "customerField",
+        title: "Package Code",
+        dataIndex: "packageCode",
+        key: "packageCode",
         width: "15%",
       },
       {
-        title: "Has Package",
-        dataIndex: "hasLookup",
-        key: "hasLookup",
+        title: "Amount",
+        dataIndex: "amount",
+        key: "amount",
+        width: "15%",
+        render: (amount: string) => Common.formatAsCurrency(Number(amount)),
+      },
+      {
+        title: "Has Validity",
+        dataIndex: "hasValidity",
+        key: "hasValidity",
         width: "10%",
-        render: (hasLookup: boolean) => (
-          <Tag color={`${hasLookup ? "green" : "red"}`}>
-            {hasLookup ? "Yes" : "No"}
+        render: (hasValidity: boolean) => (
+          <Tag color={`${hasValidity ? "green" : "red"}`}>
+            {hasValidity ? "Yes" : "No"}
           </Tag>
         ),
       },
       {
-        title: "Has Addon",
-        dataIndex: "hasAddons",
-        key: "hasAddons",
+        title: "Status",
+        dataIndex: "status",
+        key: "status",
         width: "10%",
-        render: (hasAddons: boolean) => (
-          <Tag color={`${hasAddons ? "green" : "red"}`}>
-            {hasAddons ? "Yes" : "No"}
+        render: (status: boolean) => (
+          <Tag color={`${status ? "green" : "red"}`}>
+            {status ? "Active" : "Inactive"}
           </Tag>
-        ),
-      },
-      {
-        title: "Has Package",
-        dataIndex: "hasPackages",
-        key: "hasPackages",
-        width: "10%",
-        render: (hasPackages: boolean) => (
-          <Tag color={`${hasPackages ? "green" : "red"}`}>
-            {hasPackages ? "Yes" : "No"}
-          </Tag>
-        ),
-      },
-      {
-        title: "Package",
-        dataIndex: "packages",
-        key: "packages",
-        width: "8%",
-        render: (packages: IPackage[]) => (
-          <span className="text-xs text-gray-500">
-            {packages?.length > 0
-              ? ` ${packages?.length} package(s)`
-              : ` No package`}
-          </span>
         ),
       },
       {
@@ -160,11 +139,11 @@ export default function BillerDetailScreen() {
             <span className="text-sm text-gray-500">Total: {data.length}</span>
             <Button
               icon={<PlusOutlined />}
-              title="New Biller"
+              title="New Package"
               type="primary"
-              //onClick={() => setOpen(true)}
+              onClick={() => setShow(true)}
             >
-              New Biller
+              New Package
             </Button>
           </Space>
         }
@@ -180,7 +159,7 @@ export default function BillerDetailScreen() {
             <Flex justify="space-evenly">
               <Col span={6}>
                 <Form.Item<IBiller>
-                  name="name"
+                  name="billerName"
                   label="Biller Name"
                   initialValue={payload?.name}
                   rules={[
@@ -219,7 +198,7 @@ export default function BillerDetailScreen() {
               <Col span={6}>
                 <Form.Item<IBiller>
                   label="Biller Type"
-                  name="vasType"
+                  name="billerType"
                   rules={[
                     { required: true, message: "Please select product!" },
                   ]}
@@ -282,6 +261,7 @@ export default function BillerDetailScreen() {
           columns={columns}
           dataSource={data}
         />
+        <Package isOpen={show} onCancel={() => setShow(false)} />
       </Card>
     </>
   );

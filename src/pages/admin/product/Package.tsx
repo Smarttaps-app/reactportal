@@ -1,7 +1,7 @@
 import { Button, Card, Form, Input, Modal, Select, Switch } from "antd";
 import { IProduct, IProductProps } from "../../../utils/type";
 
-const Product: React.FC<IProductProps> = ({ isOpen = false, onCancel }) => {
+const Package: React.FC<IProductProps> = ({ isOpen = false, onCancel }) => {
   return (
     <Modal
       style={{ top: 20 }}
@@ -13,7 +13,7 @@ const Product: React.FC<IProductProps> = ({ isOpen = false, onCancel }) => {
       footer={null}
       width={450}
     >
-      <Card title="Add New Product">
+      <Card title="Add New Package">
         <Form
           //form={form}
           layout="vertical"
@@ -23,11 +23,11 @@ const Product: React.FC<IProductProps> = ({ isOpen = false, onCancel }) => {
         >
           <Form.Item<IProduct>
             name="name"
-            label="Product Name"
+            label="Package Name"
             rules={[
               {
                 required: true,
-                message: "Please Enter Product Name!",
+                message: "Please Enter Package Name!",
               },
             ]}
           >
@@ -51,7 +51,7 @@ const Product: React.FC<IProductProps> = ({ isOpen = false, onCancel }) => {
             <Input placeholder="Password" className="!rounded-md !py-2" />
           </Form.Item>
           <Form.Item<IProduct>
-            label="Product Type"
+            label="Package Type"
             name="vasType"
             rules={[{ required: true, message: "Please select product!" }]}
           >
@@ -69,7 +69,7 @@ const Product: React.FC<IProductProps> = ({ isOpen = false, onCancel }) => {
           </Form.Item>
           <Form.Item<IProduct>
             name="name"
-            label="Product Description"
+            label="Package Description"
             className="lg"
           >
             <Input.TextArea
@@ -79,7 +79,7 @@ const Product: React.FC<IProductProps> = ({ isOpen = false, onCancel }) => {
           </Form.Item>
           <Form.Item
             name="status"
-            label="Product Status"
+            label="Package Status"
             valuePropName="checked"
           >
             <Switch />
@@ -101,4 +101,4 @@ const Product: React.FC<IProductProps> = ({ isOpen = false, onCancel }) => {
     </Modal>
   );
 };
-export default Product;
+export default Package;

@@ -24,6 +24,8 @@ import NotificationScreen from "../pages/admin/notification/notification";
 import Changepassword from "../pages/admin/profile/changepassword";
 import CashOutScreen from "../pages/admin/profile/cashout";
 import ProductDetailScreen from "../pages/admin/product/productdetails";
+import Index from "../pages/admin/admin";
+import RoleIndex from "../pages/admin/role";
 
 export const protectedRoutes = [
   {
@@ -88,6 +90,8 @@ export const protectedRoutes = [
     title: "Settings",
     icon: <SettingOutlined />,
     children: [
+      { path: "manage-user", Component: Index, showInMenu: true },
+      { path: "manage-role", Component: RoleIndex, showInMenu: true },
       { path: "mail-setting", Component: Profile, showInMenu: true },
       { path: "api-setting", Component: Profile, showInMenu: true },
     ],

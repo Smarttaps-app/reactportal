@@ -22,7 +22,7 @@ import {
 } from "@ant-design/icons";
 import { IBiller, IPackage, IProduct } from "../../../utils/type";
 import { useLocation, useNavigate } from "react-router-dom";
-import Product from "./Product";
+import Biller from "./Biller";
 
 export default function ProductDetailScreen() {
   const location = useLocation();
@@ -287,6 +287,7 @@ export default function ProductDetailScreen() {
           dataSource={data}
         />
       </Card>
+      <Biller isOpen={show} onCancel={() => setShow(false)} />
     </>
   );
 }

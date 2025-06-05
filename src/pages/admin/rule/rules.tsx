@@ -16,7 +16,7 @@ import {
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { Common } from "../../../utils/Common";
-import { useRules } from "./useRule";
+import { useRules } from "../../../hooks/useRole";
 import { IRule } from "../../../utils/type";
 import {
   DeleteOutlined,

@@ -1,5 +1,5 @@
 import { api } from "../utils/AxiosInstance";
-import { IAddRequest, INotification } from "../utils/type";
+import { INotification, IRole, IUser } from "../utils/type";
 
 export function getProfileService() {
   return api.get(`admin/profile`);
@@ -13,9 +13,12 @@ export const renewSubscription = async (id: number) =>
   await api.get(`admin/subcription/${id}/renew`);
 
 // service for Players
-export const getPlayers = () => api.get(`admin/players`);
-export const getPlayer = async (id: string) =>
-  await api.get(`admin/player/${id}`);
+export const getRoles = () => api.get(`admin/roles`);
+export const getRole = async (id: string) => await api.get(`admin/role/${id}`);
+export const addRole = async (payload: IRole) =>
+  await api.post(`admin/role/add`, payload);
+export const deleteRole = async (id: number) =>
+  await api.delete(`admin/role/${id}/delete`);
 
 // service for Notification
 export function getNotifications(
@@ -37,8 +40,8 @@ export const deleteNotification = async (id: number) =>
   await api.delete(`admin/notifications/${id}/delete`);
 
 // service for admins
-export const getAdmins = () => api.get(`admin`);
-export const addAdmin = async (payload: IAddRequest) =>
+export const getAdmins = () => api.get(`admin/users`);
+export const addAdmin = async (payload: IUser) =>
   await api.post(`admin/add`, payload);
 export const deleteAdmin = async (id: number) =>
   await api.delete(`admin/${id}/delete`);
