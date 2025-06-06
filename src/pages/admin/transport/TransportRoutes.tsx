@@ -12,8 +12,8 @@ import { useRoutes } from "../../../hooks/useTransport";
 import AddRoute from "./AddRoute";
 
 export default function RoutesScreen() {
-  const [show, setShow] = useState(false);
-  const [route, setRoute] = useState<IRoute>();
+  const [add, setAdd] = useState(false);
+  const [item, setItem] = useState<IRoute>();
   const { loading, routes, error } = useRoutes();
 
   const columns = useMemo(
@@ -74,8 +74,8 @@ export default function RoutesScreen() {
               type="primary"
               icon={<EyeOutlined />}
               onClick={() => {
-                setRoute(route);
-                setShow(true);
+                setItem(route);
+                setAdd(true);
               }}
             />
             <Button
@@ -119,7 +119,7 @@ export default function RoutesScreen() {
               icon={<PlusOutlined />}
               title="New Station"
               type="primary"
-              //onClick={() => setOpen(true)}
+              onClick={() => setAdd(true)}
             >
               New Station
             </Button>
@@ -134,7 +134,7 @@ export default function RoutesScreen() {
           dataSource={data}
         />
       </Card>
-      <AddRoute route={route} isOpen={show} onCancel={() => setShow(false)} />
+      <AddRoute payload={item} isOpen={add} onCancel={() => setAdd(false)} />
     </>
   );
 }

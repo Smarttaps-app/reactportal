@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { getAnalyticsAction } from "../../../serviceAction/MenuActions";
-import { toast } from "react-toastify";
 import { Common } from "../../../utils/Common";
+import { message } from "antd";
 
 export function useAnalytics() {
   const { isPending, data, error } = useQuery({
@@ -9,6 +9,6 @@ export function useAnalytics() {
     queryFn: getAnalyticsAction,
     //retry: false,
   });
-  if (error) toast.error(Common.formatError(error));
+  if (error) message.error(Common.formatError(error));
   return { isPending, data, error };
 }

@@ -17,7 +17,6 @@ import TicketsScreen from "../pages/admin/ticket/Index";
 import CustomersScreen from "../pages/admin/customer/Index";
 import TransportScreen from "../pages/admin/transport/Index";
 import ProductsScreen from "../pages/admin/product/Index";
-import StationScreen from "../pages/admin/transport/Stations";
 import RoutesScreen from "../pages/admin/transport/TransportRoutes";
 import ParksScreen from "../pages/admin/transport/Parks";
 import NotificationScreen from "../pages/admin/notification/notification";
@@ -26,6 +25,9 @@ import CashOutScreen from "../pages/admin/profile/cashout";
 import ProductDetailScreen from "../pages/admin/product/productdetails";
 import Index from "../pages/admin/admin";
 import RoleIndex from "../pages/admin/role";
+import StationsScreen from "../pages/admin/transport/Stations";
+import TrainsScreen from "../pages/admin/transport/Trains";
+import BusesScreen from "../pages/admin/transport/Buses";
 
 export const protectedRoutes = [
   {
@@ -72,10 +74,10 @@ export const protectedRoutes = [
     icon: <SwapOutlined />,
     children: [
       { path: "Parks", Component: ParksScreen, showInMenu: true },
-      { path: "stations", Component: StationScreen, showInMenu: true },
+      { path: "stations", Component: StationsScreen, showInMenu: true },
       { path: "routes", Component: RoutesScreen, showInMenu: true },
-      { path: "trains", Component: RoutesScreen, showInMenu: true },
-      { path: "buses", Component: RoutesScreen, showInMenu: true },
+      { path: "trains", Component: TrainsScreen, showInMenu: true },
+      { path: "buses", Component: BusesScreen, showInMenu: true },
     ],
   },
   {

@@ -6,50 +6,45 @@ import {
   Modal,
   Space,
 } from "antd";
-import { IRoute } from "../../../utils/type";
+import { IAddProps, IRoute } from "../../../utils/type";
 import { CloseOutlined, PrinterOutlined } from "@ant-design/icons";
 import { Common } from "../../../utils/Common";
-interface IStationProps {
-  route?: IRoute;
-  isOpen?: boolean;
-  onCancel: () => void;
-  onOK?: () => void;
-}
-const AddRoute: React.FC<IStationProps> = ({
-  route,
+
+const AddRoute: React.FC<IAddProps<IRoute>> = ({
+  payload,
   isOpen = false,
   onCancel,
 }) => {
   const items: DescriptionsProps["items"] = [
     {
       label: "Receipt",
-      children: route?.recipient,
+      children: payload?.recipient,
     },
     {
       label: "Amount",
       span: "filled",
       children: Common.formatAsCurrency(
-        route?.amount ? Number(station.amount) : 0
+        payload?.amount ? Number(station.amount) : 0
       ),
     },
     {
       label: "Transaction Type",
-      children: route?.station_type || "No remarks provided",
+      children: payload?.station_type || "No remarks provided",
     },
     {
       label: "Transaction Date",
       span: "filled",
-      children: Common.formatDate(route?.created_at),
+      children: Common.formatDate(payload?.created_at),
     },
     {
       label: "Transaction Status",
       span: "filled",
-      children: route?.status || "No remarks provided",
+      children: payload?.status || "No remarks provided",
     },
     {
       label: "Remark",
       span: "filled",
-      children: route?.statusMessage || "No remarks provided",
+      children: payload?.statusMessage || "No remarks provided",
     },
   ];
   return (

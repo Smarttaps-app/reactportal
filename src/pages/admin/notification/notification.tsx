@@ -176,7 +176,9 @@ export default function NotificationScreen() {
               htmlType="submit"
               loading={loading}
               disabled={loading}
-            ></Button>
+            >
+              Search
+            </Button>
           </Space>
         }
         className="!shadow-sm !rounded-lg"

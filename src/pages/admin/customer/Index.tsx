@@ -198,12 +198,15 @@ export default function CustomersScreen() {
               htmlType="submit"
               loading={loading}
               disabled={loading}
-            ></Button>
+            >
+              Search
+            </Button>
           </Space>
         }
       >
         <Table
           rowKey="id"
+          size="small"
           loading={loading}
           columns={columns}
           dataSource={data}

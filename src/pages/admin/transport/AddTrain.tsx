@@ -6,10 +6,10 @@ import {
   Modal,
   Space,
 } from "antd";
-import { IAddProps, IPark } from "../../../utils/type";
+import { IAddProps, ITrain } from "../../../utils/type";
 import { CloseOutlined, PrinterOutlined } from "@ant-design/icons";
 import { Common } from "../../../utils/Common";
-const AddPark: React.FC<IAddProps<IPark>> = ({
+const AddTrain: React.FC<IAddProps<ITrain>> = ({
   payload,
   isOpen = false,
   onCancel,
@@ -76,4 +76,4 @@ const AddPark: React.FC<IAddProps<IPark>> = ({
     </Modal>
   );
 };
-export default AddPark;
+export default AddTrain;

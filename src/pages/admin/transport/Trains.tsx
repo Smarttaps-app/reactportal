@@ -2,54 +2,71 @@ import { Avatar, Button, Card, Empty, Flex, Row, Space, Table } from "antd";
 import { useMemo, useState } from "react";
 import { Common } from "../../../utils/Common";
 import {
+  BarsOutlined,
   DeleteOutlined,
   EyeOutlined,
-  MoonOutlined,
   PlusOutlined,
   RedoOutlined,
 } from "@ant-design/icons";
-import { IPark } from "../../../utils/type";
-import { useParks } from "../../../hooks/useTransport";
-import AddPark from "./AddPark";
+import { ITrain } from "../../../utils/type";
+import { useTrains } from "../../../hooks/useTransport";
+import AddTrain from "./AddTrain";
 
-export default function ParksScreen() {
+export default function TrainsScreen() {
   const [add, setAdd] = useState(false);
-  const [item, setItem] = useState<IPark>();
-  const { loading, parks, error } = useParks();
+  const [item, setItem] = useState<ITrain>();
+  const { loading, trains, error } = useTrains();
 
   const columns = useMemo(
     () => [
       {
-        title: "ID",
-        dataIndex: "id",
-        key: "id",
-        width: "5%",
-      },
-      {
         title: "",
-        dataIndex: "parkImage",
-        key: "parkImage",
+        dataIndex: "image",
+        key: "image",
         width: "5%",
         render: (avatar: string) => (
-          <Avatar src={avatar} size="small" icon={<MoonOutlined />} />
+          <Avatar src={avatar} size="small" icon={<BarsOutlined />} />
         ),
       },
       {
-        title: "Park Name",
-        dataIndex: "name",
-        key: "name",
-        width: "30%",
+        title: "Bus Name",
+        dataIndex: "trainName",
+        key: "trainName",
+        width: "25%",
       },
       {
-        title: "Location",
-        dataIndex: "parkImage",
-        key: "location",
+        title: "Train Number",
+        dataIndex: "trainNumber",
+        key: "trainNumber",
+        width: "10%",
       },
       {
-        title: "Mode",
-        dataIndex: "mode",
-        key: "mode",
-        width: "6%",
+        title: "Seat",
+        dataIndex: "seatCount",
+        key: "seatCount",
+        width: "5%",
+      },
+      {
+        title: "Price",
+        dataIndex: "base_price",
+        key: "base_price",
+        width: "10%",
+        render: (base_price: string) =>
+          Common.formatAsCurrency(Number(base_price)),
+      },
+      {
+        title: "TV",
+        dataIndex: "tv",
+        key: "tv",
+        width: "5%",
+        render: (keyValue: boolean) => (keyValue ? "YES" : "NO"),
+      },
+      {
+        title: "Camera",
+        dataIndex: "camera",
+        key: "camera",
+        width: "8%",
+        render: (keyValue: boolean) => (keyValue ? "YES" : "NO"),
       },
       {
         title: "Date",
@@ -59,23 +76,16 @@ export default function ParksScreen() {
         ellipsis: true,
       },
       {
-        title: "Updated",
-        dataIndex: "updated_at",
-        key: "updated_at",
-        render: (updated: string) => Common.formatDate(updated),
-        ellipsis: true,
-      },
-      {
         title: "Actions",
         dataIndex: "",
         width: "12%",
-        render: (key: string, park: IPark) => (
+        render: (key: string, station: ITrain) => (
           <Flex gap="small" align="center" wrap>
             <Button
               type="primary"
               icon={<EyeOutlined />}
               onClick={() => {
-                setItem(park);
+                setItem(station);
                 setAdd(true);
               }}
             />
@@ -105,12 +115,12 @@ export default function ParksScreen() {
       </Row>
     );
 
-  const data: IPark[] = parks || [];
+  const data: ITrain[] = trains || [];
 
   return (
     <>
       <Card
-        title="Parks"
+        title="Stations"
         className="!shadow-sm !rounded-lg"
         loading={loading}
         extra={
@@ -118,11 +128,11 @@ export default function ParksScreen() {
             <span className="text-sm text-gray-500">Total: {data.length}</span>
             <Button
               icon={<PlusOutlined />}
-              title="New Park"
+              title="New Train"
               type="primary"
               onClick={() => setAdd(true)}
             >
-              New Park
+              New Train
             </Button>
           </Space>
         }
@@ -135,7 +145,7 @@ export default function ParksScreen() {
           dataSource={data}
         />
       </Card>
-      <AddPark payload={item} isOpen={add} onCancel={() => setAdd(false)} />
+      <AddTrain payload={item} isOpen={add} onCancel={() => setAdd(false)} />
     </>
   );
 }

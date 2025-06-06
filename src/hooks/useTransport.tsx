@@ -3,6 +3,8 @@ import {
   getStationsAction,
   getRoutesAction,
   getParksAction,
+  getBusesAction,
+  getTrainsAction,
 } from "../serviceAction/TrainActions";
 export function useRoutes() {
   const {
@@ -39,4 +41,28 @@ export function useParks() {
     refetchOnWindowFocus: false,
   });
   return { loading, parks, error };
+}
+export function useBuses() {
+  const {
+    isPending: loading,
+    data: buses = [],
+    error,
+  } = useQuery({
+    queryKey: ["buses"],
+    queryFn: getBusesAction,
+    refetchOnWindowFocus: false,
+  });
+  return { loading, buses, error };
+}
+export function useTrains() {
+  const {
+    isPending: loading,
+    data: trains = [],
+    error,
+  } = useQuery({
+    queryKey: ["trains"],
+    queryFn: getTrainsAction,
+    refetchOnWindowFocus: false,
+  });
+  return { loading, trains, error };
 }

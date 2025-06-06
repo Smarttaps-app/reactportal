@@ -180,7 +180,9 @@ export default function PaymentsScreen() {
               htmlType="submit"
               loading={loading}
               disabled={loading}
-            ></Button>
+            >
+              Search
+            </Button>
           </Space>
         }
       >

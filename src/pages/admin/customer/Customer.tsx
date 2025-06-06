@@ -68,7 +68,7 @@ const CustomerScreen: React.FC<ICustomerProps> = ({
           title="Customer Details"
           actions={[
             <Button type="primary" icon={<LockOutlined />}>
-              Change Password
+              Reset Password
             </Button>,
             <Button danger icon={<CloseOutlined />}>
               Disable Account

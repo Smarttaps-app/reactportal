@@ -11,9 +11,9 @@ import { IStation } from "../../../utils/type";
 import { useStations } from "../../../hooks/useTransport";
 import AddStation from "./AddStation";
 
-export default function StationScreen() {
-  const [show, setShow] = useState(false);
-  const [station, setProduct] = useState<IStation>();
+export default function StationsScreen() {
+  const [add, setAdd] = useState(false);
+  const [item, setItem] = useState<IStation>();
   const { loading, stations, error } = useStations();
 
   const columns = useMemo(
@@ -65,8 +65,8 @@ export default function StationScreen() {
               type="primary"
               icon={<EyeOutlined />}
               onClick={() => {
-                setProduct(station);
-                setShow(true);
+                setItem(station);
+                setAdd(true);
               }}
             />
             <Button
@@ -110,7 +110,7 @@ export default function StationScreen() {
               icon={<PlusOutlined />}
               title="New Station"
               type="primary"
-              //onClick={() => setOpen(true)}
+              onClick={() => setAdd(true)}
             >
               New Station
             </Button>
@@ -125,11 +125,7 @@ export default function StationScreen() {
           dataSource={data}
         />
       </Card>
-      <AddStation
-        station={station}
-        isOpen={show}
-        onCancel={() => setShow(false)}
-      />
+      <AddStation payload={item} isOpen={add} onCancel={() => setAdd(false)} />
     </>
   );
 }

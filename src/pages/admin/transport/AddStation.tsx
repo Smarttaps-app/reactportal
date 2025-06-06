@@ -6,50 +6,45 @@ import {
   Modal,
   Space,
 } from "antd";
-import { IStation } from "../../../utils/type";
+import { IAddProps, IStation } from "../../../utils/type";
 import { CloseOutlined, PrinterOutlined } from "@ant-design/icons";
 import { Common } from "../../../utils/Common";
-interface IStationProps {
-  station?: IStation;
-  isOpen?: boolean;
-  onCancel: () => void;
-  onOK?: () => void;
-}
-const AddStation: React.FC<IStationProps> = ({
-  station,
+
+const AddStation: React.FC<IAddProps<IStation>> = ({
+  payload,
   isOpen = false,
   onCancel,
 }) => {
   const items: DescriptionsProps["items"] = [
     {
       label: "Receipt",
-      children: station?.recipient,
+      children: payload?.recipient,
     },
     {
       label: "Amount",
       span: "filled",
       children: Common.formatAsCurrency(
-        station?.amount ? Number(station.amount) : 0
+        payload?.amount ? Number(payload.amount) : 0
       ),
     },
     {
       label: "Transaction Type",
-      children: station?.station_type || "No remarks provided",
+      children: payload?.station_type || "No remarks provided",
     },
     {
       label: "Transaction Date",
       span: "filled",
-      children: Common.formatDate(station?.created_at),
+      children: Common.formatDate(payload?.created_at),
     },
     {
       label: "Transaction Status",
       span: "filled",
-      children: station?.status || "No remarks provided",
+      children: payload?.status || "No remarks provided",
     },
     {
       label: "Remark",
       span: "filled",
-      children: station?.statusMessage || "No remarks provided",
+      children: payload?.statusMessage || "No remarks provided",
     },
   ];
   return (
