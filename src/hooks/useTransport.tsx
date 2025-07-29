@@ -1,11 +1,23 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   getStationsAction,
   getRoutesAction,
   getParksAction,
   getBusesAction,
   getTrainsAction,
+  addRouteAction,
+  deleteRouteAction,
+  addStationAction,
+  deleteStationAction,
+  addParkAction,
+  deleteParkAction,
+  addBusAction,
+  deleteBusAction,
+  addTrainAction,
+  deleteTrainAction,
 } from "../serviceAction/TrainActions";
+import { message } from "antd";
+import { Common } from "../utils/Common";
 export function useRoutes() {
   const {
     isPending: loading,
@@ -17,6 +29,26 @@ export function useRoutes() {
     refetchOnWindowFocus: false,
   });
   return { loading, routes, error };
+}
+export function useAddRoute() {
+  const { mutate: addRoute, isPending: isAdding } = useMutation({
+    mutationFn: addRouteAction,
+    onError: (error) => {
+      console.log(error);
+      message.error(Common.formatError(error));
+    },
+  });
+  return { isAdding, addRoute };
+}
+export function useDeleteRoute() {
+  const { mutate: deleteRoute, isPending: isdeleting } = useMutation({
+    mutationFn: deleteRouteAction,
+    onError: (error) => {
+      console.log(error);
+      message.error(Common.formatError(error));
+    },
+  });
+  return { isdeleting, deleteRoute };
 }
 export function useStations() {
   const {
@@ -30,6 +62,26 @@ export function useStations() {
   });
   return { loading, stations, error };
 }
+export function useAddStation() {
+  const { mutate: addStation, isPending: isAdding } = useMutation({
+    mutationFn: addStationAction,
+    onError: (error) => {
+      console.log(error);
+      message.error(Common.formatError(error));
+    },
+  });
+  return { isAdding, addStation };
+}
+export function useDeleteStation() {
+  const { mutate: deleteStation, isPending: isdeleting } = useMutation({
+    mutationFn: deleteStationAction,
+    onError: (error) => {
+      console.log(error);
+      message.error(Common.formatError(error));
+    },
+  });
+  return { isdeleting, deleteStation };
+}
 export function useParks() {
   const {
     isPending: loading,
@@ -41,6 +93,26 @@ export function useParks() {
     refetchOnWindowFocus: false,
   });
   return { loading, parks, error };
+}
+export function useAddPark() {
+  const { mutate: addPark, isPending: isAdding } = useMutation({
+    mutationFn: addParkAction,
+    onError: (error) => {
+      console.log(error);
+      message.error(Common.formatError(error));
+    },
+  });
+  return { isAdding, addPark };
+}
+export function useDeletePark() {
+  const { mutate: deletePark, isPending: isdeleting } = useMutation({
+    mutationFn: deleteParkAction,
+    onError: (error) => {
+      console.log(error);
+      message.error(Common.formatError(error));
+    },
+  });
+  return { isdeleting, deletePark };
 }
 export function useBuses() {
   const {
@@ -54,6 +126,26 @@ export function useBuses() {
   });
   return { loading, buses, error };
 }
+export function useAddBus() {
+  const { mutate: addBus, isPending: isAdding } = useMutation({
+    mutationFn: addBusAction,
+    onError: (error) => {
+      console.log(error);
+      message.error(Common.formatError(error));
+    },
+  });
+  return { isAdding, addBus };
+}
+export function useDeleteBus() {
+  const { mutate: deleteBus, isPending: isdeleting } = useMutation({
+    mutationFn: deleteBusAction,
+    onError: (error) => {
+      console.log(error);
+      message.error(Common.formatError(error));
+    },
+  });
+  return { isdeleting, deleteBus };
+}
 export function useTrains() {
   const {
     isPending: loading,
@@ -65,4 +157,24 @@ export function useTrains() {
     refetchOnWindowFocus: false,
   });
   return { loading, trains, error };
+}
+export function useAddTrain() {
+  const { mutate: addTrain, isPending: isAdding } = useMutation({
+    mutationFn: addTrainAction,
+    onError: (error) => {
+      console.log(error);
+      message.error(Common.formatError(error));
+    },
+  });
+  return { isAdding, addTrain };
+}
+export function useDeleteTrain() {
+  const { mutate: deleteTrain, isPending: isdeleting } = useMutation({
+    mutationFn: deleteTrainAction,
+    onError: (error) => {
+      console.log(error);
+      message.error(Common.formatError(error));
+    },
+  });
+  return { isdeleting, deleteTrain };
 }

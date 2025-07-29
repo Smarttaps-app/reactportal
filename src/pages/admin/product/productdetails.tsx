@@ -285,6 +285,7 @@ export default function ProductDetailScreen() {
           //loading={loading}
           columns={columns}
           dataSource={data}
+          scroll={{ x: "max-content" }}
         />
       </Card>
       <Biller isOpen={show} onCancel={() => setShow(false)} />

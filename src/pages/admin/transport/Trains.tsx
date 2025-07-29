@@ -143,6 +143,7 @@ export default function TrainsScreen() {
           loading={loading}
           columns={columns}
           dataSource={data}
+          scroll={{ x: "max-content" }}
         />
       </Card>
       <AddTrain payload={item} isOpen={add} onCancel={() => setAdd(false)} />

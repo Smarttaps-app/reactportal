@@ -134,8 +134,8 @@ export default function Index() {
           <Spin />
         </div>
       )}
-      <Row>
-        <Col span={24}>
+      <Row gutter={[16, 16]}>
+        <Col xs={24} sm={24} md={24} lg={20} xl={22} xxl={22} offset={1}>
           <Card
             title="Admin"
             extra={
@@ -156,6 +156,7 @@ export default function Index() {
               loading={isPending}
               columns={columns}
               dataSource={players}
+              scroll={{ x: "max-content" }}
             />
           </Card>
         </Col>

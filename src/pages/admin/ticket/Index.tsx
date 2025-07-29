@@ -1,7 +1,6 @@
 import {
   Button,
   Card,
-  Col,
   DatePicker,
   Empty,
   Flex,
@@ -132,59 +131,49 @@ export default function TicketsScreen() {
         align="middle"
         gutter={[{ xs: 8, sm: 16, md: 24, lg: 32 }, 8]}
       >
-        <Col span={4}>
-          <TicketCard
-            title="Total All"
-            sessionKey="status"
-            valueKey="all"
-            loading={loading}
-            data={data}
-            error={error ? true : false}
-          />
-        </Col>
-        <Col span={4}>
-          <TicketCard
-            title="Total Booked"
-            sessionKey="status"
-            valueKey="booked"
-            loading={loading}
-            data={data}
-            error={error ? true : false}
-          />
-        </Col>
-        <Col span={4}>
-          <TicketCard
-            title="Total Used"
-            sessionKey="status"
-            valueKey="used"
-            loading={loading}
-            data={data}
-            error={error ? true : false}
-          />
-        </Col>
-        <Col span={4}>
-          <TicketCard
-            title="Total Expired"
-            sessionKey="status"
-            valueKey="expired"
-            loading={loading}
-            data={data}
-            error={error ? true : false}
-          />
-        </Col>
-        <Col span={4}>
-          <TicketCard
-            title="Total Cancelled"
-            sessionKey="status"
-            valueKey="cancelled"
-            loading={loading}
-            data={data}
-            error={error ? true : false}
-          />
-        </Col>
+        <TicketCard
+          title="Total All"
+          sessionKey="status"
+          valueKey="all"
+          loading={loading}
+          data={data}
+          error={error ? true : false}
+        />
+        <TicketCard
+          title="Total Booked"
+          sessionKey="status"
+          valueKey="booked"
+          loading={loading}
+          data={data}
+          error={error ? true : false}
+        />
+        <TicketCard
+          title="Total Used"
+          sessionKey="status"
+          valueKey="used"
+          loading={loading}
+          data={data}
+          error={error ? true : false}
+        />
+        <TicketCard
+          title="Total Expired"
+          sessionKey="status"
+          valueKey="expired"
+          loading={loading}
+          data={data}
+          error={error ? true : false}
+        />
+        <TicketCard
+          title="Total Cancelled"
+          sessionKey="status"
+          valueKey="cancelled"
+          loading={loading}
+          data={data}
+          error={error ? true : false}
+        />
       </Row>
       <Card
-        title="Payments"
+        title="Ticketing"
         className="!shadow-sm !rounded-lg"
         loading={loading}
         extra={
@@ -209,6 +198,7 @@ export default function TicketsScreen() {
           loading={loading}
           columns={columns}
           dataSource={data}
+          scroll={{ x: "max-content" }}
         />
       </Card>
       <ShowTicket

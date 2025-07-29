@@ -1,4 +1,4 @@
-import { Button, Card, Col, Empty, Flex, Row, Space, Table, Tag } from "antd";
+import { Button, Card, Empty, Flex, Row, Space, Table, Tag } from "antd";
 import { useMemo, useState } from "react";
 import { Common } from "../../../utils/Common";
 import {
@@ -123,36 +123,30 @@ export default function ProductsScreen() {
   return (
     <>
       <Row className="pb-8" gutter={[{ xs: 8, sm: 16, md: 24, lg: 32 }, 8]}>
-        <Col span={6}>
-          <ProductCard
-            title="All Products"
-            sessionKey="all"
-            valueKey="all"
-            loading={loading}
-            data={data}
-            error={error ? true : false}
-          />
-        </Col>
-        <Col span={6}>
-          <ProductCard
-            title="Total Active"
-            sessionKey="active"
-            valueKey="active"
-            loading={loading}
-            data={data}
-            error={error ? true : false}
-          />
-        </Col>
-        <Col span={6}>
-          <ProductCard
-            title="Total Failed"
-            sessionKey="inactive"
-            valueKey="inactive"
-            loading={loading}
-            data={data}
-            error={error ? true : false}
-          />
-        </Col>
+        <ProductCard
+          title="All Products"
+          sessionKey="all"
+          valueKey="all"
+          loading={loading}
+          data={data}
+          error={error ? true : false}
+        />
+        <ProductCard
+          title="Total Active"
+          sessionKey="active"
+          valueKey="active"
+          loading={loading}
+          data={data}
+          error={error ? true : false}
+        />
+        <ProductCard
+          title="Total Failed"
+          sessionKey="inactive"
+          valueKey="inactive"
+          loading={loading}
+          data={data}
+          error={error ? true : false}
+        />
       </Row>
       <Card
         title="Products"
@@ -178,6 +172,7 @@ export default function ProductsScreen() {
           loading={loading}
           columns={columns}
           dataSource={data}
+          scroll={{ x: "max-content" }}
         />
         <Product isOpen={show} onCancel={() => setShow(false)} />
       </Card>

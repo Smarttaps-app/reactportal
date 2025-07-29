@@ -1,5 +1,5 @@
 import { Link, Outlet } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import profile from "../../assets/avatar.png";
 import logo from "../../assets/logo.png";
 import {
@@ -23,9 +23,11 @@ import {
   MenuUnfoldOutlined,
 } from "@ant-design/icons";
 import type { GetProp, MenuProps } from "antd";
+import { Grid } from "antd";
 import { useUser } from "../../context/useUser";
 import { protectedRoutes } from "../../routes/routes";
 const { Header, Sider, Content } = Layout;
+const { useBreakpoint } = Grid;
 // image
 type MenuItem = GetProp<MenuProps, "items">[number];
 const siderStyle: React.CSSProperties = {
@@ -40,11 +42,17 @@ const siderStyle: React.CSSProperties = {
   scrollbarColor: "unset",
 };
 const AdministratorLayout: React.FC = () => {
+  const screens = useBreakpoint();
   const [collapsed, setCollapsed] = useState(false);
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
+  const sidebarWidth = collapsed ? 80 : screens.lg ? 240 : 160;
   const { user, loading: isPending, logout } = useUser();
+  useEffect(() => {
+    if (!screens.md) setCollapsed(true);
+  }, [screens]);
+
   if (isPending) return <Spin />;
   const items: MenuItem[] = protectedRoutes
     .filter((route) => route.title)
@@ -103,7 +111,7 @@ const AdministratorLayout: React.FC = () => {
         }}
       >
         <Sider
-          width={collapsed ? 80 : window.screen.width * 0.17}
+          width={sidebarWidth}
           style={siderStyle}
           trigger={null}
           collapsible
@@ -123,22 +131,14 @@ const AdministratorLayout: React.FC = () => {
           />
         </Sider>
       </ConfigProvider>
-      <Layout
-        style={{
-          marginInlineStart: collapsed ? 80 : window.screen.width * 0.17,
-        }}
-      >
+      <Layout style={{ marginInlineStart: sidebarWidth }}>
         <Header style={{ padding: 0, background: colorBgContainer }}>
           <Flex justify="space-between">
             <Button
               type="text"
-              icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
               onClick={() => setCollapsed(!collapsed)}
-              style={{
-                fontSize: "16px",
-                width: 64,
-                height: 64,
-              }}
+              style={{ fontSize: "16px", width: 64, height: 64 }}
+              icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
             />
 
             <Space className="pe-2">

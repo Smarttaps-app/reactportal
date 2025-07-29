@@ -10,7 +10,7 @@ export default function Dashboard() {
         <>
           <Typography.Title level={4}>Customer Report</Typography.Title>
           <Row className="pb-8" gutter={[{ xs: 8, sm: 16, md: 24, lg: 32 }, 8]}>
-            <Col span={4}>
+            <Col className="gutter-row" xs={24} sm={12} md={8} lg={6} xl={6}>
               <Card className="shadow-sm">
                 <Statistic
                   title="All Customers"
@@ -20,7 +20,7 @@ export default function Dashboard() {
                 />
               </Card>
             </Col>
-            <Col span={4}>
+            <Col className="gutter-row" xs={24} sm={12} md={8} lg={6} xl={6}>
               <Card className="shadow-sm">
                 <Statistic
                   title="Active"
@@ -29,7 +29,7 @@ export default function Dashboard() {
                 />
               </Card>
             </Col>
-            <Col span={4}>
+            <Col className="gutter-row" xs={24} sm={12} md={8} lg={6} xl={6}>
               <Card className="shadow-sm">
                 <Statistic
                   title="Pending"
@@ -38,7 +38,7 @@ export default function Dashboard() {
                 />
               </Card>
             </Col>
-            <Col span={4}>
+            <Col className="gutter-row" xs={24} sm={12} md={8} lg={6} xl={6}>
               <Card className="shadow-sm">
                 <Statistic
                   title="Inactive"
@@ -47,7 +47,7 @@ export default function Dashboard() {
                 />
               </Card>
             </Col>
-            <Col span={4}>
+            <Col className="gutter-row" xs={24} sm={12} md={8} lg={6} xl={6}>
               <Card className="shadow-sm">
                 <Statistic
                   title="Locked"
@@ -56,7 +56,7 @@ export default function Dashboard() {
                 />
               </Card>
             </Col>
-            <Col span={4}>
+            <Col className="gutter-row" xs={24} sm={12} md={8} lg={6} xl={6}>
               <Card className="shadow-sm">
                 <Statistic
                   title="Blocked"
@@ -72,7 +72,7 @@ export default function Dashboard() {
         <>
           <Typography.Title level={4}>Credit Report</Typography.Title>
           <Row className="pb-8" gutter={[{ xs: 8, sm: 16, md: 24, lg: 32 }, 8]}>
-            <Col span={6}>
+            <Col className="gutter-row" xs={24} sm={12} md={8} lg={6} xl={6}>
               <Card className="shadow-sm">
                 <Statistic
                   title="Total Credit"
@@ -88,7 +88,7 @@ export default function Dashboard() {
                 </Tag>
               </Card>
             </Col>
-            <Col span={6}>
+            <Col className="gutter-row" xs={24} sm={12} md={8} lg={6} xl={6}>
               <Card className="shadow-sm">
                 <Statistic
                   title="Successful"
@@ -104,7 +104,7 @@ export default function Dashboard() {
                 </Tag>
               </Card>
             </Col>
-            <Col span={6}>
+            <Col className="gutter-row" xs={24} sm={12} md={8} lg={6} xl={6}>
               <Card className="shadow-sm">
                 <Statistic
                   title="Pending"
@@ -120,7 +120,7 @@ export default function Dashboard() {
                 </Tag>
               </Card>
             </Col>
-            <Col span={6}>
+            <Col className="gutter-row" xs={24} sm={12} md={8} lg={6} xl={6}>
               <Card className="shadow-sm">
                 <Statistic
                   title="Failed"
@@ -142,7 +142,7 @@ export default function Dashboard() {
         <>
           <Typography.Title level={4}>Debit Report</Typography.Title>
           <Row className="pb-8" gutter={[{ xs: 8, sm: 16, md: 24, lg: 32 }, 8]}>
-            <Col span={6}>
+            <Col className="gutter-row" xs={24} sm={12} md={8} lg={6} xl={6}>
               <Card className="shadow-sm">
                 <Statistic
                   title="Total Debit"
@@ -158,7 +158,7 @@ export default function Dashboard() {
                 </Tag>
               </Card>
             </Col>
-            <Col span={6}>
+            <Col className="gutter-row" xs={24} sm={12} md={8} lg={6} xl={6}>
               <Card className="shadow-sm">
                 <Statistic
                   title="Successful"
@@ -174,7 +174,7 @@ export default function Dashboard() {
                 </Tag>
               </Card>
             </Col>
-            <Col span={6}>
+            <Col className="gutter-row" xs={24} sm={12} md={8} lg={6} xl={6}>
               <Card className="shadow-sm">
                 <Statistic
                   title="Pending"
@@ -189,7 +189,7 @@ export default function Dashboard() {
                 </Tag>
               </Card>
             </Col>
-            <Col span={6}>
+            <Col className="gutter-row" xs={24} sm={12} md={8} lg={6} xl={6}>
               <Card className="shadow-sm">
                 <Statistic
                   title="Failed"

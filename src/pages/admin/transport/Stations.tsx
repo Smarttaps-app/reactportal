@@ -110,7 +110,10 @@ export default function StationsScreen() {
               icon={<PlusOutlined />}
               title="New Station"
               type="primary"
-              onClick={() => setAdd(true)}
+              onClick={() => {
+                setItem(undefined);
+                setAdd(true);
+              }}
             >
               New Station
             </Button>
@@ -123,6 +126,7 @@ export default function StationsScreen() {
           loading={loading}
           columns={columns}
           dataSource={data}
+          scroll={{ x: "max-content" }}
         />
       </Card>
       <AddStation payload={item} isOpen={add} onCancel={() => setAdd(false)} />

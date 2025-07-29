@@ -1,7 +1,10 @@
 import { Button, Card, Form, Input, Modal, Select, Switch } from "antd";
+import { Grid } from "antd";
 import { IProduct, IProductProps } from "../../../utils/type";
+const { useBreakpoint } = Grid;
 
 const Product: React.FC<IProductProps> = ({ isOpen = false, onCancel }) => {
+  const screens = useBreakpoint();
   return (
     <Modal
       style={{ top: 20 }}
@@ -11,7 +14,7 @@ const Product: React.FC<IProductProps> = ({ isOpen = false, onCancel }) => {
       onCancel={onCancel}
       destroyOnHidden
       footer={null}
-      width={450}
+      width={screens.xs ? "100%" : 450}
     >
       <Card title="Add New Product">
         <Form

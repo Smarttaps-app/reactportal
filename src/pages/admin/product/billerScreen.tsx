@@ -260,6 +260,7 @@ export default function BillerDetailScreen() {
           //loading={loading}
           columns={columns}
           dataSource={data}
+          scroll={{ x: "max-content" }}
         />
         <Package isOpen={show} onCancel={() => setShow(false)} />
       </Card>

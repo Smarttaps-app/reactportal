@@ -166,6 +166,8 @@ export interface IStation {
   id: number;
   stationName: string;
   location: string;
+  parkImage: string;
+  mode: string;
   updated_at: string;
   created_at: string;
 }

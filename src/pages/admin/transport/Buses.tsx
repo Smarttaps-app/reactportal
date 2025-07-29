@@ -143,6 +143,7 @@ export default function BusesScreen() {
           loading={loading}
           columns={columns}
           dataSource={data}
+          scroll={{ x: "max-content" }}
         />
       </Card>
       <AddBus payload={item} isOpen={add} onCancel={() => setAdd(false)} />

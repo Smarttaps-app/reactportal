@@ -1,79 +1,132 @@
 import {
   Button,
-  Descriptions,
-  DescriptionsProps,
-  Flex,
+  Card,
+  Col,
+  Form,
+  FormProps,
+  Input,
+  message,
   Modal,
-  Space,
+  Row,
+  Select,
 } from "antd";
+import { Grid } from "antd";
 import { IAddProps, IStation } from "../../../utils/type";
-import { CloseOutlined, PrinterOutlined } from "@ant-design/icons";
+import { useQueryClient } from "@tanstack/react-query";
+import { useAddStation } from "../../../hooks/useTransport";
 import { Common } from "../../../utils/Common";
+const { useBreakpoint } = Grid;
 
 const AddStation: React.FC<IAddProps<IStation>> = ({
   payload,
   isOpen = false,
   onCancel,
 }) => {
-  const items: DescriptionsProps["items"] = [
-    {
-      label: "Receipt",
-      children: payload?.recipient,
-    },
-    {
-      label: "Amount",
-      span: "filled",
-      children: Common.formatAsCurrency(
-        payload?.amount ? Number(payload.amount) : 0
-      ),
-    },
-    {
-      label: "Transaction Type",
-      children: payload?.station_type || "No remarks provided",
-    },
-    {
-      label: "Transaction Date",
-      span: "filled",
-      children: Common.formatDate(payload?.created_at),
-    },
-    {
-      label: "Transaction Status",
-      span: "filled",
-      children: payload?.status || "No remarks provided",
-    },
-    {
-      label: "Remark",
-      span: "filled",
-      children: payload?.statusMessage || "No remarks provided",
-    },
-  ];
+  const client = useQueryClient();
+  const screens = useBreakpoint();
+  const { addStation, isAdding } = useAddStation();
+  const onFinish: FormProps<IStation>["onFinish"] = (values) => {
+    console.log("Success:", values);
+    addStation(values, {
+      onSuccess: (data) => {
+        message.success(data.statusDescription);
+        onCancel();
+      },
+      onError: (error) => {
+        console.log(error);
+        message.error(Common.formatError(error));
+        onCancel();
+      },
+      onSettled: () => client.invalidateQueries({ queryKey: ["stations"] }),
+    });
+  };
   return (
     <Modal
       style={{ top: 20 }}
       open={isOpen}
       maskClosable={false}
-      // confirmLoading={updating}
+      confirmLoading={isAdding}
       onCancel={onCancel}
       destroyOnHidden
       footer={null}
-      width={750}
+      width={screens.xs ? "100%" : 450}
     >
-      <Space direction="vertical" className="w-full">
-        <Descriptions bordered title="Payment Details" items={items} />
-        <Flex className="mt-8" justify="center" gap={16}>
-          <Button type="primary" icon={<PrinterOutlined />}>
-            Print
-          </Button>
-          <Button
-            color="cyan"
-            variant="filled"
-            icon={<CloseOutlined />}
-            onClick={onCancel}
-          >
-            Cancel
-          </Button>
-        </Flex>
-      </Space>
+      <Card title="Add Station">
+        <Form
+          layout="vertical"
+          initialValues={{ remember: true }}
+          onFinish={onFinish}
+          style={{ minWidth: 320 }}
+        >
+          <Row gutter={[16, 16]}>
+            <Col xs={24} sm={24} md={24}>
+              <Form.Item<IStation>
+                name="stationName"
+                label="Station Name"
+                initialValue={payload?.stationName}
+                rules={[
+                  { required: true, message: "Please enter station name!" },
+                ]}
+              >
+                <Input
+                  placeholder="Enter station name"
+                  className="!rounded-md !py-2"
+                />
+              </Form.Item>
+            </Col>
+
+            <Col xs={24} sm={24} md={24}>
+              <Form.Item<IStation>
+                name="location"
+                label="Location "
+                initialValue={payload?.location}
+                rules={[
+                  { required: true, message: "Please enter station location!" },
+                ]}
+              >
+                <Input
+                  placeholder="Enter station location"
+                  className="!rounded-md !py-2"
+                />
+              </Form.Item>
+            </Col>
+
+            <Col xs={24} sm={24} md={24}>
+              <Form.Item<IStation>
+                label="Station Mode"
+                name="mode"
+                initialValue={payload?.mode}
+                rules={[
+                  { required: true, message: "Please select station mode!" },
+                ]}
+              >
+                <Select
+                  size="large"
+                  options={[
+                    { value: "bus", label: "Bus" },
+                    { value: "train", label: "Train" },
+                  ]}
+                />
+              </Form.Item>
+            </Col>
+
+            <Col xs={24} sm={24} md={24}>
+              <Form.Item>
+                <Button
+                  block
+                  type="primary"
+                  htmlType="submit"
+                  disabled={isAdding}
+                  loading={isAdding}
+                  className="!rounded-md !shadow-md !py-5"
+                >
+                  Submit
+                </Button>
+              </Form.Item>
+            </Col>
+          </Row>
+        </Form>
+      </Card>
     </Modal>
   );
 };

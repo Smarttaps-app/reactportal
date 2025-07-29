@@ -133,6 +133,7 @@ export default function ParksScreen() {
           loading={loading}
           columns={columns}
           dataSource={data}
+          scroll={{ x: "max-content" }}
         />
       </Card>
       <AddPark payload={item} isOpen={add} onCancel={() => setAdd(false)} />

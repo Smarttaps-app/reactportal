@@ -1,7 +1,6 @@
 import {
   Button,
   Card,
-  Col,
   DatePicker,
   Empty,
   Flex,
@@ -143,46 +142,38 @@ export default function CustomersScreen() {
   return (
     <>
       <Row className="pb-8" gutter={[{ xs: 8, sm: 16, md: 24, lg: 32 }, 8]}>
-        <Col span={6}>
-          <CustomerCard
-            title="All Customers"
-            valueKey="all"
-            sessionKey="all"
-            loading={loading}
-            data={data}
-            error={error ? true : false}
-          />
-        </Col>
-        <Col span={6}>
-          <CustomerCard
-            title="Active"
-            valueKey="account_status"
-            sessionKey="active"
-            loading={loading}
-            data={data}
-            error={error ? true : false}
-          />
-        </Col>
-        <Col span={6}>
-          <CustomerCard
-            title="Individual"
-            valueKey="account_type"
-            sessionKey="individual"
-            loading={loading}
-            data={data}
-            error={error ? true : false}
-          />
-        </Col>
-        <Col span={6}>
-          <CustomerCard
-            title="Merchant"
-            valueKey="account_type"
-            sessionKey="merchant"
-            loading={loading}
-            data={data}
-            error={error ? true : false}
-          />
-        </Col>
+        <CustomerCard
+          title="All Customers"
+          valueKey="all"
+          sessionKey="all"
+          loading={loading}
+          data={data}
+          error={error ? true : false}
+        />
+        <CustomerCard
+          title="Active"
+          valueKey="account_status"
+          sessionKey="active"
+          loading={loading}
+          data={data}
+          error={error ? true : false}
+        />
+        <CustomerCard
+          title="Individual"
+          valueKey="account_type"
+          sessionKey="individual"
+          loading={loading}
+          data={data}
+          error={error ? true : false}
+        />
+        <CustomerCard
+          title="Merchant"
+          valueKey="account_type"
+          sessionKey="merchant"
+          loading={loading}
+          data={data}
+          error={error ? true : false}
+        />
       </Row>
       <Card
         title="Payments"
@@ -210,6 +201,7 @@ export default function CustomersScreen() {
           loading={loading}
           columns={columns}
           dataSource={data}
+          scroll={{ x: "max-content" }}
         />
       </Card>
       <CustomerScreen

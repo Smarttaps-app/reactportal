@@ -1,7 +1,6 @@
 import {
   Button,
   Card,
-  Col,
   DatePicker,
   Empty,
   Flex,
@@ -129,42 +128,34 @@ export default function PaymentsScreen() {
   return (
     <>
       <Row className="pb-8" gutter={[{ xs: 8, sm: 16, md: 24, lg: 32 }, 8]}>
-        <Col span={6}>
-          <PaymentCard
-            title="Total Credits"
-            sessionKey="credit"
-            loading={loading}
-            data={data}
-            error={error ? true : false}
-          />
-        </Col>
-        <Col span={6}>
-          <PaymentCard
-            title="Total Debit"
-            sessionKey="debit"
-            loading={loading}
-            data={data}
-            error={error ? true : false}
-          />
-        </Col>
-        <Col span={6}>
-          <PaymentCard
-            title="Total Failed"
-            sessionKey="failed"
-            loading={loading}
-            data={data}
-            error={error ? true : false}
-          />
-        </Col>
-        <Col span={6}>
-          <PaymentCard
-            title="Total Pending"
-            sessionKey="pending"
-            loading={loading}
-            data={data}
-            error={error ? true : false}
-          />
-        </Col>
+        <PaymentCard
+          title="Total Credits"
+          sessionKey="credit"
+          loading={loading}
+          data={data}
+          error={error ? true : false}
+        />
+        <PaymentCard
+          title="Total Debit"
+          sessionKey="debit"
+          loading={loading}
+          data={data}
+          error={error ? true : false}
+        />
+        <PaymentCard
+          title="Total Failed"
+          sessionKey="failed"
+          loading={loading}
+          data={data}
+          error={error ? true : false}
+        />
+        <PaymentCard
+          title="Total Pending"
+          sessionKey="pending"
+          loading={loading}
+          data={data}
+          error={error ? true : false}
+        />
       </Row>
       <Card
         title="Payments"
@@ -191,6 +182,7 @@ export default function PaymentsScreen() {
           loading={loading}
           columns={columns}
           dataSource={data}
+          scroll={{ x: "max-content" }}
         />
       </Card>
       <ShowPayment

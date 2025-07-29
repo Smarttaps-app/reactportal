@@ -1,7 +1,6 @@
 import {
   Button,
   Card,
-  Col,
   Empty,
   Flex,
   message,
@@ -134,36 +133,30 @@ export default function NotificationScreen() {
     <>
       {contextHolder}
       <Row className="pb-8" gutter={[{ xs: 8, sm: 16, md: 24, lg: 32 }, 8]}>
-        <Col span={6}>
-          <StatCard
-            title="All Notifications"
-            sessionKey="all"
-            valueKey="all"
-            loading={loading}
-            data={data}
-            error={error ? true : false}
-          />
-        </Col>
-        <Col span={6}>
-          <StatCard
-            title="Total Active"
-            sessionKey="active"
-            valueKey="active"
-            loading={loading}
-            data={data}
-            error={error ? true : false}
-          />
-        </Col>
-        <Col span={6}>
-          <StatCard
-            title="Total Failed"
-            sessionKey="inactive"
-            valueKey="inactive"
-            loading={loading}
-            data={data}
-            error={error ? true : false}
-          />
-        </Col>
+        <StatCard
+          title="All Notifications"
+          sessionKey="all"
+          valueKey="all"
+          loading={loading}
+          data={data}
+          error={error ? true : false}
+        />
+        <StatCard
+          title="Total Active"
+          sessionKey="active"
+          valueKey="active"
+          loading={loading}
+          data={data}
+          error={error ? true : false}
+        />
+        <StatCard
+          title="Total Failed"
+          sessionKey="inactive"
+          valueKey="inactive"
+          loading={loading}
+          data={data}
+          error={error ? true : false}
+        />
       </Row>
       <Card
         extra={
@@ -203,6 +196,7 @@ export default function NotificationScreen() {
           loading={loading}
           columns={columns}
           dataSource={data}
+          scroll={{ x: "max-content" }}
         />
       </Card>
       <AddNotification

@@ -1,4 +1,4 @@
-import { Card, ConfigProvider, Statistic, Tag } from "antd";
+import { Card, Col, ConfigProvider, Statistic, Tag } from "antd";
 import { Common } from "../../../utils/Common";
 import { PaymentCardProps } from "../../../utils/type";
 import { ArrowDownOutlined, ArrowUpOutlined } from "@ant-design/icons";
@@ -35,30 +35,35 @@ const ParkCard: React.FC<PaymentCardProps> = ({
         },
       }}
     >
-      <Card className="!rounded-lg !shadow-lg">
-        <Statistic
-          title={title}
-          loading={loading}
-          prefix={
-            sessionKey === "credit" ? (
-              <ArrowUpOutlined />
-            ) : (
-              <ArrowDownOutlined />
-            )
-          }
-          value={
-            totalSum < 0
-              ? Common.formatAsCurrency(0)
-              : Common.formatAsCurrency(totalSum)
-          }
-          valueStyle={{ color: valueColor }}
-        />
-        <Tag bordered={false} color={sessionKey === "credit" ? "green" : "red"}>
-          {`${payments.length > 0 ? payments.length : 0} ${
-            sessionKey.charAt(0).toUpperCase() + sessionKey.slice(1)
-          }`}
-        </Tag>
-      </Card>
+      <Col className="gutter-row" xs={24} sm={12} md={8} lg={6} xl={6}>
+        <Card className="!rounded-lg !shadow-lg">
+          <Statistic
+            title={title}
+            loading={loading}
+            prefix={
+              sessionKey === "credit" ? (
+                <ArrowUpOutlined />
+              ) : (
+                <ArrowDownOutlined />
+              )
+            }
+            value={
+              totalSum < 0
+                ? Common.formatAsCurrency(0)
+                : Common.formatAsCurrency(totalSum)
+            }
+            valueStyle={{ color: valueColor }}
+          />
+          <Tag
+            bordered={false}
+            color={sessionKey === "credit" ? "green" : "red"}
+          >
+            {`${payments.length > 0 ? payments.length : 0} ${
+              sessionKey.charAt(0).toUpperCase() + sessionKey.slice(1)
+            }`}
+          </Tag>
+        </Card>
+      </Col>
     </ConfigProvider>
   );
 };

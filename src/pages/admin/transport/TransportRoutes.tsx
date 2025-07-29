@@ -132,6 +132,7 @@ export default function RoutesScreen() {
           loading={loading}
           columns={columns}
           dataSource={data}
+          scroll={{ x: "max-content" }}
         />
       </Card>
       <AddRoute payload={item} isOpen={add} onCancel={() => setAdd(false)} />

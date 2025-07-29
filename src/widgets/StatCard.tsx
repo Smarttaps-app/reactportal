@@ -1,4 +1,4 @@
-import { Card, Statistic, Typography } from "antd";
+import { Card, Col, Statistic, Typography } from "antd";
 import { Common } from "../utils/Common";
 interface StatCardProps<T> {
   title: string;
@@ -19,19 +19,21 @@ const StatCard = <T,>({
   const totalSum = Common.countByKey(data, sessionKey as keyof T, valueKey);
 
   return (
-    <Card
-      style={{ backgroundColor: Common.getcolorcode(valueKey) }}
-      className={`!rounded-lg !shadow-lg`}
-    >
-      <Statistic
-        title={
-          <Typography.Text className="!text-white">{title}</Typography.Text>
-        }
-        loading={loading}
-        value={error ? 0 : totalSum}
-        valueStyle={{ color: "#fff" }}
-      />
-    </Card>
+    <Col className="gutter-row" xs={24} sm={12} md={8} lg={6} xl={6}>
+      <Card
+        style={{ backgroundColor: Common.getcolorcode(valueKey) }}
+        className={`!rounded-lg !shadow-lg`}
+      >
+        <Statistic
+          title={
+            <Typography.Text className="!text-white">{title}</Typography.Text>
+          }
+          loading={loading}
+          value={error ? 0 : totalSum}
+          valueStyle={{ color: "#fff" }}
+        />
+      </Card>
+    </Col>
   );
 };
 
