@@ -120,7 +120,10 @@ export default function ParksScreen() {
               icon={<PlusOutlined />}
               title="New Park"
               type="primary"
-              onClick={() => setAdd(true)}
+              onClick={() => {
+                setItem(undefined);
+                setAdd(true);
+              }}
             >
               New Park
             </Button>

@@ -1,5 +1,12 @@
 import { api } from "../utils/AxiosInstance";
-import { IBus, IPark, IRoute, IStation, ITrain } from "../utils/type";
+import {
+  IBus,
+  IPark,
+  IRoute,
+  ISchedule,
+  IStation,
+  ITrain,
+} from "../utils/type";
 // service for Routes
 export const getRoutes = async () => await api.get(`admin/routes`);
 export const getRoute = async (id: string) =>
@@ -23,13 +30,21 @@ export const addPark = async (payload: IPark) =>
   await api.post(`admin/park/add`, payload);
 export const deletePark = async (id: number) =>
   await api.delete(`admin/park/${id}/delete`);
-// service for parks
+// service for buses
 export const getBuses = async () => await api.get(`admin/buses`);
 export const getBus = async (id: string) => await api.get(`admin/bus/${id}`);
 export const addBus = async (payload: IBus) =>
   await api.post(`admin/bus/add`, payload);
 export const deleteBus = async (id: number) =>
   await api.delete(`admin/bus/${id}/delete`);
+// service for buses
+export const getSchedules = async () => await api.get(`admin/schedules`);
+export const getSchedule = async (id: string) =>
+  await api.get(`admin/schedule/${id}`);
+export const addSchedule = async (payload: ISchedule) =>
+  await api.post(`admin/schedule/add`, payload);
+export const deleteSchedule = async (id: number) =>
+  await api.delete(`admin/schedule/${id}/delete`);
 // service for parks
 export const getTrains = async () => await api.get(`admin/trains`);
 export const getTrain = async (id: string) =>

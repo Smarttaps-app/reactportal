@@ -8,13 +8,13 @@ import {
   RedoOutlined,
 } from "@ant-design/icons";
 import { IRoute, IStation } from "../../../utils/type";
-import { useRoutes } from "../../../hooks/useTransport";
+import { useTRoutes } from "../../../hooks/useTransport";
 import AddRoute from "./AddRoute";
 
 export default function RoutesScreen() {
   const [add, setAdd] = useState(false);
   const [item, setItem] = useState<IRoute>();
-  const { loading, routes, error } = useRoutes();
+  const { loading, routes, error } = useTRoutes();
 
   const columns = useMemo(
     () => [
@@ -109,7 +109,7 @@ export default function RoutesScreen() {
   return (
     <>
       <Card
-        title="Stations"
+        title="Routes"
         className="!shadow-sm !rounded-lg"
         loading={loading}
         extra={
@@ -119,9 +119,12 @@ export default function RoutesScreen() {
               icon={<PlusOutlined />}
               title="New Station"
               type="primary"
-              onClick={() => setAdd(true)}
+              onClick={() => {
+                setItem(undefined);
+                setAdd(true);
+              }}
             >
-              New Station
+              New Route
             </Button>
           </Space>
         }

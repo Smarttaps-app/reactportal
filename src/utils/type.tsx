@@ -182,19 +182,24 @@ export interface ITrain {
   updated_at: string;
 }
 export interface IBus {
+  id: number;
   name: string;
-  tv: string;
-  camera: string;
+  tv: boolean;
+  camera: boolean;
+  airCondition: boolean;
   base_price: string;
   seatCount: string;
   types: string | null;
   bus_number: string | null;
+  busroutes: string[];
+  busschedules: string[];
   busImage: string | null;
   description: string | null;
   created_at: string;
   updated_at: string;
 }
 export interface ISchedule {
+  id: number;
   daysOfOperation: string | null;
   timeOfOperation: string | null;
   departureTime: string;
@@ -219,6 +224,8 @@ export interface IRoute {
   id: string;
   routeName: string;
   sourceStation: IStation;
+  startId: number;
+  stopId: number;
   destinationStation: IStation;
   trains: ITrain[];
   buses: IBus[];

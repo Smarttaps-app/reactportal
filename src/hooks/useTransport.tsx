@@ -15,10 +15,13 @@ import {
   deleteBusAction,
   addTrainAction,
   deleteTrainAction,
+  getSchedulesAction,
+  addScheduleAction,
+  deleteScheduleAction,
 } from "../serviceAction/TrainActions";
 import { message } from "antd";
 import { Common } from "../utils/Common";
-export function useRoutes() {
+export function useTRoutes() {
   const {
     isPending: loading,
     data: routes = [],
@@ -30,7 +33,7 @@ export function useRoutes() {
   });
   return { loading, routes, error };
 }
-export function useAddRoute() {
+export function useAddTRoute() {
   const { mutate: addRoute, isPending: isAdding } = useMutation({
     mutationFn: addRouteAction,
     onError: (error) => {
@@ -40,7 +43,7 @@ export function useAddRoute() {
   });
   return { isAdding, addRoute };
 }
-export function useDeleteRoute() {
+export function useDeleteTRoute() {
   const { mutate: deleteRoute, isPending: isdeleting } = useMutation({
     mutationFn: deleteRouteAction,
     onError: (error) => {
@@ -177,4 +180,36 @@ export function useDeleteTrain() {
     },
   });
   return { isdeleting, deleteTrain };
+}
+export function useTSchedules() {
+  const {
+    isPending: loading,
+    data: schedules = [],
+    error,
+  } = useQuery({
+    queryKey: ["schedules"],
+    queryFn: getSchedulesAction,
+    refetchOnWindowFocus: false,
+  });
+  return { loading, schedules, error };
+}
+export function useAddTSchedule() {
+  const { mutate: addSchedule, isPending: isAdding } = useMutation({
+    mutationFn: addScheduleAction,
+    onError: (error) => {
+      console.log(error);
+      message.error(Common.formatError(error));
+    },
+  });
+  return { isAdding, addSchedule };
+}
+export function useDeleteTSchedule() {
+  const { mutate: deleteSchedule, isPending: isdeleting } = useMutation({
+    mutationFn: deleteScheduleAction,
+    onError: (error) => {
+      console.log(error);
+      message.error(Common.formatError(error));
+    },
+  });
+  return { isdeleting, deleteSchedule };
 }

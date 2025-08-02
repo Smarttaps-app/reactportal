@@ -120,7 +120,7 @@ export default function TrainsScreen() {
   return (
     <>
       <Card
-        title="Stations"
+        title="Trains"
         className="!shadow-sm !rounded-lg"
         loading={loading}
         extra={
@@ -130,7 +130,10 @@ export default function TrainsScreen() {
               icon={<PlusOutlined />}
               title="New Train"
               type="primary"
-              onClick={() => setAdd(true)}
+              onClick={() => {
+                setItem(undefined);
+                setAdd(true);
+              }}
             >
               New Train
             </Button>

@@ -130,7 +130,10 @@ export default function BusesScreen() {
               icon={<PlusOutlined />}
               title="New Bus"
               type="primary"
-              onClick={() => setAdd(true)}
+              onClick={() => {
+                setItem(undefined);
+                setAdd(true);
+              }}
             >
               New Bus
             </Button>

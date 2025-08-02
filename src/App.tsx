@@ -38,6 +38,11 @@ function App() {
                     paddingBlockLG: 8,
                     paddingBlockSM: 8,
                   },
+                  InputNumber: {
+                    paddingBlock: 4,
+                    paddingBlockLG: 8,
+                    paddingBlockSM: 8,
+                  },
                   Form: {
                     verticalLabelPadding: "0 0 5px",
                     labelHeight: 24,
