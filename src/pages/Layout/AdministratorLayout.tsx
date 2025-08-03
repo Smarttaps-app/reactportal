@@ -70,7 +70,8 @@ const AdministratorLayout: React.FC = () => {
               key: `${index + 1}-${cIndex + 1}`,
               label: (
                 <Link to={`/admin/${route.path}/${child.path}`}>
-                  {child.path.charAt(0).toUpperCase() + child.path.slice(1)}
+                  {child.path.charAt(0).toUpperCase() +
+                    child.path.replace("-", " ").slice(1)}
                 </Link>
               ),
             })),

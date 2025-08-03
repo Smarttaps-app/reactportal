@@ -2,6 +2,7 @@ import Dashboard from "../pages/admin/dashboard/dashboard";
 import Settings from "../pages/admin/settings/settings";
 import Profile from "../pages/admin/profile/profile";
 import {
+  AccountBookOutlined,
   DashboardOutlined,
   ImportOutlined,
   InfoCircleOutlined,
@@ -28,6 +29,11 @@ import RoleIndex from "../pages/admin/role";
 import StationsScreen from "../pages/admin/transport/Stations";
 import TrainsScreen from "../pages/admin/transport/Trains";
 import BusesScreen from "../pages/admin/transport/Buses";
+import AccountingScreen from "../pages/admin/gl_account/Index";
+import GlAccountScreen from "../pages/admin/gl_account/ledger/glaccounting";
+import JournalEntriesScreen from "../pages/admin/gl_account/journal_entries";
+import CommissionsScreen from "../pages/admin/gl_account/commission/commissions";
+import DiscountsScreen from "../pages/admin/gl_account/discount/discounts";
 
 export const protectedRoutes = [
   {
@@ -78,6 +84,22 @@ export const protectedRoutes = [
       { path: "routes", Component: RoutesScreen, showInMenu: true },
       { path: "trains", Component: TrainsScreen, showInMenu: true },
       { path: "buses", Component: BusesScreen, showInMenu: true },
+    ],
+  },
+  {
+    path: "accounting",
+    Component: AccountingScreen,
+    title: "Accounting",
+    icon: <AccountBookOutlined />,
+    children: [
+      { path: "general-ledger", Component: GlAccountScreen, showInMenu: true },
+      {
+        path: "journal-entries",
+        Component: JournalEntriesScreen,
+        showInMenu: true,
+      },
+      { path: "commissions", Component: CommissionsScreen, showInMenu: true },
+      { path: "discounts", Component: DiscountsScreen, showInMenu: true },
     ],
   },
   {

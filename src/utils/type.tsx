@@ -288,3 +288,38 @@ export interface IChangePassword {
   password: string;
   confirmPassword: string;
 }
+export interface ILedger {
+  id: number;
+  code: string;
+  name: string;
+  gl_type: string;
+  gl_balance: string;
+}
+export interface IJournal {
+  id: number;
+  amount: string;
+  is_debit: boolean;
+  account_id: string;
+  admin_id: string;
+  created_at: string;
+  updated_at: string;
+}
+export interface ICommission {
+  id: number;
+  commission_rate: string;
+  commission_type: string;
+  product_type_id: string;
+  admin_id: string;
+  created_at: string;
+  updated_at: string;
+}
+export interface IDiscount {
+  id: number;
+  provider_discount_rate: string;
+  provider_discount_type: string;
+  product_type_id: string;
+  admin_id: string;
+  active: boolean;
+  created_at: string;
+  updated_at: string;
+}

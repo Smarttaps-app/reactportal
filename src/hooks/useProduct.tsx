@@ -1,5 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
-import { getProductsAction } from "../serviceAction/ProductActions";
+import {
+  getProductsAction,
+  getServicesAction,
+} from "../serviceAction/ProductActions";
 export function useProducts() {
   const {
     isPending: loading,
@@ -11,4 +14,16 @@ export function useProducts() {
     refetchOnWindowFocus: false,
   });
   return { loading, products, error };
+}
+export function useProductServices() {
+  const {
+    isPending: loading,
+    data: services = [],
+    error,
+  } = useQuery({
+    queryKey: ["services"],
+    queryFn: getServicesAction,
+    refetchOnWindowFocus: false,
+  });
+  return { loading, services, error };
 }

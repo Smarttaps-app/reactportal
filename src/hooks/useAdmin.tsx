@@ -8,7 +8,11 @@ import { Common } from "../utils/Common";
 import { message } from "antd";
 
 export function useAdmins() {
-  const { isPending, data, error } = useQuery({
+  const {
+    isPending,
+    data = [],
+    error,
+  } = useQuery({
     queryKey: ["admins"],
     queryFn: getAdminsAction,
     retry: false,
