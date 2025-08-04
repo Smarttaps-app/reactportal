@@ -7,14 +7,14 @@ import {
 import { Common } from "../utils/Common";
 import { message } from "antd";
 
-export function useAdmins() {
+export function useAdmins(role: string) {
   const {
     isPending,
     data = [],
     error,
   } = useQuery({
     queryKey: ["admins"],
-    queryFn: getAdminsAction,
+    queryFn: () => getAdminsAction(role),
     retry: false,
   });
   if (error) message.error(Common.formatError(error));

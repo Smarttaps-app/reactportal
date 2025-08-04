@@ -26,7 +26,7 @@ const AddCommission: React.FC<IAddProps<ICommission>> = ({
 }) => {
   const client = useQueryClient();
   const screens = useBreakpoint();
-  const { isPending, data } = useAdmins();
+  const { isPending, data } = useAdmins("business");
   const { loading, services } = useProductServices();
   const { addCommission, isAdding } = useAddCommission();
   const onFinish: FormProps<ICommission>["onFinish"] = (values) => {
@@ -61,9 +61,9 @@ const AddCommission: React.FC<IAddProps<ICommission>> = ({
           preserve={false}
           initialValues={{
             id: payload?.id,
-            name: payload?.commission_rate,
-            code: payload?.commission_type,
-            gl_type: payload?.product_type_id,
+            commission_rate: payload?.commission_rate,
+            commission_type: payload?.commission_type,
+            product_type_id: payload?.product_type_id,
             admin_id: payload?.admin_id,
           }}
           onFinish={onFinish}

@@ -2,7 +2,6 @@ import {
   Avatar,
   Button,
   Card,
-  Col,
   Empty,
   Flex,
   message,
@@ -18,12 +17,11 @@ import {
   DeleteOutlined,
   EditOutlined,
   PlusOutlined,
-  RedoOutlined,
   UserOutlined,
 } from "@ant-design/icons";
 import Add from "./add";
 export default function Index() {
-  const { isPending, data, error } = useAdmins();
+  const { isPending, data, error } = useAdmins("");
   const { deleteAdmin, isdeleting } = useDeleteAdmin();
   const [user, setUser] = useState<IUser>();
   const columns = useMemo(
@@ -92,12 +90,6 @@ export default function Index() {
             />
             <Button
               type="primary"
-              icon={<RedoOutlined />}
-              // loading={loadings[2]}
-              //onClick={() => enterLoading(2)}
-            />
-            <Button
-              type="primary"
               icon={<DeleteOutlined />}
               onClick={() => deleted(data.id)}
               danger
@@ -134,33 +126,29 @@ export default function Index() {
           <Spin />
         </div>
       )}
-      <Row gutter={[16, 16]}>
-        <Col xs={24} sm={24} md={24} lg={20} xl={22} xxl={22} offset={1}>
-          <Card
-            title="Admin"
-            extra={
-              <Button
-                icon={<PlusOutlined />}
-                title="Add Admin"
-                type="primary"
-                onClick={() => (setUser(undefined), setAdd(true))}
-              >
-                Add Admin
-              </Button>
-            }
-            className="shadow-sm rounded"
+      <Card
+        title="Admin"
+        extra={
+          <Button
+            icon={<PlusOutlined />}
+            title="Add Admin"
+            type="primary"
+            onClick={() => (setUser(undefined), setAdd(true))}
           >
-            <Table
-              rowKey="id"
-              size="small"
-              loading={isPending}
-              columns={columns}
-              dataSource={players}
-              scroll={{ x: "max-content" }}
-            />
-          </Card>
-        </Col>
-      </Row>
+            Add Admin
+          </Button>
+        }
+        className="shadow-sm rounded"
+      >
+        <Table
+          rowKey="id"
+          size="small"
+          loading={isPending}
+          columns={columns}
+          dataSource={players}
+          scroll={{ x: "max-content" }}
+        />
+      </Card>
       <Add payload={user} isOpen={add} onCancel={() => setAdd(false)} />
     </div>
   );

@@ -40,7 +40,14 @@ export const deleteNotification = async (id: number) =>
   await api.delete(`admin/notifications/${id}/delete`);
 
 // service for admins
-export const getAdmins = () => api.get(`admin/users`);
+export function getAdmins(role?: string | null) {
+  console.log(role);
+  const params: { [key: string]: string } = {};
+  if (role) params.role = role;
+  return api.get(`admin/users`, {
+    params,
+  });
+}
 export const addAdmin = async (payload: IUser) =>
   await api.post(`admin/add`, payload);
 export const deleteAdmin = async (id: number) =>

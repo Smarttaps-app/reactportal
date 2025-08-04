@@ -3,16 +3,18 @@ import { useMemo, useState } from "react";
 import { Common } from "../../../../utils/Common";
 import {
   DeleteOutlined,
+  EditOutlined,
   EyeOutlined,
   PlusOutlined,
-  RedoOutlined,
 } from "@ant-design/icons";
 import { ILedger } from "../../../../utils/type";
 import { useLedgers } from "../../../../hooks/useAccounting";
 import AddLedger from "./AddGL";
+import ListJournal from "./journal_entries";
 
 export default function GlAccountScreen() {
   const [add, setAdd] = useState(false);
+  const [show, setShow] = useState(false);
   const [item, setItem] = useState<ILedger>();
   const { loading, ledgers, error } = useLedgers();
 
@@ -55,7 +57,7 @@ export default function GlAccountScreen() {
           <Flex gap="small" align="center" wrap>
             <Button
               type="primary"
-              icon={<EyeOutlined />}
+              icon={<EditOutlined />}
               onClick={() => {
                 setItem(ledger);
                 setAdd(true);
@@ -63,9 +65,11 @@ export default function GlAccountScreen() {
             />
             <Button
               type="primary"
-              icon={<RedoOutlined />}
-              // loading={loadings[2]}
-              //onClick={() => enterLoading(2)}
+              icon={<EyeOutlined />}
+              onClick={() => {
+                setItem(ledger);
+                setShow(true);
+              }}
             />
             <Button
               type="primary"
@@ -121,7 +125,13 @@ export default function GlAccountScreen() {
           scroll={{ x: "max-content" }}
         />
       </Card>
+
       <AddLedger payload={item} isOpen={add} onCancel={() => setAdd(false)} />
+      <ListJournal
+        payload={item}
+        isOpen={show}
+        onCancel={() => setShow(false)}
+      />
     </>
   );
 }

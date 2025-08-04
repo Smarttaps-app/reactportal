@@ -1,12 +1,14 @@
 import {
   Button,
   Card,
+  Col,
   Form,
   FormProps,
   Input,
   message,
   Modal,
   Select,
+  Switch,
 } from "antd";
 import { IAddProps, IRole } from "../../../utils/type";
 import { useAddRole } from "../../../hooks/useRole";
@@ -32,7 +34,7 @@ const Add: React.FC<IAddProps<IRole>> = ({
         message.error(Common.formatError(error));
         onCancel();
       },
-      onSettled: () => client.invalidateQueries({ queryKey: ["admins"] }),
+      onSettled: () => client.invalidateQueries({ queryKey: ["roles"] }),
     });
   };
   return (
@@ -44,7 +46,7 @@ const Add: React.FC<IAddProps<IRole>> = ({
       onCancel={onCancel}
       destroyOnHidden
       footer={null}
-      width={500}
+      width={400}
     >
       <Card className="px-16" title="Add New Role">
         <Form
@@ -57,31 +59,62 @@ const Add: React.FC<IAddProps<IRole>> = ({
           <Form.Item<IRole> name="id" hidden initialValue={payload?.id}>
             <Input hidden size="large" />
           </Form.Item>
-          <Form.Item<IRole>
-            label="Role Name"
-            name="name"
-            initialValue={payload?.name}
-            rules={[{ required: true, message: "Please input Role name!" }]}
-          >
-            <Input size="large" />
-          </Form.Item>
-          <Form.Item<IRole>
-            label="Role Tag"
-            name="tag"
-            initialValue={payload?.tag}
-            rules={[{ required: true, message: "Please input!" }]}
-          >
-            <Select
-              size="large"
-              options={[
-                { value: "admin", label: "Admin" },
-                { value: "business", label: "Business" },
-                { value: "accountant", label: "Accountant" },
-                { value: "audit", label: "Audit" },
-                { value: "support", label: "Support" },
-              ]}
-            />
-          </Form.Item>
+          <Col xs={24} sm={24} md={24}>
+            <Form.Item<IRole>
+              label="Role Name"
+              name="name"
+              initialValue={payload?.name}
+              rules={[{ required: true, message: "Please input Role name!" }]}
+            >
+              <Input size="large" />
+            </Form.Item>
+          </Col>
+          <Col xs={24} sm={24} md={24}>
+            <Form.Item<IRole>
+              label="Role Tag"
+              name="tag"
+              initialValue={payload?.tag}
+              rules={[{ required: true, message: "Please input!" }]}
+            >
+              <Select
+                size="large"
+                options={[
+                  { value: "admin", label: "Admin" },
+                  { value: "accountant", label: "Accountant" },
+                  { value: "audit", label: "Audit" },
+                  { value: "business", label: "Business" },
+                  { value: "support", label: "Support" },
+                  { value: "provider", label: "Provider" },
+                ]}
+              />
+            </Form.Item>
+          </Col>
+          <Col xs={24} sm={24} md={24}>
+            <Form.Item<IRole>
+              name="status"
+              label="Status"
+              valuePropName="checked"
+            >
+              <Switch
+                defaultValue={payload?.status}
+                unCheckedChildren="Inactive"
+                checkedChildren="Active"
+              />
+            </Form.Item>
+          </Col>
+          <Col xs={24}>
+            <Form.Item<IRole>
+              name="description"
+              label="Description"
+              initialValue={payload?.description}
+            >
+              <Input.TextArea
+                placeholder="Enter description"
+                className="!rounded-md "
+                rows={2}
+              />
+            </Form.Item>
+          </Col>
           <Form.Item>
             <Button type="primary" block htmlType="submit" loading={isAdding}>
               Submit

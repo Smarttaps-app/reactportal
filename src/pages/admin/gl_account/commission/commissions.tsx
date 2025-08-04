@@ -1,20 +1,19 @@
 import { Button, Card, Empty, Flex, Row, Space, Table } from "antd";
 import { useMemo, useState } from "react";
 import { Common } from "../../../../utils/Common";
+import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
+import { IBiller, ICommission, IUser } from "../../../../utils/type";
 import {
-  DeleteOutlined,
-  EyeOutlined,
-  PlusOutlined,
-  RedoOutlined,
-} from "@ant-design/icons";
-import { ICommission } from "../../../../utils/type";
-import { useCommissions } from "../../../../hooks/useAccounting";
+  useCommissions,
+  useDeleteCommission,
+} from "../../../../hooks/useAccounting";
 import AddCommission from "./AddCommission";
 
 export default function CommissionsScreen() {
   const [add, setAdd] = useState(false);
   const [item, setItem] = useState<ICommission>();
   const { loading, commissions, error } = useCommissions();
+  const { deleteCommission, isdeleting } = useDeleteCommission();
 
   const columns = useMemo(
     () => [
@@ -25,21 +24,34 @@ export default function CommissionsScreen() {
         width: "5%",
       },
       {
-        title: "GL Name",
-        dataIndex: "name",
-        key: "name",
+        title: "Merchant Name",
+        dataIndex: "admin",
+        key: "admin",
         width: "20%",
+        render: (admin: IUser) => (
+          <span className="text-xs text-gray-500">
+            {admin?.firstname} {admin?.lastname}
+          </span>
+        ),
       },
       {
-        title: "GL code",
-        dataIndex: "code",
-        key: "code",
+        title: "Product",
+        dataIndex: "product_type",
+        key: "product_type",
         width: "20%",
+        render: (biller: IBiller) => (
+          <span className="text-xs text-gray-500">{biller?.billerName}</span>
+        ),
       },
       {
-        title: "GL Type",
-        dataIndex: "gl_type",
-        key: "gl_type",
+        title: "Commission",
+        dataIndex: "commission_rate",
+        key: "commission_rate",
+      },
+      {
+        title: "Mode",
+        dataIndex: "commission_type",
+        key: "commission_type",
       },
       {
         title: "Updated",
@@ -55,7 +67,7 @@ export default function CommissionsScreen() {
           <Flex gap="small" align="center" wrap>
             <Button
               type="primary"
-              icon={<EyeOutlined />}
+              icon={<EditOutlined />}
               onClick={() => {
                 setItem(ledger);
                 setAdd(true);
@@ -63,16 +75,10 @@ export default function CommissionsScreen() {
             />
             <Button
               type="primary"
-              icon={<RedoOutlined />}
-              // loading={loadings[2]}
-              //onClick={() => enterLoading(2)}
-            />
-            <Button
-              type="primary"
-              danger
               icon={<DeleteOutlined />}
-              // loading={loadings[2]}
-              //onClick={() => enterLoading(2)}
+              onClick={() => deleteCommission(ledger.id)}
+              danger
+              loading={isdeleting}
             />
           </Flex>
         ),

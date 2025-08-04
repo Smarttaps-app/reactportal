@@ -26,7 +26,7 @@ const AddDiscount: React.FC<IAddProps<IDiscount>> = ({
 }) => {
   const client = useQueryClient();
   const screens = useBreakpoint();
-  const { isPending, data } = useAdmins();
+  const { isPending, data } = useAdmins("provider");
   const { loading, services } = useProductServices();
   const { addDiscount, isAdding } = useAddDiscount();
   const onFinish: FormProps<IDiscount>["onFinish"] = (values) => {
@@ -61,9 +61,9 @@ const AddDiscount: React.FC<IAddProps<IDiscount>> = ({
           preserve={false}
           initialValues={{
             id: payload?.id,
-            name: payload?.product_type_id,
-            code: payload?.provider_discount_rate,
-            gl_type: payload?.provider_discount_type,
+            product_type_id: payload?.product_type_id,
+            provider_discount_rate: payload?.provider_discount_rate,
+            provider_discount_type: payload?.provider_discount_type,
             admin_id: payload?.admin_id,
             active: payload?.active,
           }}
@@ -71,6 +71,34 @@ const AddDiscount: React.FC<IAddProps<IDiscount>> = ({
           style={{ minWidth: 320 }}
         >
           <Row gutter={[16, 16]}>
+            <Col xs={24} sm={24} md={24}>
+              <Form.Item<IDiscount>
+                label="Provider"
+                name="admin_id"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please select a provider!",
+                  },
+                ]}
+              >
+                <Select
+                  showSearch
+                  loading={isPending}
+                  optionLabelProp="label"
+                  options={data.map((item: IUser) => ({
+                    label: `${item.firstname} → ${item.lastname}`,
+                    value: item.id,
+                  }))}
+                  filterOption={(input, option) =>
+                    (option?.label ?? "")
+                      .toString()
+                      .toLowerCase()
+                      .includes(input.toLowerCase())
+                  }
+                />
+              </Form.Item>
+            </Col>
             <Col xs={24} sm={24} md={24}>
               <Form.Item<IDiscount>
                 label="Biller"
@@ -88,34 +116,6 @@ const AddDiscount: React.FC<IAddProps<IDiscount>> = ({
                   optionLabelProp="label"
                   options={services.map((item: IBiller) => ({
                     label: `${item.billerName}`,
-                    value: item.id,
-                  }))}
-                  filterOption={(input, option) =>
-                    (option?.label ?? "")
-                      .toString()
-                      .toLowerCase()
-                      .includes(input.toLowerCase())
-                  }
-                />
-              </Form.Item>
-            </Col>
-            <Col xs={24} sm={24} md={24}>
-              <Form.Item<IDiscount>
-                label="Merchants"
-                name="admin_id"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please select a merchant!",
-                  },
-                ]}
-              >
-                <Select
-                  showSearch
-                  loading={isPending}
-                  optionLabelProp="label"
-                  options={data.map((item: IUser) => ({
-                    label: `${item.firstname} → ${item.lastname}`,
                     value: item.id,
                   }))}
                   filterOption={(input, option) =>

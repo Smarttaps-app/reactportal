@@ -95,6 +95,7 @@ export interface IRole {
   id: number;
   name: string;
   tag: string;
+  description: string;
   status: boolean;
 }
 export interface IForgotPasswordRequest {
@@ -294,6 +295,7 @@ export interface ILedger {
   name: string;
   gl_type: string;
   gl_balance: string;
+  journal_entries: IJournal[];
 }
 export interface IJournal {
   id: number;

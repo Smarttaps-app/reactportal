@@ -66,6 +66,12 @@ const AddLedger: React.FC<IAddProps<ILedger>> = ({
         >
           <Row gutter={[16, 16]}>
             <Col xs={24} sm={24} md={24}>
+              <Form.Item<ILedger> name="id" hidden>
+                <Input hidden />
+              </Form.Item>
+              <Form.Item<ILedger> name="code" hidden>
+                <Input hidden />
+              </Form.Item>
               <Form.Item<ILedger>
                 name="name"
                 label="Ledger Name"
@@ -90,11 +96,11 @@ const AddLedger: React.FC<IAddProps<ILedger>> = ({
                 <Select
                   size="large"
                   options={[
-                    { value: "assets", label: "Assets" },
-                    { value: "liabilities", label: "Liabilities" },
-                    { value: "income", label: "Income" },
+                    { value: "asset", label: "Asset" },
                     { value: "expenses", label: "Expenses" },
                     { value: "equity", label: "Equity" },
+                    { value: "liability", label: "Liability" },
+                    { value: "revenue", label: "Revenue" },
                   ]}
                 />
               </Form.Item>

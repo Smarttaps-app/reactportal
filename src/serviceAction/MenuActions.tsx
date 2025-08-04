@@ -67,8 +67,8 @@ export async function deleteRoleAction(id: number) {
   throw new Error(response.data);
 }
 // action for admin
-export async function getAdminsAction() {
-  const response = await getAdmins();
+export async function getAdminsAction(role = "") {
+  const response = await getAdmins(role);
   if (response.status == 200) {
     console.log(response.data.data);
     return response.data.data;

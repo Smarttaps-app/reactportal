@@ -13,12 +13,7 @@ import { useMemo, useState } from "react";
 import { Common } from "../../../utils/Common";
 import { useRoles, useDeleteRole } from "../../../hooks/useRole";
 import { IRole } from "../../../utils/type";
-import {
-  DeleteOutlined,
-  EditOutlined,
-  PlusOutlined,
-  RedoOutlined,
-} from "@ant-design/icons";
+import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
 import Add from "./add";
 export default function RoleIndex() {
   const { isShowing, roles, error } = useRoles();
@@ -56,19 +51,12 @@ export default function RoleIndex() {
       {
         title: "Actions",
         dataIndex: "",
-        width: "12%",
         render: (key: string, data: IRole) => (
           <Flex gap="small" align="center" wrap>
             <Button
               type="primary"
               icon={<EditOutlined />}
               onClick={() => (setRole(data), setAdd(true))}
-            />
-            <Button
-              type="primary"
-              icon={<RedoOutlined />}
-              // loading={loadings[2]}
-              //onClick={() => enterLoading(2)}
             />
             <Button
               type="primary"

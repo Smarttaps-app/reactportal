@@ -7,6 +7,7 @@ import {
   message,
   Modal,
   Select,
+  Switch,
 } from "antd";
 import { IAddProps, IUser, IRole } from "../../../utils/type";
 import { useRoles } from "../../../hooks/useRole";
@@ -47,7 +48,7 @@ const Add: React.FC<IAddProps<IUser>> = ({
       onCancel={onCancel}
       destroyOnHidden
       footer={null}
-      width={500}
+      width={450}
     >
       <Card className="px-16" title="Add New Admin">
         <Form
@@ -58,7 +59,7 @@ const Add: React.FC<IAddProps<IUser>> = ({
           autoComplete="off"
         >
           <Form.Item<IUser> name="id" hidden initialValue={payload?.id}>
-            <Input hidden size="large" />
+            <Input hidden />
           </Form.Item>
           <Form.Item<IUser>
             label="First Name"
@@ -66,7 +67,7 @@ const Add: React.FC<IAddProps<IUser>> = ({
             initialValue={payload?.firstname}
             rules={[{ required: true, message: "Please input word!" }]}
           >
-            <Input size="large" />
+            <Input />
           </Form.Item>
           <Form.Item<IUser>
             label="LastName"
@@ -74,7 +75,7 @@ const Add: React.FC<IAddProps<IUser>> = ({
             initialValue={payload?.lastname}
             rules={[{ required: true, message: "Please input word!" }]}
           >
-            <Input size="large" />
+            <Input />
           </Form.Item>
           <Form.Item<IUser>
             label="Phone Number"
@@ -82,7 +83,7 @@ const Add: React.FC<IAddProps<IUser>> = ({
             initialValue={payload?.phonenumber}
             rules={[{ required: true, message: "Please input length!" }]}
           >
-            <Input size="large" />
+            <Input />
           </Form.Item>
 
           <Form.Item<IUser>
@@ -91,7 +92,7 @@ const Add: React.FC<IAddProps<IUser>> = ({
             initialValue={payload?.email}
             rules={[{ required: true, message: "Please input email address!" }]}
           >
-            <Input size="large" />
+            <Input />
           </Form.Item>
           <Form.Item<IUser>
             label="Role"
@@ -100,7 +101,6 @@ const Add: React.FC<IAddProps<IUser>> = ({
             rules={[{ required: true, message: "Please input!" }]}
           >
             <Select
-              size="large"
               //onChange={handleChange}
               loading={isShowing}
             >
@@ -110,6 +110,17 @@ const Add: React.FC<IAddProps<IUser>> = ({
                 </Option>
               ))}
             </Select>
+          </Form.Item>
+          <Form.Item<IUser>
+            name="status"
+            label="Status"
+            valuePropName="checked"
+          >
+            <Switch
+              defaultValue={payload?.status}
+              unCheckedChildren="Inactive"
+              checkedChildren="Active"
+            />
           </Form.Item>
           <Form.Item>
             <Button type="primary" block htmlType="submit" loading={isAdding}>

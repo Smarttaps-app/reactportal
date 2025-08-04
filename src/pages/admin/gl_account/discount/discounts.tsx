@@ -1,20 +1,19 @@
 import { Button, Card, Empty, Flex, Row, Space, Table } from "antd";
 import { useMemo, useState } from "react";
 import { Common } from "../../../../utils/Common";
-import {
-  DeleteOutlined,
-  EyeOutlined,
-  PlusOutlined,
-  RedoOutlined,
-} from "@ant-design/icons";
-import { IDiscount } from "../../../../utils/type";
+import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
+import { IBiller, IDiscount, IUser } from "../../../../utils/type";
 import AddDiscount from "./AddDiscount";
-import { useDiscounts } from "../../../../hooks/useAccounting";
+import {
+  useDeleteDiscount,
+  useDiscounts,
+} from "../../../../hooks/useAccounting";
 
 export default function DiscountsScreen() {
   const [add, setAdd] = useState(false);
   const [item, setItem] = useState<IDiscount>();
   const { loading, discounts, error } = useDiscounts();
+  const { deleteDiscount, isdeleting } = useDeleteDiscount();
 
   const columns = useMemo(
     () => [
@@ -25,21 +24,35 @@ export default function DiscountsScreen() {
         width: "5%",
       },
       {
-        title: "GL Name",
-        dataIndex: "name",
-        key: "name",
+        title: "Provider Name",
+        dataIndex: "admin",
+        key: "admin",
+        width: "20%",
+        render: (admin: IUser) => (
+          <span className="text-xs text-gray-500">
+            {admin?.firstname} {admin?.lastname}
+          </span>
+        ),
+      },
+      {
+        title: "Product",
+        dataIndex: "product_type",
+        key: "product_type",
+        width: "20%",
+        render: (biller: IBiller) => (
+          <span className="text-xs text-gray-500">{biller?.billerName}</span>
+        ),
+      },
+      {
+        title: "provider discount rate",
+        dataIndex: "provider_discount_rate",
+        key: "provider_discount_rate",
         width: "20%",
       },
       {
-        title: "GL code",
-        dataIndex: "code",
-        key: "code",
-        width: "20%",
-      },
-      {
-        title: "GL Type",
-        dataIndex: "gl_type",
-        key: "gl_type",
+        title: "Mode",
+        dataIndex: "provider_discount_type",
+        key: "provider_discount_type",
       },
       {
         title: "Updated",
@@ -55,7 +68,7 @@ export default function DiscountsScreen() {
           <Flex gap="small" align="center" wrap>
             <Button
               type="primary"
-              icon={<EyeOutlined />}
+              icon={<EditOutlined />}
               onClick={() => {
                 setItem(ledger);
                 setAdd(true);
@@ -63,16 +76,10 @@ export default function DiscountsScreen() {
             />
             <Button
               type="primary"
-              icon={<RedoOutlined />}
-              // loading={loadings[2]}
-              //onClick={() => enterLoading(2)}
-            />
-            <Button
-              type="primary"
-              danger
               icon={<DeleteOutlined />}
-              // loading={loadings[2]}
-              //onClick={() => enterLoading(2)}
+              onClick={() => deleteDiscount(ledger.id)}
+              danger
+              loading={isdeleting}
             />
           </Flex>
         ),
