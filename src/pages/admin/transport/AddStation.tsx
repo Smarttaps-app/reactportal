@@ -51,7 +51,7 @@ const AddStation: React.FC<IAddProps<IStation>> = ({
       footer={null}
       width={screens.xs ? "100%" : 450}
     >
-      <Card title="Add Station">
+      <Card title="Add Park">
         <Form
           layout="vertical"
           initialValues={{ remember: true }}
@@ -62,7 +62,7 @@ const AddStation: React.FC<IAddProps<IStation>> = ({
             <Col xs={24} sm={24} md={24}>
               <Form.Item<IStation>
                 name="stationName"
-                label="Station Name"
+                label="Park Name"
                 initialValue={payload?.stationName}
                 rules={[
                   { required: true, message: "Please enter station name!" },

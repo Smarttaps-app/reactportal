@@ -52,7 +52,7 @@ const AddPark: React.FC<IAddProps<IPark>> = ({
       footer={null}
       width={screens.xs ? "100%" : 450}
     >
-      <Card title="Add Park">
+      <Card title="Add Transport Company">
         <Form
           layout="vertical"
           initialValues={{ remember: true }}

@@ -15,6 +15,7 @@ import ForgotPassword from "../pages/auth/ForgotPassword";
 import ResetPassword from "../pages/auth/ResetPassword";
 import ProductDetailScreen from "../pages/admin/product/productdetails";
 import BillerDetailScreen from "../pages/admin/product/billerScreen";
+import { UserProvider } from "../context/UserContext";
 export default function AppRouted() {
   return (
     <Routes>
@@ -24,13 +25,22 @@ export default function AppRouted() {
         <Route path="forgot-password" element={<ForgotPassword />} />
         <Route path="reset-password" element={<ResetPassword />} />
       </Route>
-      <Route path="/admin" element={<AdministratorLayout />}>
+      <Route
+        path="/admin"
+        element={
+          <UserProvider>
+            <ProtectedRouted allowedRole={["superadmin"]}>
+              <AdministratorLayout />
+            </ProtectedRouted>
+          </UserProvider>
+        }
+      >
         {protectedRoutes.map(({ path, Component, children }) => (
           <Route
             key={path}
             path={path}
             element={
-              <ProtectedRouted allowedRole="superadmin">
+              <ProtectedRouted allowedRole={["superadmin"]}>
                 <Component />
               </ProtectedRouted>
             }
@@ -48,52 +58,88 @@ export default function AppRouted() {
         <Route path="product/:id" element={<ProductDetailScreen />} />
         <Route path="biller/:id" element={<BillerDetailScreen />} />
       </Route>
-      <Route path="/business" element={<AdministratorLayout />}>
+      <Route
+        path="/business"
+        element={
+          <UserProvider>
+            <ProtectedRouted allowedRole={["business"]}>
+              <AdministratorLayout />
+            </ProtectedRouted>
+          </UserProvider>
+        }
+      >
         {businessRoutes.map(({ path, Component }) => (
           <Route
             key={path}
             path={path}
             element={
-              <ProtectedRouted allowedRole="business">
+              <ProtectedRouted allowedRole={["business"]}>
                 <Component />
               </ProtectedRouted>
             }
           />
         ))}
       </Route>
-      <Route path="/accountant" element={<AdministratorLayout />}>
+      <Route
+        path="/accountant"
+        element={
+          <UserProvider>
+            <ProtectedRouted allowedRole={["accountant"]}>
+              <AdministratorLayout />
+            </ProtectedRouted>
+          </UserProvider>
+        }
+      >
         {accountantRoutes.map(({ path, Component }) => (
           <Route
             key={path}
             path={path}
             element={
-              <ProtectedRouted allowedRole="accountant">
+              <ProtectedRouted allowedRole={["accountant"]}>
                 <Component />
               </ProtectedRouted>
             }
           />
         ))}
       </Route>
-      <Route path="/audit" element={<AdministratorLayout />}>
+      <Route
+        path="/audit"
+        element={
+          <UserProvider>
+            <ProtectedRouted allowedRole={["audit"]}>
+              <AdministratorLayout />
+            </ProtectedRouted>
+          </UserProvider>
+        }
+      >
         {auditRoutes.map(({ path, Component }) => (
           <Route
             key={path}
             path={path}
             element={
-              <ProtectedRouted allowedRole="audit">
+              <ProtectedRouted allowedRole={["audit"]}>
                 <Component />
               </ProtectedRouted>
             }
           />
         ))}
       </Route>
-      <Route path="/support" element={<AdministratorLayout />}>
+      <Route
+        path="/support"
+        element={
+          <UserProvider>
+            <ProtectedRouted allowedRole={["support"]}>
+              <AdministratorLayout />
+            </ProtectedRouted>
+          </UserProvider>
+        }
+      >
         {supportRoutes.map(({ path, Component }) => (
           <Route
             key={path}
             path={path}
             element={
-              <ProtectedRouted allowedRole="support">
+              <ProtectedRouted allowedRole={["support"]}>
                 <Component />
               </ProtectedRouted>
             }

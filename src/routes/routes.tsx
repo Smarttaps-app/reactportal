@@ -78,8 +78,8 @@ export const protectedRoutes = [
     title: "Services",
     icon: <SwapOutlined />,
     children: [
-      { path: "Parks", Component: ParksScreen, showInMenu: true },
-      { path: "stations", Component: StationsScreen, showInMenu: true },
+      { path: "Transport Company", Component: ParksScreen, showInMenu: true },
+      { path: "Parks", Component: StationsScreen, showInMenu: true },
       { path: "routes", Component: RoutesScreen, showInMenu: true },
       { path: "trains", Component: TrainsScreen, showInMenu: true },
       { path: "buses", Component: BusesScreen, showInMenu: true },

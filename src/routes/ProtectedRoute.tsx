@@ -3,13 +3,13 @@ import { Spin } from "antd";
 import { useUser } from "../context/useUser";
 interface ProtectedRouteProps {
   children: React.ReactNode;
-  allowedRole?: string;
+  allowedRole?: string[];
   redirectTo?: string;
 }
 
 const ProtectedRouted = ({
   children,
-  allowedRole = "",
+  allowedRole = ["admin"],
   redirectTo = "/",
 }: ProtectedRouteProps) => {
   const location = useLocation();
@@ -23,7 +23,7 @@ const ProtectedRouted = ({
   if (!user) {
     return <Navigate to={redirectTo} replace />;
   }
-  if (allowedRole && user.tag !== allowedRole) {
+  if (allowedRole && !allowedRole.includes(user.tag)) {
     return <Navigate to={from} replace />;
   }
   return children;

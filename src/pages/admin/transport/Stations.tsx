@@ -1,4 +1,4 @@
-import { Button, Card, Empty, Flex, Row, Space, Table } from "antd";
+import { Button, Card, Empty, Flex, Input, Row, Space, Table } from "antd";
 import { useMemo, useState } from "react";
 import { Common } from "../../../utils/Common";
 import {
@@ -10,8 +10,10 @@ import {
 import { IStation } from "../../../utils/type";
 import { useStations } from "../../../hooks/useTransport";
 import AddStation from "./AddStation";
+import { Search } from "lucide-react";
 
 export default function StationsScreen() {
+  const [searchTerm, setSearchTerm] = useState("");
   const [add, setAdd] = useState(false);
   const [item, setItem] = useState<IStation>();
   const { loading, stations, error } = useStations();
@@ -95,27 +97,42 @@ export default function StationsScreen() {
       </Row>
     );
 
-  const data: IStation[] = stations || [];
+  const data =
+    stations.filter(
+      (payment: IStation) =>
+        payment.stationName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        payment.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        payment.mode.toLowerCase().includes(searchTerm.toLowerCase())
+    ) || [];
 
   return (
     <>
       <Card
-        title="Stations"
+        title="Parks"
         className="!shadow-sm !rounded-lg"
         loading={loading}
         extra={
           <Space className="flex items-center">
+            <div className="relative flex-1 max-w-md">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+              <Input
+                placeholder="Search ..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10 py-6 bg-gray-50 border-gray-200 focus-visible:outline-none focus:ring-2 focus:!ring-primary focus:bg-white !ease-linear !duration-200 !transition-all"
+              />
+            </div>
             <span className="text-sm text-gray-500">Total: {data.length}</span>
             <Button
               icon={<PlusOutlined />}
-              title="New Station"
+              title="New Park"
               type="primary"
               onClick={() => {
                 setItem(undefined);
                 setAdd(true);
               }}
             >
-              New Station
+              New Park
             </Button>
           </Space>
         }

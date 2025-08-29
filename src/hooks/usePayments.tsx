@@ -4,7 +4,7 @@ import { getPaymentsAction } from "../serviceAction/PaymentActions";
 export function usePayments(selectedDates: [dayjs.Dayjs, dayjs.Dayjs]) {
   const {
     isPending: loading,
-    data: payments,
+    data: payments = [],
     isError,
     error,
     refetch,

@@ -1,3 +1,5 @@
+import { ReactNode } from "react";
+
 export interface IPayment {
   id: number;
   recipient: string;
@@ -15,6 +17,8 @@ export interface PaymentCardProps {
   loading: boolean;
   data: IPayment[];
   error: boolean;
+  color: string;
+  children?: ReactNode;
 }
 export interface ProductCardProps {
   title: string;

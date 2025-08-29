@@ -1,4 +1,14 @@
-import { Avatar, Button, Card, Empty, Flex, Row, Space, Table } from "antd";
+import {
+  Avatar,
+  Button,
+  Card,
+  Empty,
+  Flex,
+  Input,
+  Row,
+  Space,
+  Table,
+} from "antd";
 import { useMemo, useState } from "react";
 import { Common } from "../../../utils/Common";
 import {
@@ -11,8 +21,10 @@ import {
 import { IPark } from "../../../utils/type";
 import { useParks } from "../../../hooks/useTransport";
 import AddPark from "./AddPark";
+import { Search } from "lucide-react";
 
 export default function ParksScreen() {
+  const [searchTerm, setSearchTerm] = useState("");
   const [add, setAdd] = useState(false);
   const [item, setItem] = useState<IPark>();
   const { loading, parks, error } = useParks();
@@ -105,27 +117,41 @@ export default function ParksScreen() {
       </Row>
     );
 
-  const data: IPark[] = parks || [];
+  const data =
+    parks.filter(
+      (payment: IPark) =>
+        payment.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        payment.address.toLowerCase().includes(searchTerm.toLowerCase())
+    ) || [];
 
   return (
     <>
       <Card
-        title="Parks"
+        title="Transport Companies"
         className="!shadow-sm !rounded-lg"
         loading={loading}
         extra={
           <Space className="flex items-center">
+            <div className="relative flex-1 max-w-md">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+              <Input
+                placeholder="Search ..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10 py-6 bg-gray-50 border-gray-200 focus-visible:outline-none focus:ring-2 focus:!ring-primary focus:bg-white !ease-linear !duration-200 !transition-all"
+              />
+            </div>
             <span className="text-sm text-gray-500">Total: {data.length}</span>
             <Button
               icon={<PlusOutlined />}
-              title="New Park"
+              title="New Transport Company"
               type="primary"
               onClick={() => {
                 setItem(undefined);
                 setAdd(true);
               }}
             >
-              New Park
+              New Transport Company
             </Button>
           </Space>
         }

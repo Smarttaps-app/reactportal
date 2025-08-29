@@ -11,10 +11,14 @@ import {
   Select,
 } from "antd";
 import { Grid } from "antd";
-import { IAddProps, IRoute, IStation } from "../../../utils/type";
+import { IAddProps, IBus, IRoute, IStation } from "../../../utils/type";
 import { useQueryClient } from "@tanstack/react-query";
 import { Common } from "../../../utils/Common";
-import { useAddTRoute, useStations } from "../../../hooks/useTransport";
+import {
+  useAddTRoute,
+  useBuses,
+  useStations,
+} from "../../../hooks/useTransport";
 import { useEffect, useMemo } from "react";
 const { useBreakpoint } = Grid;
 
@@ -27,6 +31,7 @@ const AddRoute: React.FC<IAddProps<IRoute>> = ({
   const screens = useBreakpoint();
   const { addRoute, isAdding } = useAddTRoute();
   const { loading, stations } = useStations();
+  const { pending, buses, error } = useBuses();
   const [form] = Form.useForm();
   const selectedStartId = Form.useWatch("startId", form);
   useEffect(() => {
@@ -79,6 +84,7 @@ const AddRoute: React.FC<IAddProps<IRoute>> = ({
             routeName: payload?.routeName,
             startId: payload?.sourceStation?.id,
             stopId: payload?.destinationStation?.id,
+            buses: payload?.buses,
             remember: true,
           }}
           onFinish={onFinish}
@@ -106,19 +112,19 @@ const AddRoute: React.FC<IAddProps<IRoute>> = ({
               >
                 {() => (
                   <Form.Item<IRoute>
-                    label="Starting Station"
+                    label="Starting Park"
                     name="startId"
                     rules={[
                       {
                         required: true,
-                        message: "Please select a starting station!",
+                        message: "Please select a starting park!",
                       },
                       ({ getFieldValue }) => ({
                         validator(_, value) {
                           if (value && value === getFieldValue("stopId")) {
                             return Promise.reject(
                               new Error(
-                                "Starting station can't be the same as starting station!"
+                                "Starting park can't be the same as starting park!"
                               )
                             );
                           }
@@ -150,12 +156,12 @@ const AddRoute: React.FC<IAddProps<IRoute>> = ({
             </Col>
             <Col xs={24} sm={24} md={24}>
               <Form.Item<IRoute>
-                label="Stopping Station"
+                label="Destination Park"
                 name="stopId"
                 rules={[
                   {
                     required: true,
-                    message: "Please select a stopping station!",
+                    message: "Please select a destionation park!",
                   },
                 ]}
               >
@@ -166,6 +172,36 @@ const AddRoute: React.FC<IAddProps<IRoute>> = ({
                   optionLabelProp="label"
                   options={filteredStopStations.map((item: IStation) => ({
                     label: `${item.stationName} → ${item.mode.toUpperCase()}`,
+                    value: item.id,
+                  }))}
+                  filterOption={(input, option) =>
+                    (option?.label ?? "")
+                      .toString()
+                      .toLowerCase()
+                      .includes(input.toLowerCase())
+                  }
+                />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={24} md={24}>
+              <Form.Item<IRoute>
+                label="Choose Buses"
+                name="buses"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please choose buses for the route!",
+                  },
+                ]}
+              >
+                <Select
+                  showSearch
+                  disabled={error ? true : false}
+                  loading={pending}
+                  mode="multiple"
+                  optionLabelProp="label"
+                  options={buses.map((item: IBus) => ({
+                    label: `${item.name} → ${item.bus_number?.toUpperCase()}`,
                     value: item.id,
                   }))}
                   filterOption={(input, option) =>

@@ -4,6 +4,7 @@ import {
   DatePicker,
   Empty,
   Flex,
+  Input,
   Row,
   Space,
   Table,
@@ -17,9 +18,11 @@ import { EyeOutlined, RedoOutlined, SearchOutlined } from "@ant-design/icons";
 import { IPayment } from "../../../utils/type";
 import PaymentCard from "./PaymentCard";
 import ShowPayment from "./ShowPayment";
+import { Search } from "lucide-react";
 const { RangePicker } = DatePicker;
 
 export default function PaymentsScreen() {
+  const [searchTerm, setSearchTerm] = useState("");
   const [show, setShow] = useState(false);
   const [payment, setPayment] = useState<IPayment>();
   const [selectedDates, setSelectedDates] = useState<
@@ -123,7 +126,12 @@ export default function PaymentsScreen() {
       </Row>
     );
 
-  const data: IPayment[] = payments || [];
+  const data =
+    payments.filter(
+      (payment: IPayment) =>
+        payment.recipient.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        payment.payment_type.toLowerCase().includes(searchTerm.toLowerCase())
+    ) || [];
 
   return (
     <>
@@ -134,6 +142,7 @@ export default function PaymentsScreen() {
           loading={loading}
           data={data}
           error={error ? true : false}
+          color="green"
         />
         <PaymentCard
           title="Total Debit"
@@ -141,6 +150,7 @@ export default function PaymentsScreen() {
           loading={loading}
           data={data}
           error={error ? true : false}
+          color="red"
         />
         <PaymentCard
           title="Total Failed"
@@ -148,6 +158,7 @@ export default function PaymentsScreen() {
           loading={loading}
           data={data}
           error={error ? true : false}
+          color="purple"
         />
         <PaymentCard
           title="Total Pending"
@@ -155,6 +166,7 @@ export default function PaymentsScreen() {
           loading={loading}
           data={data}
           error={error ? true : false}
+          color="yellow"
         />
       </Row>
       <Card
@@ -163,6 +175,15 @@ export default function PaymentsScreen() {
         loading={loading}
         extra={
           <Space>
+            <div className="relative flex-1 max-w-md">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+              <Input
+                placeholder="Search products..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10 py-6 bg-gray-50 border-gray-200 focus-visible:outline-none focus:ring-2 focus:!ring-primary focus:bg-white !ease-linear !duration-200 !transition-all"
+              />
+            </div>
             <RangePicker onChange={handleDateChange} />
             <Button
               type="primary"

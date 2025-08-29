@@ -4,6 +4,7 @@ import {
   DatePicker,
   Empty,
   Flex,
+  Input,
   Row,
   Space,
   Table,
@@ -17,9 +18,11 @@ import { ITicket } from "../../../utils/type";
 import TicketCard from "./TicketCard";
 import { useTicket } from "../../../hooks/useTicket";
 import ShowTicket from "./ShowTicket";
+import { Search } from "lucide-react";
 const { RangePicker } = DatePicker;
 
 export default function TicketsScreen() {
+  const [searchTerm, setSearchTerm] = useState("");
   const [show, setShow] = useState(false);
   const [ticket, setTicket] = useState<ITicket>();
   const [selectedDates, setSelectedDates] = useState<
@@ -122,7 +125,12 @@ export default function TicketsScreen() {
       </Row>
     );
 
-  const data: ITicket[] = tickets || [];
+  const data =
+    tickets.filter(
+      (ticket: ITicket) =>
+        ticket.ticket_number.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        ticket.mode.toLowerCase().includes(searchTerm.toLowerCase())
+    ) || [];
 
   return (
     <>
@@ -178,6 +186,15 @@ export default function TicketsScreen() {
         loading={loading}
         extra={
           <Space>
+            <div className="relative flex-1 max-w-md">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+              <Input
+                placeholder="Search products..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10 py-6 bg-gray-50 border-gray-200 focus-visible:outline-none focus:ring-2 focus:!ring-primary focus:bg-white !ease-linear !duration-200 !transition-all"
+              />
+            </div>
             <RangePicker onChange={handleDateChange} />
             <Button
               type="primary"

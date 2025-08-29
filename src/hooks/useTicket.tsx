@@ -4,7 +4,7 @@ import { getTicketsAction } from "../serviceAction/TicketActions";
 export function useTicket(selectedDates: [dayjs.Dayjs, dayjs.Dayjs]) {
   const {
     isPending: loading,
-    data: tickets,
+    data: tickets = [],
     isError,
     error,
     refetch,

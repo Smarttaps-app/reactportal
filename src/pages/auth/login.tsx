@@ -2,15 +2,12 @@ import { ILogin } from "../../utils/type";
 import { Flex, Form, Input, Checkbox, Space, Button } from "antd";
 import { Link } from "react-router-dom";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
-import { useUser } from "../../context/useUser";
+import { useLogin } from "./useLogin";
 
 export default function Login() {
-  const { login, isloading: loading } = useUser();
+  const { login, isPending: loading } = useLogin();
   const [form] = Form.useForm();
-
-  const onFinish = async (data: ILogin) => {
-    await login(data);
-  };
+  const onFinish = async (data: ILogin) => login(data);
   return (
     <Form
       form={form}

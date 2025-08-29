@@ -1,15 +1,13 @@
 import { Flex, Form, Input, Button, Card } from "antd";
 import { LockOutlined } from "@ant-design/icons";
-import { useChangePassword } from "../../../hooks/useLogin";
 import { IChangePassword } from "../../../utils/type";
+import { useChangePassword } from "../../auth/useLogin";
 
 export default function Changepassword() {
-  const { changePassword, loading } = useChangePassword();
+  const { changePassword, isPending: loading } = useChangePassword();
   const [form] = Form.useForm();
 
-  const onFinish = async (data: IChangePassword) => {
-    await changePassword(data);
-  };
+  const onFinish = async (data: IChangePassword) => changePassword(data);
   return (
     <Card style={{ width: "100%" }} title="Change Password">
       <Flex justify="center">

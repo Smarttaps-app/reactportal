@@ -1,15 +1,13 @@
 import { Flex, Form, Input, Button, Card, InputNumber } from "antd";
 import { LockOutlined } from "@ant-design/icons";
-import { useChangePassword } from "../../../hooks/useLogin";
 import { IChangePassword } from "../../../utils/type";
+import { useCashOut } from "./useProfile";
 
 export default function CashOutScreen() {
-  const { changePassword, loading } = useChangePassword();
+  const { cashout, loading } = useCashOut();
   const [form] = Form.useForm();
 
-  const onFinish = async (data: IChangePassword) => {
-    await changePassword(data);
-  };
+  const onFinish = async (data: IChangePassword) => cashout(data);
   return (
     <Card style={{ width: "100%" }} title="Cash Out Withdrawal">
       <Flex justify="center">
