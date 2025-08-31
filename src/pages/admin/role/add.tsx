@@ -83,8 +83,10 @@ const Add: React.FC<IAddProps<IRole>> = ({
                   { value: "accountant", label: "Accountant" },
                   { value: "audit", label: "Audit" },
                   { value: "business", label: "Business" },
+                  { value: "busprovider", label: "Bus Provider" },
                   { value: "support", label: "Support" },
                   { value: "provider", label: "Provider" },
+                  { value: "trainprovider", label: "Train Provider" },
                 ]}
               />
             </Form.Item>

@@ -11,14 +11,10 @@ import {
   Select,
 } from "antd";
 import { Grid } from "antd";
-import { IAddProps, IBus, IRoute, IStation } from "../../../utils/type";
+import { IAddProps, IBus, IRoute, IStation } from "../../../../utils/type";
 import { useQueryClient } from "@tanstack/react-query";
-import { Common } from "../../../utils/Common";
-import {
-  useAddTRoute,
-  useBuses,
-  useStations,
-} from "../../../hooks/useTransport";
+import { Common } from "../../../../utils/Common";
+import { useAddTRoute, useBuses, useStations } from "./useBus";
 import { useEffect, useMemo } from "react";
 const { useBreakpoint } = Grid;
 
@@ -85,7 +81,6 @@ const AddRoute: React.FC<IAddProps<IRoute>> = ({
             startId: payload?.sourceStation?.id,
             stopId: payload?.destinationStation?.id,
             buses: payload?.buses,
-            remember: true,
           }}
           onFinish={onFinish}
           style={{ minWidth: 320 }}

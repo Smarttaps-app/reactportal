@@ -16,7 +16,9 @@ export const addRoute = async (payload: IRoute) =>
 export const deleteRoute = async (id: number) =>
   await api.delete(`admin/route/${id}/delete`);
 // service for Stations
-export const getStations = async () => await api.get(`admin/stations`);
+export const getBusStations = async () => await api.get(`admin/bus/stations`);
+export const getTrainStations = async () =>
+  await api.get(`admin/train/stations`);
 export const getStation = async (id: string) =>
   await api.get(`admin/station/${id}`);
 export const addStation = async (payload: IStation) =>

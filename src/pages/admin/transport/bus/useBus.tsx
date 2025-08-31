@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import {
-  getTrainStationsAction,
+  getBusStationsAction,
   getRoutesAction,
   getParksAction,
   getBusesAction,
@@ -18,9 +18,9 @@ import {
   getSchedulesAction,
   addScheduleAction,
   deleteScheduleAction,
-} from "../serviceAction/TrainActions";
+} from "../../../../serviceAction/TrainActions";
 import { message } from "antd";
-import { Common } from "../utils/Common";
+import { Common } from "../../../../utils/Common";
 export function useTRoutes() {
   const {
     isPending: loading,
@@ -59,8 +59,8 @@ export function useStations() {
     data: stations = [],
     error,
   } = useQuery({
-    queryKey: ["stations"],
-    queryFn: getTrainStationsAction,
+    queryKey: ["busstations"],
+    queryFn: getBusStationsAction,
     refetchOnWindowFocus: false,
   });
   return { loading, stations, error };

@@ -11,10 +11,11 @@ import {
   Select,
 } from "antd";
 import { Grid } from "antd";
-import { IAddProps, IStation } from "../../../utils/type";
 import { useQueryClient } from "@tanstack/react-query";
-import { useAddStation } from "../../../hooks/useTransport";
-import { Common } from "../../../utils/Common";
+import { IAddProps, IStation } from "../../../../utils/type";
+import { useAddStation } from "./useBus";
+import { Common } from "../../../../utils/Common";
+import states from "../../../../utils/states";
 const { useBreakpoint } = Grid;
 
 const AddStation: React.FC<IAddProps<IStation>> = ({
@@ -25,7 +26,7 @@ const AddStation: React.FC<IAddProps<IStation>> = ({
   const client = useQueryClient();
   const screens = useBreakpoint();
   const { addStation, isAdding } = useAddStation();
-  const onFinish: FormProps<IStation>["onFinish"] = (values) => {
+  const onFinish = async (values: IStation) => {
     console.log("Success:", values);
     addStation(values, {
       onSuccess: (data) => {
@@ -54,7 +55,11 @@ const AddStation: React.FC<IAddProps<IStation>> = ({
       <Card title="Add Park">
         <Form
           layout="vertical"
-          initialValues={{ remember: true }}
+          initialValues={{
+            mode: "bus",
+            stationName: payload?.stationName,
+            location: payload?.location,
+          }}
           onFinish={onFinish}
           style={{ minWidth: 320 }}
         >
@@ -78,35 +83,43 @@ const AddStation: React.FC<IAddProps<IStation>> = ({
             <Col xs={24} sm={24} md={24}>
               <Form.Item<IStation>
                 name="location"
-                label="Location "
+                label="Select Location"
                 initialValue={payload?.location}
                 rules={[
-                  { required: true, message: "Please enter station location!" },
+                  {
+                    required: true,
+                    message: "Please choose station location!",
+                  },
                 ]}
               >
-                <Input
-                  placeholder="Enter station location"
-                  className="!rounded-md !py-2"
+                <Select
+                  showSearch
+                  loading={isAdding}
+                  disabled={isAdding}
+                  size="large"
+                  placeholder="Choose station location"
+                  optionLabelProp="label"
+                  options={states.map((item) => ({
+                    label: item.state,
+                    value: item.state,
+                  }))}
+                  filterOption={(input, option) =>
+                    (option?.label ?? "")
+                      .toString()
+                      .toLowerCase()
+                      .includes(input.toLowerCase())
+                  }
                 />
               </Form.Item>
             </Col>
 
             <Col xs={24} sm={24} md={24}>
               <Form.Item<IStation>
-                label="Station Mode"
                 name="mode"
+                hidden
                 initialValue={payload?.mode}
-                rules={[
-                  { required: true, message: "Please select station mode!" },
-                ]}
               >
-                <Select
-                  size="large"
-                  options={[
-                    { value: "bus", label: "Bus" },
-                    { value: "train", label: "Train" },
-                  ]}
-                />
+                <Input />
               </Form.Item>
             </Col>
 

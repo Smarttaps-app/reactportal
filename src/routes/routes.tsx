@@ -3,6 +3,7 @@ import Settings from "../pages/admin/settings/settings";
 import Profile from "../pages/admin/profile/profile";
 import {
   AccountBookOutlined,
+  CarOutlined,
   DashboardOutlined,
   ImportOutlined,
   InfoCircleOutlined,
@@ -19,20 +20,23 @@ import CustomersScreen from "../pages/admin/customer/Index";
 import TransportScreen from "../pages/admin/transport/Index";
 import ProductsScreen from "../pages/admin/product/Index";
 import RoutesScreen from "../pages/admin/transport/TransportRoutes";
-import ParksScreen from "../pages/admin/transport/Parks";
+import ParksScreen from "../pages/admin/transport/bus/BusProviders";
 import NotificationScreen from "../pages/admin/notification/notification";
 import Changepassword from "../pages/admin/profile/changepassword";
 import CashOutScreen from "../pages/admin/profile/cashout";
 import ProductDetailScreen from "../pages/admin/product/productdetails";
 import Index from "../pages/admin/admin";
 import RoleIndex from "../pages/admin/role";
-import StationsScreen from "../pages/admin/transport/Stations";
-import TrainsScreen from "../pages/admin/transport/Trains";
-import BusesScreen from "../pages/admin/transport/Buses";
+import StationsScreen from "../pages/admin/transport/train/Stations";
+import BusesScreen from "../pages/admin/transport/bus/Buses";
 import AccountingScreen from "../pages/admin/gl_account/Index";
 import GlAccountScreen from "../pages/admin/gl_account/ledger/glaccounting";
 import CommissionsScreen from "../pages/admin/gl_account/commission/commissions";
 import DiscountsScreen from "../pages/admin/gl_account/discount/discounts";
+import { TrainIcon } from "lucide-react";
+import TrainsScreen from "../pages/admin/transport/train/Trains";
+import BusRoutesScreen from "../pages/admin/transport/bus/BusRoutes";
+import BusStationsScreen from "../pages/admin/transport/bus/parks";
 
 export const protectedRoutes = [
   {
@@ -73,16 +77,25 @@ export const protectedRoutes = [
     icon: <ImportOutlined />,
   },
   {
-    path: "services",
+    path: "bus-services",
     Component: TransportScreen,
-    title: "Services",
-    icon: <SwapOutlined />,
+    title: "Bus",
+    icon: <CarOutlined />,
     children: [
-      { path: "Transport Company", Component: ParksScreen, showInMenu: true },
-      { path: "Parks", Component: StationsScreen, showInMenu: true },
-      { path: "routes", Component: RoutesScreen, showInMenu: true },
-      { path: "trains", Component: TrainsScreen, showInMenu: true },
       { path: "buses", Component: BusesScreen, showInMenu: true },
+      { path: "bus-parks", Component: BusStationsScreen, showInMenu: true },
+      { path: "bus-routes", Component: BusRoutesScreen, showInMenu: true },
+    ],
+  },
+  {
+    path: "train-services",
+    Component: TransportScreen,
+    title: "Train",
+    icon: <TrainIcon />,
+    children: [
+      { path: "trains", Component: TrainsScreen, showInMenu: true },
+      { path: "train-routes", Component: RoutesScreen, showInMenu: true },
+      { path: "train-stations", Component: StationsScreen, showInMenu: true },
     ],
   },
   {
@@ -125,6 +138,55 @@ export const protectedRoutes = [
     ],
   },
 ];
+
+export const busproviderRoutes = [
+  {
+    path: "",
+    Component: Dashboard,
+    title: "Dasboard",
+    icon: <DashboardOutlined />,
+  },
+  {
+    path: "payments",
+    Component: PaymentsScreen,
+    title: "Payments",
+    icon: <TeamOutlined />,
+  },
+  {
+    path: "ticketing",
+    Component: TicketsScreen,
+    title: "Tickets",
+    icon: <ImportOutlined />,
+  },
+  {
+    path: "bus-services",
+    Component: TransportScreen,
+    title: "Bus",
+    icon: <CarOutlined />,
+    children: [
+      { path: "buses", Component: BusesScreen, showInMenu: true },
+      { path: "bus-parks", Component: BusStationsScreen, showInMenu: true },
+      { path: "bus-routes", Component: BusRoutesScreen, showInMenu: true },
+    ],
+  },
+  {
+    path: "notification",
+    Component: NotificationScreen,
+    title: "Notifications",
+    icon: <InfoCircleOutlined />,
+  },
+  {
+    path: "profile",
+    Component: Profile,
+    title: "Profile",
+    icon: <ProfileOutlined />,
+    children: [
+      { path: "change-password", Component: Changepassword, showInMenu: false },
+      { path: "cash-out", Component: CashOutScreen, showInMenu: false },
+    ],
+  },
+];
+
 export const businessRoutes = [
   {
     path: "",

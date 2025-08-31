@@ -12,10 +12,10 @@ import {
   Switch,
 } from "antd";
 import { Grid } from "antd";
-import { IAddProps, IPark } from "../../../utils/type";
+import { IAddProps, IPark } from "../../../../utils/type";
 import { useQueryClient } from "@tanstack/react-query";
-import { Common } from "../../../utils/Common";
-import { useAddPark } from "../../../hooks/useTransport";
+import { Common } from "../../../../utils/Common";
+import { useAddPark } from "../../../../hooks/useTransport";
 const { useBreakpoint } = Grid;
 
 const AddPark: React.FC<IAddProps<IPark>> = ({

@@ -1,20 +1,22 @@
-import { Button, Card, Empty, Flex, Row, Space, Table } from "antd";
+import { Button, Card, Empty, Flex, Input, Row, Space, Table } from "antd";
 import { useMemo, useState } from "react";
-import { Common } from "../../../utils/Common";
 import {
   DeleteOutlined,
   EyeOutlined,
   PlusOutlined,
   RedoOutlined,
 } from "@ant-design/icons";
-import { IRoute, IStation } from "../../../utils/type";
-import { useTRoutes } from "../../../hooks/useTransport";
-import AddRoute from "./train/AddRoute";
+import { Search } from "lucide-react";
+import { useStations } from "./useBus";
+import { IStation } from "../../../../utils/type";
+import AddStation from "./AddStation";
+import { Common } from "../../../../utils/Common";
 
-export default function RoutesScreen() {
+export default function BusStationsScreen() {
+  const [searchTerm, setSearchTerm] = useState("");
   const [add, setAdd] = useState(false);
-  const [item, setItem] = useState<IRoute>();
-  const { loading, routes, error } = useTRoutes();
+  const [item, setItem] = useState<IStation>();
+  const { loading, stations, error } = useStations();
 
   const columns = useMemo(
     () => [
@@ -25,37 +27,28 @@ export default function RoutesScreen() {
         width: "5%",
       },
       {
-        title: "Route Name",
-        dataIndex: "routeName",
-        key: "routeName",
-        width: "20%",
+        title: "Park Name",
+        dataIndex: "stationName",
+        key: "stationName",
+        width: "30%",
       },
       {
-        title: "Departure",
-        dataIndex: "sourceStation",
-        key: "sourceStation",
-        render: (sourceStation: IStation) => sourceStation?.stationName,
-      },
-      {
-        title: "Arival",
-        dataIndex: "destinationStation",
-        key: "destinationStation",
-        render: (destinationStation: IStation) =>
-          destinationStation?.stationName,
+        title: "Location",
+        dataIndex: "location",
+        key: "location",
       },
       {
         title: "Mode",
         dataIndex: "mode",
         key: "mode",
         width: "6%",
-        render: (routeName: string, record: IRoute) => (
-          <span className="text-xs text-gray-500">
-            {routeName}
-            {record.buses.length > 0
-              ? ` ${record.buses.length} Buses`
-              : ` ${record.trains.length} Trains`}
-          </span>
-        ),
+      },
+      {
+        title: "Date",
+        dataIndex: "created_at",
+        key: "created_at",
+        render: (created: string) => Common.formatDate(created),
+        ellipsis: true,
       },
       {
         title: "Updated",
@@ -68,13 +61,13 @@ export default function RoutesScreen() {
         title: "Actions",
         dataIndex: "",
         width: "12%",
-        render: (key: string, route: IRoute) => (
+        render: (key: string, station: IStation) => (
           <Flex gap="small" align="center" wrap>
             <Button
               type="primary"
               icon={<EyeOutlined />}
               onClick={() => {
-                setItem(route);
+                setItem(station);
                 setAdd(true);
               }}
             />
@@ -104,27 +97,42 @@ export default function RoutesScreen() {
       </Row>
     );
 
-  const data: IRoute[] = routes || [];
+  const data =
+    stations.filter(
+      (payment: IStation) =>
+        payment.stationName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        payment.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        payment.mode.toLowerCase().includes(searchTerm.toLowerCase())
+    ) || [];
 
   return (
     <>
       <Card
-        title="Routes"
+        title="Parks"
         className="!shadow-sm !rounded-lg"
         loading={loading}
         extra={
           <Space className="flex items-center">
+            <div className="relative flex-1 max-w-md">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+              <Input
+                placeholder="Search ..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10 py-6 bg-gray-50 border-gray-200 focus-visible:outline-none focus:ring-2 focus:!ring-primary focus:bg-white !ease-linear !duration-200 !transition-all"
+              />
+            </div>
             <span className="text-sm text-gray-500">Total: {data.length}</span>
             <Button
               icon={<PlusOutlined />}
-              title="New Station"
+              title="New Park"
               type="primary"
               onClick={() => {
                 setItem(undefined);
                 setAdd(true);
               }}
             >
-              New Route
+              New Park
             </Button>
           </Space>
         }
@@ -138,7 +146,7 @@ export default function RoutesScreen() {
           scroll={{ x: "max-content" }}
         />
       </Card>
-      <AddRoute payload={item} isOpen={add} onCancel={() => setAdd(false)} />
+      <AddStation payload={item} isOpen={add} onCancel={() => setAdd(false)} />
     </>
   );
 }

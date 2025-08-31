@@ -18,6 +18,8 @@ export const useLogin = () => {
         console.log(response.data.data.tag);
         if (response.data.data.tag === "superadmin") {
           navigate("/admin", { replace: true });
+        } else if (response.data.data.tag === "busprovider") {
+          navigate("/provider", { replace: true });
         } else if (response.data.data.tag === "support") {
           navigate("/support", { replace: true });
         } else if (response.data.data.tag === "business") {

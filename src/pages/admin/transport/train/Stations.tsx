@@ -1,72 +1,47 @@
-import { Avatar, Button, Card, Empty, Flex, Row, Space, Table } from "antd";
+import { Button, Card, Empty, Flex, Input, Row, Space, Table } from "antd";
 import { useMemo, useState } from "react";
-import { Common } from "../../../utils/Common";
+import { Common } from "../../../../utils/Common";
 import {
-  BarsOutlined,
   DeleteOutlined,
   EyeOutlined,
   PlusOutlined,
   RedoOutlined,
 } from "@ant-design/icons";
-import { IBus } from "../../../utils/type";
-import { useBuses } from "../../../hooks/useTransport";
-import AddBus from "./AddBus";
+import { IStation } from "../../../../utils/type";
+import { useStations } from "../../../../hooks/useTransport";
+import AddStation from "./AddStation";
+import { Search } from "lucide-react";
 
-export default function BusesScreen() {
+export default function StationsScreen() {
+  const [searchTerm, setSearchTerm] = useState("");
   const [add, setAdd] = useState(false);
-  const [item, setItem] = useState<IBus>();
-  const { loading, buses, error } = useBuses();
+  const [item, setItem] = useState<IStation>();
+  const { loading, stations, error } = useStations();
 
   const columns = useMemo(
     () => [
       {
-        title: "",
-        dataIndex: "busImage",
-        key: "busImage",
-        width: "5%",
-        render: (avatar: string) => (
-          <Avatar src={avatar} size="small" icon={<BarsOutlined />} />
-        ),
-      },
-      {
-        title: "Bus Name",
-        dataIndex: "name",
-        key: "name",
-        width: "25%",
-      },
-      {
-        title: "Bus Number",
-        dataIndex: "bus_number",
-        key: "bus_number",
-        width: "10%",
-      },
-      {
-        title: "Seat",
-        dataIndex: "seatCount",
-        key: "seatCount",
+        title: "ID",
+        dataIndex: "id",
+        key: "id",
         width: "5%",
       },
       {
-        title: "Price",
-        dataIndex: "base_price",
-        key: "base_price",
-        width: "10%",
-        render: (base_price: string) =>
-          Common.formatAsCurrency(Number(base_price)),
+        title: "Station Name",
+        dataIndex: "stationName",
+        key: "stationName",
+        width: "30%",
       },
       {
-        title: "TV",
-        dataIndex: "tv",
-        key: "tv",
-        width: "5%",
-        render: (keyValue: boolean) => (keyValue ? "YES" : "NO"),
+        title: "Location",
+        dataIndex: "location",
+        key: "location",
       },
       {
-        title: "Camera",
-        dataIndex: "camera",
-        key: "camera",
-        width: "8%",
-        render: (keyValue: boolean) => (keyValue ? "YES" : "NO"),
+        title: "Mode",
+        dataIndex: "mode",
+        key: "mode",
+        width: "6%",
       },
       {
         title: "Date",
@@ -76,10 +51,17 @@ export default function BusesScreen() {
         ellipsis: true,
       },
       {
+        title: "Updated",
+        dataIndex: "updated_at",
+        key: "updated_at",
+        render: (updated: string) => Common.formatDate(updated),
+        ellipsis: true,
+      },
+      {
         title: "Actions",
         dataIndex: "",
         width: "12%",
-        render: (key: string, station: IBus) => (
+        render: (key: string, station: IStation) => (
           <Flex gap="small" align="center" wrap>
             <Button
               type="primary"
@@ -115,27 +97,42 @@ export default function BusesScreen() {
       </Row>
     );
 
-  const data: IBus[] = buses || [];
+  const data =
+    stations.filter(
+      (payment: IStation) =>
+        payment.stationName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        payment.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        payment.mode.toLowerCase().includes(searchTerm.toLowerCase())
+    ) || [];
 
   return (
     <>
       <Card
-        title="Buses"
+        title="Parks"
         className="!shadow-sm !rounded-lg"
         loading={loading}
         extra={
           <Space className="flex items-center">
+            <div className="relative flex-1 max-w-md">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+              <Input
+                placeholder="Search ..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10 py-6 bg-gray-50 border-gray-200 focus-visible:outline-none focus:ring-2 focus:!ring-primary focus:bg-white !ease-linear !duration-200 !transition-all"
+              />
+            </div>
             <span className="text-sm text-gray-500">Total: {data.length}</span>
             <Button
               icon={<PlusOutlined />}
-              title="New Bus"
+              title="New Park"
               type="primary"
               onClick={() => {
                 setItem(undefined);
                 setAdd(true);
               }}
             >
-              New Bus
+              New Park
             </Button>
           </Space>
         }
@@ -149,7 +146,7 @@ export default function BusesScreen() {
           scroll={{ x: "max-content" }}
         />
       </Card>
-      <AddBus payload={item} isOpen={add} onCancel={() => setAdd(false)} />
+      <AddStation payload={item} isOpen={add} onCancel={() => setAdd(false)} />
     </>
   );
 }

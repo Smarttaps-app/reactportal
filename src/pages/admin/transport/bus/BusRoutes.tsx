@@ -1,33 +1,22 @@
-import {
-  Avatar,
-  Button,
-  Card,
-  Empty,
-  Flex,
-  Input,
-  Row,
-  Space,
-  Table,
-} from "antd";
+import { Button, Card, Empty, Flex, Input, Row, Space, Table } from "antd";
 import { useMemo, useState } from "react";
-import { Common } from "../../../utils/Common";
 import {
   DeleteOutlined,
   EyeOutlined,
-  MoonOutlined,
   PlusOutlined,
   RedoOutlined,
 } from "@ant-design/icons";
-import { IPark } from "../../../utils/type";
-import { useParks } from "../../../hooks/useTransport";
-import AddPark from "./AddPark";
 import { Search } from "lucide-react";
+import AddRoute from "./AddRoute";
+import { IRoute, IStation } from "../../../../utils/type";
+import { useTRoutes } from "./useBus";
+import { Common } from "../../../../utils/Common";
 
-export default function ParksScreen() {
+export default function BusRoutesScreen() {
   const [searchTerm, setSearchTerm] = useState("");
   const [add, setAdd] = useState(false);
-  const [item, setItem] = useState<IPark>();
-  const { loading, parks, error } = useParks();
+  const [item, setItem] = useState<IRoute>();
+  const { loading, routes, error } = useTRoutes();
 
   const columns = useMemo(
     () => [
@@ -38,37 +27,37 @@ export default function ParksScreen() {
         width: "5%",
       },
       {
-        title: "",
-        dataIndex: "parkImage",
-        key: "parkImage",
-        width: "5%",
-        render: (avatar: string) => (
-          <Avatar src={avatar} size="small" icon={<MoonOutlined />} />
-        ),
+        title: "Route Name",
+        dataIndex: "routeName",
+        key: "routeName",
+        width: "20%",
       },
       {
-        title: "Park Name",
-        dataIndex: "name",
-        key: "name",
-        width: "30%",
+        title: "Departure",
+        dataIndex: "sourceStation",
+        key: "sourceStation",
+        render: (sourceStation: IStation) => sourceStation?.stationName,
       },
       {
-        title: "Location",
-        dataIndex: "parkImage",
-        key: "location",
+        title: "Arival",
+        dataIndex: "destinationStation",
+        key: "destinationStation",
+        render: (destinationStation: IStation) =>
+          destinationStation?.stationName,
       },
       {
         title: "Mode",
         dataIndex: "mode",
         key: "mode",
         width: "6%",
-      },
-      {
-        title: "Date",
-        dataIndex: "created_at",
-        key: "created_at",
-        render: (created: string) => Common.formatDate(created),
-        ellipsis: true,
+        render: (routeName: string, record: IRoute) => (
+          <span className="text-xs text-gray-500">
+            {routeName}
+            {record.buses.length > 0
+              ? ` ${record.buses.length} Buses`
+              : ` ${record.trains.length} Trains`}
+          </span>
+        ),
       },
       {
         title: "Updated",
@@ -81,13 +70,13 @@ export default function ParksScreen() {
         title: "Actions",
         dataIndex: "",
         width: "12%",
-        render: (key: string, park: IPark) => (
+        render: (key: string, route: IRoute) => (
           <Flex gap="small" align="center" wrap>
             <Button
               type="primary"
               icon={<EyeOutlined />}
               onClick={() => {
-                setItem(park);
+                setItem(route);
                 setAdd(true);
               }}
             />
@@ -118,40 +107,45 @@ export default function ParksScreen() {
     );
 
   const data =
-    parks.filter(
-      (payment: IPark) =>
-        payment.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        payment.address.toLowerCase().includes(searchTerm.toLowerCase())
+    routes.filter(
+      (route: IRoute) =>
+        route.routeName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        route.sourceStation.location
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase()) ||
+        route.destinationStation.location
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase())
     ) || [];
 
   return (
     <>
       <Card
-        title="Transport Companies"
+        title="Routes"
         className="!shadow-sm !rounded-lg"
         loading={loading}
         extra={
           <Space className="flex items-center">
+            <span className="text-sm text-gray-500">Total: {data.length}</span>
             <div className="relative flex-1 max-w-md">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
               <Input
-                placeholder="Search ..."
+                placeholder="Search products..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-10 py-6 bg-gray-50 border-gray-200 focus-visible:outline-none focus:ring-2 focus:!ring-primary focus:bg-white !ease-linear !duration-200 !transition-all"
               />
             </div>
-            <span className="text-sm text-gray-500">Total: {data.length}</span>
             <Button
               icon={<PlusOutlined />}
-              title="New Transport Company"
+              title="New Station"
               type="primary"
               onClick={() => {
                 setItem(undefined);
                 setAdd(true);
               }}
             >
-              New Transport Company
+              New Route
             </Button>
           </Space>
         }
@@ -165,7 +159,7 @@ export default function ParksScreen() {
           scroll={{ x: "max-content" }}
         />
       </Card>
-      <AddPark payload={item} isOpen={add} onCancel={() => setAdd(false)} />
+      <AddRoute payload={item} isOpen={add} onCancel={() => setAdd(false)} />
     </>
   );
 }

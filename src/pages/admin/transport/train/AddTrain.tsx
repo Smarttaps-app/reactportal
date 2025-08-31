@@ -13,14 +13,14 @@ import {
   Switch,
 } from "antd";
 import { Grid } from "antd";
-import { IAddProps, ITrain, IRoute, ISchedule } from "../../../utils/type";
+import { IAddProps, ITrain, IRoute, ISchedule } from "../../../../utils/type";
 import { useQueryClient } from "@tanstack/react-query";
 import {
   useAddTrain,
   useTRoutes,
   useTSchedules,
-} from "../../../hooks/useTransport";
-import { Common } from "../../../utils/Common";
+} from "../../../../hooks/useTransport";
+import { Common } from "../../../../utils/Common";
 const { useBreakpoint } = Grid;
 
 const AddTrain: React.FC<IAddProps<ITrain>> = ({

@@ -1,7 +1,7 @@
 import {
   getRoutes,
   getRoute,
-  getStations,
+  getBusStations,
   getStation,
   getParks,
   getBuses,
@@ -19,6 +19,7 @@ import {
   deleteSchedule,
   addSchedule,
   getSchedules,
+  getTrainStations,
 } from "../services/TrainService";
 import {
   IBus,
@@ -87,8 +88,16 @@ export async function deleteRouteAction(id: number) {
   throw new Error(response.data);
 }
 // action for Station
-export async function getStationsAction() {
-  const response = await getStations();
+export async function getBusStationsAction() {
+  const response = await getBusStations();
+  if (response.status == 200) {
+    console.log(response.data.data);
+    return response.data.data;
+  }
+  throw new Error(response.data);
+}
+export async function getTrainStationsAction() {
+  const response = await getTrainStations();
   if (response.status == 200) {
     console.log(response.data.data);
     return response.data.data;

@@ -3,6 +3,7 @@ import {
   accountantRoutes,
   auditRoutes,
   businessRoutes,
+  busproviderRoutes,
   protectedRoutes,
   supportRoutes,
 } from "./routes";
@@ -57,6 +58,28 @@ export default function AppRouted() {
         ))}
         <Route path="product/:id" element={<ProductDetailScreen />} />
         <Route path="biller/:id" element={<BillerDetailScreen />} />
+      </Route>
+      <Route
+        path="/provider"
+        element={
+          <UserProvider>
+            <ProtectedRouted allowedRole={["busprovider"]}>
+              <AdministratorLayout />
+            </ProtectedRouted>
+          </UserProvider>
+        }
+      >
+        {busproviderRoutes.map(({ path, Component }) => (
+          <Route
+            key={path}
+            path={path}
+            element={
+              <ProtectedRouted allowedRole={["busprovider"]}>
+                <Component />
+              </ProtectedRouted>
+            }
+          />
+        ))}
       </Route>
       <Route
         path="/business"

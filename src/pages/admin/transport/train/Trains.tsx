@@ -1,6 +1,6 @@
 import { Avatar, Button, Card, Empty, Flex, Row, Space, Table } from "antd";
 import { useMemo, useState } from "react";
-import { Common } from "../../../utils/Common";
+import { Common } from "../../../../utils/Common";
 import {
   BarsOutlined,
   DeleteOutlined,
@@ -8,8 +8,8 @@ import {
   PlusOutlined,
   RedoOutlined,
 } from "@ant-design/icons";
-import { ITrain } from "../../../utils/type";
-import { useTrains } from "../../../hooks/useTransport";
+import { ITrain } from "../../../../utils/type";
+import { useTrains } from "../../../../hooks/useTransport";
 import AddTrain from "./AddTrain";
 
 export default function TrainsScreen() {
