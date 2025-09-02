@@ -1,4 +1,5 @@
 import { api } from "../utils/AxiosInstance";
+import { IChangePassword } from "../utils/type";
 
 // service for Customers
 export function getCustomers(
@@ -17,3 +18,7 @@ export function getCustomers(
 
 export const getCustomer = async (id: string) =>
   await api.get(`admin/customer/${id}`);
+
+export function changePassword(payload: IChangePassword) {
+  return api.post(`admin/change-password`, payload);
+}

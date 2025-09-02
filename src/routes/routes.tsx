@@ -5,12 +5,14 @@ import {
   AccountBookOutlined,
   CarOutlined,
   DashboardOutlined,
+  DeploymentUnitOutlined,
+  DollarOutlined,
   ImportOutlined,
   InfoCircleOutlined,
+  NotificationOutlined,
   ProfileOutlined,
   RocketOutlined,
   SettingOutlined,
-  SwapOutlined,
   TagsOutlined,
   TeamOutlined,
 } from "@ant-design/icons";
@@ -20,10 +22,8 @@ import CustomersScreen from "../pages/admin/customer/Index";
 import TransportScreen from "../pages/admin/transport/Index";
 import ProductsScreen from "../pages/admin/product/Index";
 import RoutesScreen from "../pages/admin/transport/TransportRoutes";
-import ParksScreen from "../pages/admin/transport/bus/BusProviders";
 import NotificationScreen from "../pages/admin/notification/notification";
 import Changepassword from "../pages/admin/profile/changepassword";
-import CashOutScreen from "../pages/admin/profile/cashout";
 import ProductDetailScreen from "../pages/admin/product/productdetails";
 import Index from "../pages/admin/admin";
 import RoleIndex from "../pages/admin/role";
@@ -33,10 +33,12 @@ import AccountingScreen from "../pages/admin/gl_account/Index";
 import GlAccountScreen from "../pages/admin/gl_account/ledger/glaccounting";
 import CommissionsScreen from "../pages/admin/gl_account/commission/commissions";
 import DiscountsScreen from "../pages/admin/gl_account/discount/discounts";
-import { TrainIcon } from "lucide-react";
+import { TrainIcon, UserCog2 } from "lucide-react";
 import TrainsScreen from "../pages/admin/transport/train/Trains";
 import BusRoutesScreen from "../pages/admin/transport/bus/BusRoutes";
 import BusStationsScreen from "../pages/admin/transport/bus/parks";
+import BusDashboard from "../pages/admin/transport/bus/BusDashboard";
+import CashoutsScreen from "../pages/admin/cashout/Index";
 
 export const protectedRoutes = [
   {
@@ -50,6 +52,12 @@ export const protectedRoutes = [
     Component: PaymentsScreen,
     title: "Payments",
     icon: <TeamOutlined />,
+  },
+  {
+    path: "cashouts",
+    Component: CashoutsScreen,
+    title: "cashouts",
+    icon: <DeploymentUnitOutlined />,
   },
   {
     path: "customers",
@@ -134,7 +142,6 @@ export const protectedRoutes = [
     icon: <ProfileOutlined />,
     children: [
       { path: "change-password", Component: Changepassword, showInMenu: false },
-      { path: "cash-out", Component: CashOutScreen, showInMenu: false },
     ],
   },
 ];
@@ -142,7 +149,59 @@ export const protectedRoutes = [
 export const busproviderRoutes = [
   {
     path: "",
-    Component: Dashboard,
+    Component: BusDashboard,
+    title: "Dasboard",
+    icon: <DashboardOutlined />,
+  },
+  {
+    path: "payments",
+    Component: PaymentsScreen,
+    title: "Payments",
+    icon: <DollarOutlined />,
+  },
+  {
+    path: "cashouts",
+    Component: CashoutsScreen,
+    title: "cashouts",
+    icon: <DeploymentUnitOutlined />,
+  },
+  {
+    path: "ticketing",
+    Component: TicketsScreen,
+    title: "Tickets",
+    icon: <ImportOutlined />,
+  },
+  {
+    path: "bus-services",
+    Component: TransportScreen,
+    title: "Bus",
+    icon: <CarOutlined />,
+    children: [
+      { path: "buses", Component: BusesScreen, showInMenu: true },
+      { path: "bus-parks", Component: BusStationsScreen, showInMenu: true },
+      { path: "bus-routes", Component: BusRoutesScreen, showInMenu: true },
+    ],
+  },
+  {
+    path: "notification",
+    Component: NotificationScreen,
+    title: "Notifications",
+    icon: <NotificationOutlined />,
+  },
+  {
+    path: "profile",
+    Component: Profile,
+    title: "Profile",
+    icon: <UserCog2 />,
+    children: [
+      { path: "change-password", Component: Changepassword, showInMenu: false },
+    ],
+  },
+];
+export const trainproviderRoutes = [
+  {
+    path: "",
+    Component: BusDashboard,
     title: "Dasboard",
     icon: <DashboardOutlined />,
   },
@@ -151,6 +210,12 @@ export const busproviderRoutes = [
     Component: PaymentsScreen,
     title: "Payments",
     icon: <TeamOutlined />,
+  },
+  {
+    path: "cashouts",
+    Component: CashoutsScreen,
+    title: "cashouts",
+    icon: <DeploymentUnitOutlined />,
   },
   {
     path: "ticketing",
@@ -182,7 +247,6 @@ export const busproviderRoutes = [
     icon: <ProfileOutlined />,
     children: [
       { path: "change-password", Component: Changepassword, showInMenu: false },
-      { path: "cash-out", Component: CashOutScreen, showInMenu: false },
     ],
   },
 ];
@@ -201,35 +265,16 @@ export const businessRoutes = [
     icon: <TeamOutlined />,
   },
   {
-    path: "products",
-    Component: ProductsScreen,
-    title: "Products",
-    icon: <RocketOutlined />,
-    children: [
-      {
-        path: ":id",
-        Component: ProductDetailScreen,
-        showInMenu: false,
-      },
-    ],
+    path: "cashouts",
+    Component: CashoutsScreen,
+    title: "cashouts",
+    icon: <DeploymentUnitOutlined />,
   },
   {
     path: "ticketing",
     Component: TicketsScreen,
     title: "Tickets",
     icon: <ImportOutlined />,
-  },
-  {
-    path: "services",
-    Component: TransportScreen,
-    title: "Services",
-    icon: <SwapOutlined />,
-    children: [
-      { path: "stations", Component: StationsScreen, showInMenu: true },
-      { path: "routes", Component: RoutesScreen, showInMenu: true },
-      { path: "trains", Component: TrainsScreen, showInMenu: true },
-      { path: "buses", Component: BusesScreen, showInMenu: true },
-    ],
   },
   {
     path: "accounting",
@@ -255,7 +300,6 @@ export const businessRoutes = [
     icon: <ProfileOutlined />,
     children: [
       { path: "change-password", Component: Changepassword, showInMenu: false },
-      { path: "cash-out", Component: CashOutScreen, showInMenu: false },
     ],
   },
 ];
@@ -273,42 +317,16 @@ export const accountantRoutes = [
     icon: <TeamOutlined />,
   },
   {
-    path: "customers",
-    Component: CustomersScreen,
-    title: "Customers",
-    icon: <TagsOutlined />,
-  },
-  {
-    path: "products",
-    Component: ProductsScreen,
-    title: "Products",
-    icon: <RocketOutlined />,
-    children: [
-      {
-        path: ":id",
-        Component: ProductDetailScreen,
-        showInMenu: false,
-      },
-    ],
+    path: "cashouts",
+    Component: CashoutsScreen,
+    title: "cashouts",
+    icon: <DeploymentUnitOutlined />,
   },
   {
     path: "ticketing",
     Component: TicketsScreen,
     title: "Tickets",
     icon: <ImportOutlined />,
-  },
-  {
-    path: "services",
-    Component: TransportScreen,
-    title: "Services",
-    icon: <SwapOutlined />,
-    children: [
-      { path: "Parks", Component: ParksScreen, showInMenu: true },
-      { path: "stations", Component: StationsScreen, showInMenu: true },
-      { path: "routes", Component: RoutesScreen, showInMenu: true },
-      { path: "trains", Component: TrainsScreen, showInMenu: true },
-      { path: "buses", Component: BusesScreen, showInMenu: true },
-    ],
   },
   {
     path: "accounting",
@@ -328,7 +346,6 @@ export const accountantRoutes = [
     icon: <ProfileOutlined />,
     children: [
       { path: "change-password", Component: Changepassword, showInMenu: false },
-      { path: "cash-out", Component: CashOutScreen, showInMenu: false },
     ],
   },
 ];
@@ -352,47 +369,10 @@ export const supportRoutes = [
     icon: <TagsOutlined />,
   },
   {
-    path: "products",
-    Component: ProductsScreen,
-    title: "Products",
-    icon: <RocketOutlined />,
-    children: [
-      {
-        path: ":id",
-        Component: ProductDetailScreen,
-        showInMenu: false,
-      },
-    ],
-  },
-  {
     path: "ticketing",
     Component: TicketsScreen,
     title: "Tickets",
     icon: <ImportOutlined />,
-  },
-  {
-    path: "services",
-    Component: TransportScreen,
-    title: "Services",
-    icon: <SwapOutlined />,
-    children: [
-      { path: "Parks", Component: ParksScreen, showInMenu: true },
-      { path: "stations", Component: StationsScreen, showInMenu: true },
-      { path: "routes", Component: RoutesScreen, showInMenu: true },
-      { path: "trains", Component: TrainsScreen, showInMenu: true },
-      { path: "buses", Component: BusesScreen, showInMenu: true },
-    ],
-  },
-  {
-    path: "accounting",
-    Component: AccountingScreen,
-    title: "Accounting",
-    icon: <AccountBookOutlined />,
-    children: [
-      { path: "general-ledger", Component: GlAccountScreen, showInMenu: true },
-      { path: "commissions", Component: CommissionsScreen, showInMenu: true },
-      { path: "discounts", Component: DiscountsScreen, showInMenu: true },
-    ],
   },
   {
     path: "notification",
@@ -407,7 +387,6 @@ export const supportRoutes = [
     icon: <ProfileOutlined />,
     children: [
       { path: "change-password", Component: Changepassword, showInMenu: false },
-      { path: "cash-out", Component: CashOutScreen, showInMenu: false },
     ],
   },
 ];
@@ -425,25 +404,6 @@ export const auditRoutes = [
     icon: <TeamOutlined />,
   },
   {
-    path: "customers",
-    Component: CustomersScreen,
-    title: "Customers",
-    icon: <TagsOutlined />,
-  },
-  {
-    path: "products",
-    Component: ProductsScreen,
-    title: "Products",
-    icon: <RocketOutlined />,
-    children: [
-      {
-        path: ":id",
-        Component: ProductDetailScreen,
-        showInMenu: false,
-      },
-    ],
-  },
-  {
     path: "ticketing",
     Component: TicketsScreen,
     title: "Tickets",
@@ -461,19 +421,12 @@ export const auditRoutes = [
     ],
   },
   {
-    path: "notification",
-    Component: NotificationScreen,
-    title: "Notifications",
-    icon: <InfoCircleOutlined />,
-  },
-  {
     path: "profile",
     Component: Profile,
     title: "Profile",
     icon: <ProfileOutlined />,
     children: [
       { path: "change-password", Component: Changepassword, showInMenu: false },
-      { path: "cash-out", Component: CashOutScreen, showInMenu: false },
     ],
   },
 ];

@@ -1,4 +1,9 @@
-import { getCustomer, getCustomers } from "../services/CustomerService";
+import {
+  changePassword,
+  getCustomer,
+  getCustomers,
+} from "../services/CustomerService";
+import { IChangePassword } from "../utils/type";
 
 // action for Customer
 export async function getCustomersAction(startDate = "", endDate = "") {
@@ -14,6 +19,14 @@ export async function getCustomerAction(id: string) {
   const response = await getCustomer(id);
   if (response.status == 200) {
     console.log(response.data);
+    return response.data;
+  }
+  throw new Error(response.data);
+}
+export async function changePasswordAction(payload: IChangePassword) {
+  const response = await changePassword(payload);
+  if (response.status == 200) {
+    console.log(response.data.data);
     return response.data;
   }
   throw new Error(response.data);

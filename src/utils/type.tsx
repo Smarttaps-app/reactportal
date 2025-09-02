@@ -1,5 +1,19 @@
 import { ReactNode } from "react";
-
+export interface ICashout {
+  id: number;
+  walletCashout: string;
+  message: string;
+  source: string;
+  amount: string;
+  recipient: string;
+  withdrawalStatus: string;
+  statusCode: string;
+  statusDescription: string;
+  reference: string;
+  reason: string;
+  created_at: string;
+  updated_at: string;
+}
 export interface IPayment {
   id: number;
   recipient: string;

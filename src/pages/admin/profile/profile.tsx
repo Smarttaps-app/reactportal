@@ -74,7 +74,7 @@ export default function Profile() {
             icon={<BankOutlined />}
             onClick={() => navigate("cash-out")}
           >
-            Cash Out
+            More
           </Button>,
         ]}
       >

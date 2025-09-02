@@ -8,6 +8,7 @@ import {
   DatePicker,
   Space,
   Table,
+  Input,
 } from "antd";
 import { useMemo, useState } from "react";
 import { Common } from "../../../utils/Common";
@@ -26,8 +27,10 @@ import {
 } from "@ant-design/icons";
 import AddNotification from "./add";
 import StatCard from "../../../widgets/StatCard";
+import { Search } from "lucide-react";
 const { RangePicker } = DatePicker;
 export default function NotificationScreen() {
+  const [searchTerm, setSearchTerm] = useState("");
   const [messageApi, contextHolder] = message.useMessage();
   const [show, setShow] = useState(false);
   const [notification, setNotification] = useState<INotification>();
@@ -127,7 +130,12 @@ export default function NotificationScreen() {
       </Row>
     );
 
-  const data: INotification[] = notifications || [];
+  const data =
+    notifications.filter(
+      (notification: INotification) =>
+        notification.message.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        notification.title.toLowerCase().includes(searchTerm.toLowerCase())
+    ) || [];
 
   return (
     <>
@@ -161,6 +169,15 @@ export default function NotificationScreen() {
       <Card
         extra={
           <Space>
+            <div className="relative flex-1 max-w-md">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+              <Input
+                placeholder="Search ..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10 py-6 bg-gray-50 border-gray-200 focus-visible:outline-none focus:ring-2 focus:!ring-primary focus:bg-white !ease-linear !duration-200 !transition-all"
+              />
+            </div>
             <RangePicker onChange={handleDateChange} />
             <Button
               type="primary"

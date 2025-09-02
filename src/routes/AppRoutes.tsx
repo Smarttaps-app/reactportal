@@ -17,6 +17,7 @@ import ResetPassword from "../pages/auth/ResetPassword";
 import ProductDetailScreen from "../pages/admin/product/productdetails";
 import BillerDetailScreen from "../pages/admin/product/billerScreen";
 import { UserProvider } from "../context/UserContext";
+import { renderRoutes } from "./routeHelper";
 export default function AppRouted() {
   return (
     <Routes>
@@ -69,17 +70,7 @@ export default function AppRouted() {
           </UserProvider>
         }
       >
-        {busproviderRoutes.map(({ path, Component }) => (
-          <Route
-            key={path}
-            path={path}
-            element={
-              <ProtectedRouted allowedRole={["busprovider"]}>
-                <Component />
-              </ProtectedRouted>
-            }
-          />
-        ))}
+        {renderRoutes(busproviderRoutes)}
       </Route>
       <Route
         path="/business"

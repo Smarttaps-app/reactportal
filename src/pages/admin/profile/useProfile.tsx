@@ -1,14 +1,9 @@
 import { useMutation } from "@tanstack/react-query";
+import { changePasswordAction } from "../../../serviceAction/CustomerActions";
 
 export const useChangePassword = () => {
   const { mutate: changePassword, isPending: loading } = useMutation({
-    mutationFn: loginAction,
+    mutationFn: changePasswordAction,
   });
   return { changePassword, loading };
-};
-export const useCashOut = () => {
-  const { mutate: cashout, isPending: loading } = useMutation({
-    mutationFn: loginAction,
-  });
-  return { cashout, loading };
 };
