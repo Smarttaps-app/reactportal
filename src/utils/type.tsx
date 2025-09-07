@@ -186,11 +186,14 @@ export interface IStation {
   stationName: string;
   location: string;
   parkImage: string;
+  admin_id: number;
   mode: string;
   updated_at: string;
   created_at: string;
 }
 export interface ITrain {
+  id: number;
+  admin_id: number;
   trainName: string;
   trainNumber: string;
   image: string;
@@ -202,6 +205,7 @@ export interface ITrain {
 }
 export interface IBus {
   id: number;
+  admin_id: number;
   name: string;
   tv: boolean;
   camera: boolean;
@@ -240,7 +244,8 @@ export interface ITicket {
   ticket_number: string;
 }
 export interface IRoute {
-  id: string;
+  id: number;
+  admin_id: number;
   routeName: string;
   sourceStation: IStation;
   startId: number;

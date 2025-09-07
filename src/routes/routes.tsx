@@ -21,7 +21,6 @@ import TicketsScreen from "../pages/admin/ticket/Index";
 import CustomersScreen from "../pages/admin/customer/Index";
 import TransportScreen from "../pages/admin/transport/Index";
 import ProductsScreen from "../pages/admin/product/Index";
-import RoutesScreen from "../pages/admin/transport/TransportRoutes";
 import NotificationScreen from "../pages/admin/notification/notification";
 import Changepassword from "../pages/admin/profile/changepassword";
 import ProductDetailScreen from "../pages/admin/product/productdetails";
@@ -39,6 +38,7 @@ import BusRoutesScreen from "../pages/admin/transport/bus/BusRoutes";
 import BusStationsScreen from "../pages/admin/transport/bus/parks";
 import BusDashboard from "../pages/admin/transport/bus/BusDashboard";
 import CashoutsScreen from "../pages/admin/cashout/Index";
+import TrainRoutesScreen from "../pages/admin/transport/train/TrainRoutes";
 
 export const protectedRoutes = [
   {
@@ -91,8 +91,8 @@ export const protectedRoutes = [
     icon: <CarOutlined />,
     children: [
       { path: "buses", Component: BusesScreen, showInMenu: true },
-      { path: "bus-parks", Component: BusStationsScreen, showInMenu: true },
       { path: "bus-routes", Component: BusRoutesScreen, showInMenu: true },
+      { path: "bus-parks", Component: BusStationsScreen, showInMenu: true },
     ],
   },
   {
@@ -102,7 +102,7 @@ export const protectedRoutes = [
     icon: <TrainIcon />,
     children: [
       { path: "trains", Component: TrainsScreen, showInMenu: true },
-      { path: "train-routes", Component: RoutesScreen, showInMenu: true },
+      { path: "train-routes", Component: TrainRoutesScreen, showInMenu: true },
       { path: "train-stations", Component: StationsScreen, showInMenu: true },
     ],
   },
@@ -178,8 +178,8 @@ export const busproviderRoutes = [
     icon: <CarOutlined />,
     children: [
       { path: "buses", Component: BusesScreen, showInMenu: true },
-      { path: "bus-parks", Component: BusStationsScreen, showInMenu: true },
       { path: "bus-routes", Component: BusRoutesScreen, showInMenu: true },
+      { path: "bus-parks", Component: BusStationsScreen, showInMenu: true },
     ],
   },
   {
@@ -224,14 +224,14 @@ export const trainproviderRoutes = [
     icon: <ImportOutlined />,
   },
   {
-    path: "bus-services",
+    path: "train-services",
     Component: TransportScreen,
-    title: "Bus",
+    title: "Train",
     icon: <CarOutlined />,
     children: [
-      { path: "buses", Component: BusesScreen, showInMenu: true },
-      { path: "bus-parks", Component: BusStationsScreen, showInMenu: true },
-      { path: "bus-routes", Component: BusRoutesScreen, showInMenu: true },
+      { path: "trains", Component: TrainsScreen, showInMenu: true },
+      { path: "train-routes", Component: TrainRoutesScreen, showInMenu: true },
+      { path: "train-stations", Component: StationsScreen, showInMenu: true },
     ],
   },
   {

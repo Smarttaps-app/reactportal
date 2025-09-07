@@ -11,17 +11,22 @@ import {
   Select,
 } from "antd";
 import { Grid } from "antd";
-import { IAddProps, IStation } from "../../../../utils/type";
+import { IAddProps, IStation, IUser } from "../../../../utils/type";
 import { useQueryClient } from "@tanstack/react-query";
 import { useAddStation } from "../../../../hooks/useTransport";
 import { Common } from "../../../../utils/Common";
+import { useUser } from "../../../../context/useUser";
+import { useAdmins } from "../../../../hooks/useAdmin";
 const { useBreakpoint } = Grid;
+const { Option } = Select;
 
 const AddStation: React.FC<IAddProps<IStation>> = ({
   payload,
   isOpen = false,
   onCancel,
 }) => {
+  const { user } = useUser();
+  const { isPending, data: providers } = useAdmins("trainprovider");
   const client = useQueryClient();
   const screens = useBreakpoint();
   const { addStation, isAdding } = useAddStation();
@@ -54,7 +59,12 @@ const AddStation: React.FC<IAddProps<IStation>> = ({
       <Card title="Add Park">
         <Form
           layout="vertical"
-          initialValues={{ remember: true }}
+          initialValues={{
+            mode: "train",
+            stationName: payload?.stationName,
+            location: payload?.location,
+            admin_id: payload?.admin_id,
+          }}
           onFinish={onFinish}
           style={{ minWidth: 320 }}
         >
@@ -92,24 +102,35 @@ const AddStation: React.FC<IAddProps<IStation>> = ({
             </Col>
 
             <Col xs={24} sm={24} md={24}>
-              <Form.Item<IStation>
-                label="Station Mode"
-                name="mode"
-                initialValue={payload?.mode}
-                rules={[
-                  { required: true, message: "Please select station mode!" },
-                ]}
-              >
-                <Select
-                  size="large"
-                  options={[
-                    { value: "bus", label: "Bus" },
-                    { value: "train", label: "Train" },
+              {user?.tag == "trainprovider" ? (
+                <Form.Item<IStation>
+                  name="admin_id"
+                  initialValue={user.id}
+                  hidden
+                >
+                  <Input />
+                </Form.Item>
+              ) : (
+                <Form.Item<IStation>
+                  label="Select a provider"
+                  name="admin_id"
+                  rules={[
+                    { required: true, message: "Please select a provider!" },
                   ]}
-                />
-              </Form.Item>
+                >
+                  <Select
+                    //onChange={handleChange}
+                    loading={isPending}
+                  >
+                    {providers?.map((item: IUser) => (
+                      <Option key={item.id} value={item.id}>
+                        {item.lastname} {item.firstname}
+                      </Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+              )}
             </Col>
-
             <Col xs={24} sm={24} md={24}>
               <Form.Item>
                 <Button

@@ -1,22 +1,21 @@
-import { Button, Card, Empty, Flex, Input, Row, Space, Table } from "antd";
+import { App, Button, Card, Empty, Flex, Input, Row, Space, Table } from "antd";
 import { useMemo, useState } from "react";
-import {
-  DeleteOutlined,
-  EyeOutlined,
-  PlusOutlined,
-  RedoOutlined,
-} from "@ant-design/icons";
+import { PlusOutlined } from "@ant-design/icons";
 import { Search } from "lucide-react";
-import { useStations } from "./useBus";
+import { useDeleteStation, useStations } from "./useBus";
 import { IStation } from "../../../../utils/type";
 import AddStation from "./AddStation";
 import { Common } from "../../../../utils/Common";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function BusStationsScreen() {
+  const { message } = App.useApp();
+  const client = useQueryClient();
   const [searchTerm, setSearchTerm] = useState("");
   const [add, setAdd] = useState(false);
   const [item, setItem] = useState<IStation>();
   const { loading, stations, error } = useStations();
+  const { isdeleting, deleteStation } = useDeleteStation();
 
   const columns = useMemo(
     () => [
@@ -41,14 +40,7 @@ export default function BusStationsScreen() {
         title: "Mode",
         dataIndex: "mode",
         key: "mode",
-        width: "6%",
-      },
-      {
-        title: "Date",
-        dataIndex: "created_at",
-        key: "created_at",
-        render: (created: string) => Common.formatDate(created),
-        ellipsis: true,
+        width: "10%",
       },
       {
         title: "Updated",
@@ -60,30 +52,36 @@ export default function BusStationsScreen() {
       {
         title: "Actions",
         dataIndex: "",
-        width: "12%",
-        render: (key: string, station: IStation) => (
+        width: "15%",
+        render: (station: IStation) => (
           <Flex gap="small" align="center" wrap>
             <Button
-              type="primary"
-              icon={<EyeOutlined />}
+              color="cyan"
+              variant="solid"
               onClick={() => {
                 setItem(station);
                 setAdd(true);
               }}
-            />
-            <Button
-              type="primary"
-              icon={<RedoOutlined />}
-              // loading={loadings[2]}
-              //onClick={() => enterLoading(2)}
-            />
+            >
+              View
+            </Button>
             <Button
               type="primary"
               danger
-              icon={<DeleteOutlined />}
-              // loading={loadings[2]}
-              //onClick={() => enterLoading(2)}
-            />
+              disabled={isdeleting}
+              loading={isdeleting}
+              onClick={() =>
+                deleteStation(station.id, {
+                  onSuccess: (response) =>
+                    message.success(response.statusDescription),
+                  onError: (error) => message.error(Common.formatError(error)),
+                  onSettled: () =>
+                    client.invalidateQueries({ queryKey: ["busstations"] }),
+                })
+              }
+            >
+              Delete
+            </Button>
           </Flex>
         ),
       },

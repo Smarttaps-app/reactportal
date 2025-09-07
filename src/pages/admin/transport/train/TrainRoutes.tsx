@@ -1,20 +1,19 @@
-import { Button, Card, Empty, Flex, Row, Space, Table } from "antd";
+import { App, Button, Card, Empty, Flex, Row, Space, Table } from "antd";
 import { useMemo, useState } from "react";
-import { Common } from "../../../utils/Common";
-import {
-  DeleteOutlined,
-  EyeOutlined,
-  PlusOutlined,
-  RedoOutlined,
-} from "@ant-design/icons";
-import { IRoute, IStation } from "../../../utils/type";
-import { useTRoutes } from "../../../hooks/useTransport";
-import AddRoute from "./train/AddRoute";
+import { PlusOutlined } from "@ant-design/icons";
+import { useQueryClient } from "@tanstack/react-query";
+import { useDeleteTRoute, useTRoutes } from "./useTrain";
+import { IRoute, IStation } from "../../../../utils/type";
+import { Common } from "../../../../utils/Common";
+import AddRoute from "./AddRoute";
 
-export default function RoutesScreen() {
+export default function TrainRoutesScreen() {
+  const { message } = App.useApp();
+  const client = useQueryClient();
   const [add, setAdd] = useState(false);
   const [item, setItem] = useState<IRoute>();
   const { loading, routes, error } = useTRoutes();
+  const { isdeleting, deleteRoute } = useDeleteTRoute();
 
   const columns = useMemo(
     () => [
@@ -51,9 +50,9 @@ export default function RoutesScreen() {
         render: (routeName: string, record: IRoute) => (
           <span className="text-xs text-gray-500">
             {routeName}
-            {record.buses.length > 0
-              ? ` ${record.buses.length} Buses`
-              : ` ${record.trains.length} Trains`}
+            {record.trains.length > 0
+              ? ` ${record.buses.length} Trains`
+              : `No Train`}
           </span>
         ),
       },
@@ -67,30 +66,36 @@ export default function RoutesScreen() {
       {
         title: "Actions",
         dataIndex: "",
-        width: "12%",
-        render: (key: string, route: IRoute) => (
+        width: "15%",
+        render: (route: IRoute) => (
           <Flex gap="small" align="center" wrap>
             <Button
-              type="primary"
-              icon={<EyeOutlined />}
+              color="cyan"
+              variant="solid"
               onClick={() => {
                 setItem(route);
                 setAdd(true);
               }}
-            />
-            <Button
-              type="primary"
-              icon={<RedoOutlined />}
-              // loading={loadings[2]}
-              //onClick={() => enterLoading(2)}
-            />
+            >
+              View
+            </Button>
             <Button
               type="primary"
               danger
-              icon={<DeleteOutlined />}
-              // loading={loadings[2]}
-              //onClick={() => enterLoading(2)}
-            />
+              disabled={isdeleting}
+              loading={isdeleting}
+              onClick={() =>
+                deleteRoute(route.id, {
+                  onSuccess: (response) =>
+                    message.success(response.statusDescription),
+                  onError: (error) => message.error(Common.formatError(error)),
+                  onSettled: () =>
+                    client.invalidateQueries({ queryKey: ["routes"] }),
+                })
+              }
+            >
+              Delete
+            </Button>
           </Flex>
         ),
       },

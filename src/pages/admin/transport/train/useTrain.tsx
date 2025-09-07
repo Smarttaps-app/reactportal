@@ -2,16 +2,13 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   getBusStationsAction,
   getRoutesAction,
-  getParksAction,
-  getBusesAction,
+  getTrainsAction,
   addRouteAction,
   deleteRouteAction,
   addStationAction,
   deleteStationAction,
-  addParkAction,
-  deleteParkAction,
-  addBusAction,
-  deleteBusAction,
+  addTrainAction,
+  deleteTrainAction,
   getSchedulesAction,
   addScheduleAction,
   deleteScheduleAction,
@@ -54,7 +51,7 @@ export function useStations() {
     data: stations = [],
     error,
   } = useQuery({
-    queryKey: ["busstations"],
+    queryKey: ["trainstations"],
     queryFn: getBusStationsAction,
     refetchOnWindowFocus: false,
   });
@@ -78,65 +75,35 @@ export function useDeleteStation() {
   });
   return { isdeleting, deleteStation };
 }
-export function useParks() {
+export function useTrains() {
   const {
     isPending: loading,
-    data: parks = [],
+    data: trains = [],
     error,
   } = useQuery({
-    queryKey: ["parks"],
-    queryFn: getParksAction,
+    queryKey: ["trains"],
+    queryFn: getTrainsAction,
     refetchOnWindowFocus: false,
   });
-  return { loading, parks, error };
+  return { loading, trains, error };
 }
-export function useAddPark() {
-  const { mutate: addPark, isPending: isAdding } = useMutation({
-    mutationFn: addParkAction,
+export function useAddTrain() {
+  const { mutate: addTrain, isPending: isAdding } = useMutation({
+    mutationFn: addTrainAction,
     onError: (error) => {
       message.error(Common.formatError(error));
     },
   });
-  return { isAdding, addPark };
+  return { isAdding, addTrain };
 }
-export function useDeletePark() {
-  const { mutate: deletePark, isPending: isdeleting } = useMutation({
-    mutationFn: deleteParkAction,
+export function useDeleteTrain() {
+  const { mutate: deleteTrain, isPending: isdeleting } = useMutation({
+    mutationFn: deleteTrainAction,
     onError: (error) => {
       message.error(Common.formatError(error));
     },
   });
-  return { isdeleting, deletePark };
-}
-export function useBuses() {
-  const {
-    isPending: loading,
-    data: buses = [],
-    error,
-  } = useQuery({
-    queryKey: ["buses"],
-    queryFn: getBusesAction,
-    refetchOnWindowFocus: false,
-  });
-  return { loading, buses, error };
-}
-export function useAddBus() {
-  const { mutate: addBus, isPending: isAdding } = useMutation({
-    mutationFn: addBusAction,
-    onError: (error) => {
-      message.error(Common.formatError(error));
-    },
-  });
-  return { isAdding, addBus };
-}
-export function useDeleteBus() {
-  const { mutate: deleteBus, isPending: isdeleting } = useMutation({
-    mutationFn: deleteBusAction,
-    onError: (error) => {
-      message.error(Common.formatError(error));
-    },
-  });
-  return { isdeleting, deleteBus };
+  return { isdeleting, deleteTrain };
 }
 export function useTSchedules() {
   const {

@@ -3,7 +3,6 @@ import {
   Card,
   Col,
   Form,
-  FormProps,
   Input,
   message,
   Modal,
@@ -11,27 +10,28 @@ import {
   Select,
 } from "antd";
 import { Grid } from "antd";
-import { IAddProps, IBus, IRoute, IStation } from "../../../../utils/type";
+import { IAddProps, IRoute, IStation, IUser } from "../../../../utils/type";
 import { useQueryClient } from "@tanstack/react-query";
 import { Common } from "../../../../utils/Common";
-import {
-  useAddTRoute,
-  useBuses,
-  useStations,
-} from "../../../../hooks/useTransport";
+import { useAddTRoute, useStations } from "../../../../hooks/useTransport";
 import { useEffect, useMemo } from "react";
+import { useUser } from "../../../../context/useUser";
+import { useAdmins } from "../../../../hooks/useAdmin";
 const { useBreakpoint } = Grid;
+const { Option } = Select;
 
 const AddRoute: React.FC<IAddProps<IRoute>> = ({
   payload,
   isOpen = false,
   onCancel,
 }) => {
+  const { user } = useUser();
+  const { isPending, data: providers } = useAdmins("trainprovider");
   const client = useQueryClient();
   const screens = useBreakpoint();
   const { addRoute, isAdding } = useAddTRoute();
   const { loading, stations } = useStations();
-  const { pending, buses, error } = useBuses();
+  //const { pending, buses, error } = useBuses();
   const [form] = Form.useForm();
   const selectedStartId = Form.useWatch("startId", form);
   useEffect(() => {
@@ -49,7 +49,7 @@ const AddRoute: React.FC<IAddProps<IRoute>> = ({
   }, [stations, selectedStartId]);
   console.log("selectedStartId", selectedStartId);
   console.log("filteredStopStations", filteredStopStations);
-  const onFinish: FormProps<IRoute>["onFinish"] = (values) => {
+  const onFinish = async (values: IRoute) => {
     console.log("Success:", values);
     addRoute(values, {
       onSuccess: (data) => {
@@ -57,9 +57,8 @@ const AddRoute: React.FC<IAddProps<IRoute>> = ({
         onCancel();
       },
       onError: (error) => {
-        console.log(error);
         message.error(Common.formatError(error));
-        // onCancel();
+        onCancel();
       },
       onSettled: () => client.invalidateQueries({ queryKey: ["routes"] }),
     });
@@ -84,7 +83,7 @@ const AddRoute: React.FC<IAddProps<IRoute>> = ({
             routeName: payload?.routeName,
             startId: payload?.sourceStation?.id,
             stopId: payload?.destinationStation?.id,
-            buses: payload?.buses,
+            admin_id: payload?.admin_id,
           }}
           onFinish={onFinish}
           style={{ minWidth: 320 }}
@@ -111,19 +110,19 @@ const AddRoute: React.FC<IAddProps<IRoute>> = ({
               >
                 {() => (
                   <Form.Item<IRoute>
-                    label="Starting Park"
+                    label="Starting Station"
                     name="startId"
                     rules={[
                       {
                         required: true,
-                        message: "Please select a starting park!",
+                        message: "Please select a starting Station!",
                       },
                       ({ getFieldValue }) => ({
                         validator(_, value) {
                           if (value && value === getFieldValue("stopId")) {
                             return Promise.reject(
                               new Error(
-                                "Starting park can't be the same as starting park!"
+                                "Starting Station can't be the same as starting Station!"
                               )
                             );
                           }
@@ -183,34 +182,34 @@ const AddRoute: React.FC<IAddProps<IRoute>> = ({
               </Form.Item>
             </Col>
             <Col xs={24} sm={24} md={24}>
-              <Form.Item<IRoute>
-                label="Choose Buses"
-                name="buses"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please choose buses for the route!",
-                  },
-                ]}
-              >
-                <Select
-                  showSearch
-                  disabled={error ? true : false}
-                  loading={pending}
-                  mode="multiple"
-                  optionLabelProp="label"
-                  options={buses.map((item: IBus) => ({
-                    label: `${item.name} → ${item.bus_number?.toUpperCase()}`,
-                    value: item.id,
-                  }))}
-                  filterOption={(input, option) =>
-                    (option?.label ?? "")
-                      .toString()
-                      .toLowerCase()
-                      .includes(input.toLowerCase())
-                  }
-                />
-              </Form.Item>
+              {user?.tag == "trainprovider" ? (
+                <Form.Item<IRoute>
+                  name="admin_id"
+                  initialValue={user.id}
+                  hidden
+                >
+                  <Input />
+                </Form.Item>
+              ) : (
+                <Form.Item<IRoute>
+                  label="Select a provider"
+                  name="admin_id"
+                  rules={[
+                    { required: true, message: "Please select a provider!" },
+                  ]}
+                >
+                  <Select
+                    //onChange={handleChange}
+                    loading={isPending}
+                  >
+                    {providers?.map((item: IUser) => (
+                      <Option key={item.id} value={item.id}>
+                        {item.lastname} {item.firstname}
+                      </Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+              )}
             </Col>
             <Col span={24}>
               <Form.Item>

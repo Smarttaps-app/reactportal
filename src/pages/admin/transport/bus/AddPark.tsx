@@ -8,7 +8,6 @@ import {
   message,
   Modal,
   Row,
-  Select,
   Switch,
 } from "antd";
 import { Grid } from "antd";
@@ -72,44 +71,6 @@ const AddPark: React.FC<IAddProps<IPark>> = ({
                 <Input
                   placeholder="Enter package name"
                   className="!rounded-md !py-2"
-                />
-              </Form.Item>
-            </Col>
-
-            <Col xs={24} sm={24} md={12}>
-              <Form.Item<IPark>
-                name="customerField"
-                label="Customer Field"
-                rules={[
-                  { required: true, message: "Please enter customer field!" },
-                  { min: 5, message: "Minimum 5 characters" },
-                ]}
-              >
-                <Input
-                  placeholder="Enter customer field"
-                  className="!rounded-md !py-2"
-                />
-              </Form.Item>
-            </Col>
-
-            <Col xs={24} sm={24} md={12}>
-              <Form.Item<IPark>
-                label="Package Type"
-                name="vasType"
-                rules={[
-                  { required: true, message: "Please select package type!" },
-                ]}
-              >
-                <Select
-                  size="large"
-                  options={[
-                    { value: "airtime", label: "Airtime" },
-                    { value: "data", label: "Data" },
-                    { value: "cable", label: "Cable" },
-                    { value: "utility", label: "Utility" },
-                    { value: "payment", label: "Payment" },
-                    { value: "transport", label: "Transport" },
-                  ]}
                 />
               </Form.Item>
             </Col>

@@ -1,4 +1,5 @@
 import {
+  App,
   Avatar,
   Button,
   Card,
@@ -11,23 +12,22 @@ import {
 } from "antd";
 import { useMemo, useState } from "react";
 import { Common } from "../../../../utils/Common";
-import {
-  BarsOutlined,
-  DeleteOutlined,
-  EyeOutlined,
-  PlusOutlined,
-  RedoOutlined,
-} from "@ant-design/icons";
+import { BarsOutlined, PlusOutlined } from "@ant-design/icons";
 import { IBus } from "../../../../utils/type";
 import { useBuses } from "../../../../hooks/useTransport";
 import AddBus from "./AddBus";
 import { Search } from "lucide-react";
+import { useDeleteBus } from "./useBus";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function BusesScreen() {
+  const { message } = App.useApp();
+  const client = useQueryClient();
   const [searchTerm, setSearchTerm] = useState("");
   const [add, setAdd] = useState(false);
   const [item, setItem] = useState<IBus>();
   const { loading, buses, error } = useBuses();
+  const { isdeleting, deleteBus } = useDeleteBus();
 
   const columns = useMemo(
     () => [
@@ -90,30 +90,36 @@ export default function BusesScreen() {
       {
         title: "Actions",
         dataIndex: "",
-        width: "12%",
-        render: (key: string, station: IBus) => (
+        width: "18%",
+        render: (bus: IBus) => (
           <Flex gap="small" align="center" wrap>
             <Button
-              type="primary"
-              icon={<EyeOutlined />}
+              color="cyan"
+              variant="solid"
               onClick={() => {
-                setItem(station);
+                setItem(bus);
                 setAdd(true);
               }}
-            />
-            <Button
-              type="primary"
-              icon={<RedoOutlined />}
-              // loading={loadings[2]}
-              //onClick={() => enterLoading(2)}
-            />
+            >
+              View
+            </Button>
             <Button
               type="primary"
               danger
-              icon={<DeleteOutlined />}
-              // loading={loadings[2]}
-              //onClick={() => enterLoading(2)}
-            />
+              disabled={isdeleting}
+              loading={isdeleting}
+              onClick={() =>
+                deleteBus(bus.id, {
+                  onSuccess: (response) =>
+                    message.success(response.statusDescription),
+                  onError: (error) => message.error(Common.formatError(error)),
+                  onSettled: () =>
+                    client.invalidateQueries({ queryKey: ["busstations"] }),
+                })
+              }
+            >
+              Delete
+            </Button>
           </Flex>
         ),
       },

@@ -1,22 +1,21 @@
-import { Button, Card, Empty, Flex, Input, Row, Space, Table } from "antd";
+import { App, Button, Card, Empty, Flex, Input, Row, Space, Table } from "antd";
 import { useMemo, useState } from "react";
 import { Common } from "../../../../utils/Common";
-import {
-  DeleteOutlined,
-  EyeOutlined,
-  PlusOutlined,
-  RedoOutlined,
-} from "@ant-design/icons";
+import { PlusOutlined } from "@ant-design/icons";
 import { IStation } from "../../../../utils/type";
-import { useStations } from "../../../../hooks/useTransport";
 import AddStation from "./AddStation";
 import { Search } from "lucide-react";
+import { useQueryClient } from "@tanstack/react-query";
+import { useDeleteStation, useStations } from "./useTrain";
 
 export default function StationsScreen() {
+  const { message } = App.useApp();
+  const client = useQueryClient();
   const [searchTerm, setSearchTerm] = useState("");
   const [add, setAdd] = useState(false);
   const [item, setItem] = useState<IStation>();
   const { loading, stations, error } = useStations();
+  const { isdeleting, deleteStation } = useDeleteStation();
 
   const columns = useMemo(
     () => [
@@ -64,26 +63,32 @@ export default function StationsScreen() {
         render: (key: string, station: IStation) => (
           <Flex gap="small" align="center" wrap>
             <Button
-              type="primary"
-              icon={<EyeOutlined />}
+              color="cyan"
+              variant="solid"
               onClick={() => {
                 setItem(station);
                 setAdd(true);
               }}
-            />
-            <Button
-              type="primary"
-              icon={<RedoOutlined />}
-              // loading={loadings[2]}
-              //onClick={() => enterLoading(2)}
-            />
+            >
+              View
+            </Button>
             <Button
               type="primary"
               danger
-              icon={<DeleteOutlined />}
-              // loading={loadings[2]}
-              //onClick={() => enterLoading(2)}
-            />
+              disabled={isdeleting}
+              loading={isdeleting}
+              onClick={() =>
+                deleteStation(station.id, {
+                  onSuccess: (response) =>
+                    message.success(response.statusDescription),
+                  onError: (error) => message.error(Common.formatError(error)),
+                  onSettled: () =>
+                    client.invalidateQueries({ queryKey: ["trainstations"] }),
+                })
+              }
+            >
+              Delete
+            </Button>
           </Flex>
         ),
       },

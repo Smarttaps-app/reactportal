@@ -1,22 +1,19 @@
-import { Button, Card, Empty, Flex, Input, Row, Space, Table } from "antd";
+import { App, Button, Card, Empty, Flex, Input, Row, Space, Table } from "antd";
 import { useMemo, useState } from "react";
-import {
-  DeleteOutlined,
-  EyeOutlined,
-  PlusOutlined,
-  RedoOutlined,
-} from "@ant-design/icons";
+import { PlusOutlined } from "@ant-design/icons";
 import { Search } from "lucide-react";
 import AddRoute from "./AddRoute";
 import { IRoute, IStation } from "../../../../utils/type";
-import { useTRoutes } from "./useBus";
+import { useDeleteTRoute, useTRoutes } from "./useBus";
 import { Common } from "../../../../utils/Common";
 
 export default function BusRoutesScreen() {
+  const { message } = App.useApp();
   const [searchTerm, setSearchTerm] = useState("");
   const [add, setAdd] = useState(false);
   const [item, setItem] = useState<IRoute>();
   const { loading, routes, error } = useTRoutes();
+  const { isdeleting, deleteRoute } = useDeleteTRoute();
 
   const columns = useMemo(
     () => [
@@ -30,7 +27,7 @@ export default function BusRoutesScreen() {
         title: "Route Name",
         dataIndex: "routeName",
         key: "routeName",
-        width: "20%",
+        width: "25%",
       },
       {
         title: "Departure",
@@ -49,13 +46,13 @@ export default function BusRoutesScreen() {
         title: "Mode",
         dataIndex: "mode",
         key: "mode",
-        width: "6%",
+        width: "8%",
         render: (routeName: string, record: IRoute) => (
           <span className="text-xs text-gray-500">
             {routeName}
             {record.buses.length > 0
               ? ` ${record.buses.length} Buses`
-              : ` ${record.trains.length} Trains`}
+              : `No Bus`}
           </span>
         ),
       },
@@ -63,36 +60,41 @@ export default function BusRoutesScreen() {
         title: "Updated",
         dataIndex: "updated_at",
         key: "updated_at",
+        width: "8%",
         render: (updated: string) => Common.formatDate(updated),
         ellipsis: true,
       },
       {
         title: "Actions",
         dataIndex: "",
-        width: "12%",
-        render: (key: string, route: IRoute) => (
+        width: "15%",
+        render: (route: IRoute) => (
           <Flex gap="small" align="center" wrap>
             <Button
-              type="primary"
-              icon={<EyeOutlined />}
+              color="cyan"
+              variant="solid"
               onClick={() => {
                 setItem(route);
                 setAdd(true);
               }}
-            />
-            <Button
-              type="primary"
-              icon={<RedoOutlined />}
-              // loading={loadings[2]}
-              //onClick={() => enterLoading(2)}
-            />
+            >
+              View
+            </Button>
             <Button
               type="primary"
               danger
-              icon={<DeleteOutlined />}
-              // loading={loadings[2]}
-              //onClick={() => enterLoading(2)}
-            />
+              disabled={isdeleting}
+              loading={isdeleting}
+              onClick={() =>
+                deleteRoute(route.id, {
+                  onSuccess: (response) =>
+                    message.success(response.statusDescription),
+                  onError: (error) => message.error(Common.formatError(error)),
+                })
+              }
+            >
+              Delete
+            </Button>
           </Flex>
         ),
       },
@@ -130,7 +132,7 @@ export default function BusRoutesScreen() {
             <div className="relative flex-1 max-w-md">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
               <Input
-                placeholder="Search products..."
+                placeholder="Search route..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-10 py-6 bg-gray-50 border-gray-200 focus-visible:outline-none focus:ring-2 focus:!ring-primary focus:bg-white !ease-linear !duration-200 !transition-all"
@@ -138,7 +140,7 @@ export default function BusRoutesScreen() {
             </div>
             <Button
               icon={<PlusOutlined />}
-              title="New Station"
+              title="New Route"
               type="primary"
               onClick={() => {
                 setItem(undefined);

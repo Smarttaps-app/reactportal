@@ -1,21 +1,30 @@
-import { Avatar, Button, Card, Empty, Flex, Row, Space, Table } from "antd";
+import {
+  App,
+  Avatar,
+  Button,
+  Card,
+  Empty,
+  Flex,
+  Row,
+  Space,
+  Table,
+} from "antd";
 import { useMemo, useState } from "react";
 import { Common } from "../../../../utils/Common";
-import {
-  BarsOutlined,
-  DeleteOutlined,
-  EyeOutlined,
-  PlusOutlined,
-  RedoOutlined,
-} from "@ant-design/icons";
+import { BarsOutlined, PlusOutlined } from "@ant-design/icons";
 import { ITrain } from "../../../../utils/type";
 import { useTrains } from "../../../../hooks/useTransport";
 import AddTrain from "./AddTrain";
+import { useDeleteTrain } from "./useTrain";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function TrainsScreen() {
+  const { message } = App.useApp();
+  const client = useQueryClient();
   const [add, setAdd] = useState(false);
   const [item, setItem] = useState<ITrain>();
   const { loading, trains, error } = useTrains();
+  const { isdeleting, deleteTrain } = useDeleteTrain();
 
   const columns = useMemo(
     () => [
@@ -47,14 +56,6 @@ export default function TrainsScreen() {
         width: "5%",
       },
       {
-        title: "Price",
-        dataIndex: "base_price",
-        key: "base_price",
-        width: "10%",
-        render: (base_price: string) =>
-          Common.formatAsCurrency(Number(base_price)),
-      },
-      {
         title: "TV",
         dataIndex: "tv",
         key: "tv",
@@ -78,30 +79,36 @@ export default function TrainsScreen() {
       {
         title: "Actions",
         dataIndex: "",
-        width: "12%",
-        render: (key: string, station: ITrain) => (
+        width: "15%",
+        render: (train: ITrain) => (
           <Flex gap="small" align="center" wrap>
             <Button
-              type="primary"
-              icon={<EyeOutlined />}
+              color="cyan"
+              variant="solid"
               onClick={() => {
-                setItem(station);
+                setItem(train);
                 setAdd(true);
               }}
-            />
-            <Button
-              type="primary"
-              icon={<RedoOutlined />}
-              // loading={loadings[2]}
-              //onClick={() => enterLoading(2)}
-            />
+            >
+              View
+            </Button>
             <Button
               type="primary"
               danger
-              icon={<DeleteOutlined />}
-              // loading={loadings[2]}
-              //onClick={() => enterLoading(2)}
-            />
+              disabled={isdeleting}
+              loading={isdeleting}
+              onClick={() =>
+                deleteTrain(train.id, {
+                  onSuccess: (response) =>
+                    message.success(response.statusDescription),
+                  onError: (error) => message.error(Common.formatError(error)),
+                  onSettled: () =>
+                    client.invalidateQueries({ queryKey: ["busstations"] }),
+                })
+              }
+            >
+              Delete
+            </Button>
           </Flex>
         ),
       },
