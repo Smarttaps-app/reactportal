@@ -12,7 +12,6 @@ import {
 import { Grid } from "antd";
 import { IAddProps, ISeat, IUser } from "../../../../utils/type";
 import { useQueryClient } from "@tanstack/react-query";
-import states from "../../../../utils/states";
 import { Common } from "../../../../utils/Common";
 import { useUser } from "../../../../context/useUser";
 import { useAdmins } from "../../../../hooks/useAdmin";
@@ -59,30 +58,14 @@ const AddSeat: React.FC<IAddProps<ISeat>> = ({
           layout="vertical"
           initialValues={{
             mode: "train",
-            stationName: payload?.classType,
-            location: payload?.price,
+            classType: payload?.classType,
+            price: payload?.price,
             admin_id: payload?.admin_id,
           }}
           onFinish={onFinish}
           style={{ minWidth: 320 }}
         >
           <Row gutter={[16, 16]}>
-            <Col xs={24} sm={24} md={24}>
-              <Form.Item<ISeat>
-                name="classType"
-                label="Seat Class"
-                initialValue={payload?.classType}
-                rules={[
-                  { required: true, message: "Please enter station name!" },
-                ]}
-              >
-                <Input
-                  placeholder="Enter station name"
-                  className="!rounded-md !py-2"
-                />
-              </Form.Item>
-            </Col>
-
             <Col xs={24} sm={24} md={24}>
               <Form.Item<ISeat>
                 name="classType"
@@ -100,21 +83,29 @@ const AddSeat: React.FC<IAddProps<ISeat>> = ({
                   disabled={isAdding}
                   size="large"
                   placeholder="Choose seat class"
-                  optionLabelProp="label"
-                  options={states.map((item) => ({
-                    label: item.state,
-                    value: item.state,
-                  }))}
-                  filterOption={(input, option) =>
-                    (option?.label ?? "")
-                      .toString()
-                      .toLowerCase()
-                      .includes(input.toLowerCase())
-                  }
+                  options={[
+                    { value: "FIRST", label: "first class" },
+                    { value: "BUSINESS", label: "Business class" },
+                    { value: "ADULT", label: "Standard Adult" },
+                    { value: "MINOR", label: "Standard Minor" },
+                  ]}
                 />
               </Form.Item>
             </Col>
 
+            <Col xs={24} sm={24} md={24}>
+              <Form.Item<ISeat>
+                name="price"
+                label="Seat Price"
+                initialValue={payload?.classType}
+                rules={[{ required: true, message: "Please enter price!" }]}
+              >
+                <Input
+                  placeholder="Enter price"
+                  className="!rounded-md !py-2"
+                />
+              </Form.Item>
+            </Col>
             <Col xs={24} sm={24} md={24}>
               {user?.tag == "trainprovider" ? (
                 <Form.Item<ISeat> name="admin_id" initialValue={user.id} hidden>

@@ -41,35 +41,16 @@ export default function SeatsScreen() {
       },
       {
         title: "Seat Name",
-        dataIndex: "trainName",
-        key: "trainName",
+        dataIndex: "classType",
+        key: "classType",
         width: "25%",
       },
       {
-        title: "Seat Number",
-        dataIndex: "trainNumber",
-        key: "trainNumber",
-        width: "10%",
-      },
-      {
-        title: "Seat",
-        dataIndex: "seatCount",
-        key: "seatCount",
-        width: "5%",
-      },
-      {
-        title: "TV",
-        dataIndex: "tv",
-        key: "tv",
-        width: "5%",
-        render: (keyValue: boolean) => (keyValue ? "YES" : "NO"),
-      },
-      {
-        title: "Camera",
-        dataIndex: "camera",
-        key: "camera",
-        width: "8%",
-        render: (keyValue: boolean) => (keyValue ? "YES" : "NO"),
+        title: "Seat price",
+        dataIndex: "price",
+        key: "price",
+        render: (price: string) => Common.formatAsCurrency(Number(price)),
+        width: "15%",
       },
       {
         title: "Date",
@@ -81,7 +62,7 @@ export default function SeatsScreen() {
       {
         title: "Actions",
         dataIndex: "",
-        width: "15%",
+        width: "25%",
         render: (seat: ISeat) => (
           <Flex gap="small" align="center" wrap>
             <Button

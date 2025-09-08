@@ -17,6 +17,7 @@ import {
   IRoute,
   ISchedule,
   ISeat,
+  IUser,
 } from "../../../../utils/type";
 import { useQueryClient } from "@tanstack/react-query";
 import {
@@ -26,13 +27,18 @@ import {
 } from "../../../../hooks/useTransport";
 import { Common } from "../../../../utils/Common";
 import { useSeats } from "./useTrain";
+import { useUser } from "../../../../context/useUser";
+import { useAdmins } from "../../../../hooks/useAdmin";
 const { useBreakpoint } = Grid;
+const { Option } = Select;
 
 const AddTrain: React.FC<IAddProps<ITrain>> = ({
   payload,
   isOpen = false,
   onCancel,
 }) => {
+  const { user } = useUser();
+  const { isPending, data: providers } = useAdmins("trainprovider");
   const client = useQueryClient();
   const screens = useBreakpoint();
   const { addTrain, isAdding } = useAddTrain();
@@ -66,7 +72,14 @@ const AddTrain: React.FC<IAddProps<ITrain>> = ({
       <Card title="Add Train">
         <Form
           layout="vertical"
-          initialValues={{ remember: true }}
+          initialValues={{
+            trainName: payload?.trainName,
+            trainNumber: payload?.trainNumber,
+            seats: payload?.seats,
+            routes: payload?.routes,
+            schedules: payload?.schedules,
+            description: payload?.description,
+          }}
           onFinish={onFinish}
           style={{ minWidth: 320 }}
         >
@@ -78,7 +91,6 @@ const AddTrain: React.FC<IAddProps<ITrain>> = ({
               <Form.Item<ITrain>
                 name="trainName"
                 label="Train Name"
-                initialValue={payload?.trainName}
                 rules={[
                   { required: true, message: "Please enter train name!" },
                 ]}
@@ -115,10 +127,9 @@ const AddTrain: React.FC<IAddProps<ITrain>> = ({
                   showSearch
                   loading={showing}
                   mode="multiple"
-                  // onChange={onPricingChange}
                   optionLabelProp="label"
                   options={seats.map((item: ISeat) => ({
-                    label: `${item.classType} ${item.classType}`,
+                    label: `${item.classType}`,
                     value: item.id,
                   }))}
                   filterOption={(input, option) =>
@@ -134,7 +145,7 @@ const AddTrain: React.FC<IAddProps<ITrain>> = ({
               <Form.Item<ITrain>
                 label="Train Route"
                 name="routes"
-                initialValue={payload?.busroutes}
+                initialValue={payload?.routes}
                 rules={[{ required: true, message: "Please bus routes!" }]}
               >
                 <Select
@@ -166,7 +177,6 @@ const AddTrain: React.FC<IAddProps<ITrain>> = ({
                   showSearch
                   loading={waiting}
                   mode="multiple"
-                  // onChange={onPricingChange}
                   optionLabelProp="label"
                   options={schedules.map((item: ISchedule) => ({
                     label: `${item.timeOfOperation} ${item.departureTime}`,
@@ -181,6 +191,33 @@ const AddTrain: React.FC<IAddProps<ITrain>> = ({
                 ></Select>
               </Form.Item>
             </Col>
+            <Col xs={24} sm={24} md={24}>
+              {user?.tag == "trainprovider" ? (
+                <Form.Item<ITrain>
+                  name="admin_id"
+                  initialValue={user.id}
+                  hidden
+                >
+                  <Input />
+                </Form.Item>
+              ) : (
+                <Form.Item<ITrain>
+                  label="Select a provider"
+                  name="admin_id"
+                  rules={[
+                    { required: true, message: "Please select a provider!" },
+                  ]}
+                >
+                  <Select loading={isPending}>
+                    {providers?.map((item: IUser) => (
+                      <Option key={item.id} value={item.id}>
+                        {item.lastname} {item.firstname}
+                      </Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+              )}
+            </Col>
             <Col xs={24}>
               <Form.Item<ITrain>
                 name="description"
@@ -194,6 +231,7 @@ const AddTrain: React.FC<IAddProps<ITrain>> = ({
                 />
               </Form.Item>
             </Col>
+
             <Col xs={24} sm={24} md={24}>
               <Form.Item>
                 <Button

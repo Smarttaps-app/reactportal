@@ -200,6 +200,7 @@ export interface ITrain {
   description: string;
   schedules: ISchedule[];
   seats: ISeat[];
+  routes: IRoute[];
   created_at: string;
   updated_at: string;
 }
