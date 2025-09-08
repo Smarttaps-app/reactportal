@@ -1,12 +1,11 @@
 import {
+  App,
   Button,
   Card,
   Col,
   Form,
-  FormProps,
   Input,
   InputNumber,
-  message,
   Modal,
   Row,
   Select,
@@ -28,13 +27,13 @@ const AddBus: React.FC<IAddProps<IBus>> = ({
   isOpen = false,
   onCancel,
 }) => {
+  const { message } = App.useApp();
   const client = useQueryClient();
   const screens = useBreakpoint();
   const { loading, routes } = useTRoutes();
   const { loading: waiting, schedules } = useTSchedules();
   const { addBus, isAdding } = useAddBus();
-  const onFinish: FormProps<IBus>["onFinish"] = (values) => {
-    console.log("Success:", values);
+  const onFinish = async (values: IBus) => {
     addBus(values, {
       onSuccess: (data) => {
         message.success(data.statusDescription);
@@ -165,7 +164,7 @@ const AddBus: React.FC<IAddProps<IBus>> = ({
                   // onChange={onPricingChange}
                   optionLabelProp="label"
                   options={schedules.map((item: ISchedule) => ({
-                    label: `${item.timeOfOperation}`,
+                    label: `${item.timeOfOperation}  ${item.departureTime}`,
                     value: item.id,
                   }))}
                   filterOption={(input, option) =>

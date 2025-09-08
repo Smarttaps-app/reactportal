@@ -39,6 +39,7 @@ import BusStationsScreen from "../pages/admin/transport/bus/parks";
 import BusDashboard from "../pages/admin/transport/bus/BusDashboard";
 import CashoutsScreen from "../pages/admin/cashout/Index";
 import TrainRoutesScreen from "../pages/admin/transport/train/TrainRoutes";
+import SeatsScreen from "../pages/admin/transport/train/Seats";
 
 export const protectedRoutes = [
   {
@@ -232,6 +233,7 @@ export const trainproviderRoutes = [
       { path: "trains", Component: TrainsScreen, showInMenu: true },
       { path: "train-routes", Component: TrainRoutesScreen, showInMenu: true },
       { path: "train-stations", Component: StationsScreen, showInMenu: true },
+      { path: "train-class", Component: SeatsScreen, showInMenu: true },
     ],
   },
   {

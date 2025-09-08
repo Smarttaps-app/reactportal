@@ -1,6 +1,5 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import {
-  getBusStationsAction,
   getRoutesAction,
   getTrainsAction,
   addRouteAction,
@@ -12,6 +11,10 @@ import {
   getSchedulesAction,
   addScheduleAction,
   deleteScheduleAction,
+  getTrainStationsAction,
+  getSeatsAction,
+  addSeatAction,
+  deleteSeatAction,
 } from "../../../../serviceAction/TrainActions";
 import { message } from "antd";
 import { Common } from "../../../../utils/Common";
@@ -52,7 +55,7 @@ export function useStations() {
     error,
   } = useQuery({
     queryKey: ["trainstations"],
-    queryFn: getBusStationsAction,
+    queryFn: getTrainStationsAction,
     refetchOnWindowFocus: false,
   });
   return { loading, stations, error };
@@ -74,6 +77,37 @@ export function useDeleteStation() {
     },
   });
   return { isdeleting, deleteStation };
+}
+
+export function useSeats() {
+  const {
+    isPending: loading,
+    data: seats = [],
+    error,
+  } = useQuery({
+    queryKey: ["seats"],
+    queryFn: getSeatsAction,
+    refetchOnWindowFocus: false,
+  });
+  return { loading, seats, error };
+}
+export function useAddSeat() {
+  const { mutate: addSeat, isPending: isAdding } = useMutation({
+    mutationFn: addSeatAction,
+    onError: (error) => {
+      message.error(Common.formatError(error));
+    },
+  });
+  return { isAdding, addSeat };
+}
+export function useDeleteSeat() {
+  const { mutate: deleteSeat, isPending: isdeleting } = useMutation({
+    mutationFn: deleteSeatAction,
+    onError: (error) => {
+      message.error(Common.formatError(error));
+    },
+  });
+  return { isdeleting, deleteSeat };
 }
 export function useTrains() {
   const {

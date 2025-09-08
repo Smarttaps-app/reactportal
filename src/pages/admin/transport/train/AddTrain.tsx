@@ -5,15 +5,19 @@ import {
   Form,
   FormProps,
   Input,
-  InputNumber,
   message,
   Modal,
   Row,
   Select,
-  Switch,
 } from "antd";
 import { Grid } from "antd";
-import { IAddProps, ITrain, IRoute, ISchedule } from "../../../../utils/type";
+import {
+  IAddProps,
+  ITrain,
+  IRoute,
+  ISchedule,
+  ISeat,
+} from "../../../../utils/type";
 import { useQueryClient } from "@tanstack/react-query";
 import {
   useAddTrain,
@@ -21,6 +25,7 @@ import {
   useTSchedules,
 } from "../../../../hooks/useTransport";
 import { Common } from "../../../../utils/Common";
+import { useSeats } from "./useTrain";
 const { useBreakpoint } = Grid;
 
 const AddTrain: React.FC<IAddProps<ITrain>> = ({
@@ -32,6 +37,7 @@ const AddTrain: React.FC<IAddProps<ITrain>> = ({
   const screens = useBreakpoint();
   const { addTrain, isAdding } = useAddTrain();
   const { loading, routes } = useTRoutes();
+  const { loading: showing, seats } = useSeats();
   const { loading: waiting, schedules } = useTSchedules();
   const onFinish: FormProps<ITrain>["onFinish"] = (values) => {
     addTrain(values, {
@@ -57,7 +63,7 @@ const AddTrain: React.FC<IAddProps<ITrain>> = ({
       footer={null}
       width={screens.xs ? "100%" : 650}
     >
-      <Card title="Add Bus">
+      <Card title="Add Train">
         <Form
           layout="vertical"
           initialValues={{ remember: true }}
@@ -70,65 +76,64 @@ const AddTrain: React.FC<IAddProps<ITrain>> = ({
             </Form.Item>
             <Col xs={24} sm={24} md={12}>
               <Form.Item<ITrain>
-                name="name"
-                label="Bus Name"
-                initialValue={payload?.name}
-                rules={[{ required: true, message: "Please enter bus name!" }]}
-              >
-                <Input placeholder="Enter bus name" className="!rounded-md " />
-              </Form.Item>
-            </Col>
-            <Col xs={24} sm={24} md={12}>
-              <Form.Item<ITrain>
-                name="bus_number"
-                label="bus number"
-                initialValue={payload?.bus_number}
+                name="trainName"
+                label="Train Name"
+                initialValue={payload?.trainName}
                 rules={[
-                  { required: true, message: "Please enter bus Number!" },
+                  { required: true, message: "Please enter train name!" },
                 ]}
               >
                 <Input
-                  placeholder="Enter bus number"
+                  placeholder="Enter train name"
                   className="!rounded-md "
                 />
               </Form.Item>
             </Col>
             <Col xs={24} sm={24} md={12}>
               <Form.Item<ITrain>
-                name="base_price"
-                label="base price"
-                initialValue={payload?.base_price}
+                name="trainNumber"
+                label="Train number"
+                initialValue={payload?.trainNumber}
                 rules={[
-                  { required: true, message: "Please enter base price!" },
+                  { required: true, message: "Please enter train Number!" },
                 ]}
               >
                 <Input
-                  placeholder="Enter base price"
+                  placeholder="Enter train number"
                   className="!rounded-md "
                 />
               </Form.Item>
             </Col>
             <Col xs={24} sm={24} md={12}>
               <Form.Item<ITrain>
-                label="Seat Count"
-                name="seatCount"
-                initialValue={payload?.seatCount}
-                rules={[
-                  { required: true, message: "Please seat count is required!" },
-                ]}
+                label="Train Seat"
+                name="seats"
+                initialValue={payload?.seats}
+                rules={[{ required: true, message: "Please bus seats!" }]}
               >
-                <InputNumber
-                  suffix="Seat"
-                  className="!rounded-md "
-                  style={{ width: "100%" }}
-                  min={5}
-                />
+                <Select
+                  showSearch
+                  loading={showing}
+                  mode="multiple"
+                  // onChange={onPricingChange}
+                  optionLabelProp="label"
+                  options={seats.map((item: ISeat) => ({
+                    label: `${item.classType} ${item.classType}`,
+                    value: item.id,
+                  }))}
+                  filterOption={(input, option) =>
+                    (option?.label ?? "")
+                      .toString()
+                      .toLowerCase()
+                      .includes(input.toLowerCase())
+                  }
+                ></Select>
               </Form.Item>
             </Col>
             <Col xs={24} sm={24} md={12}>
               <Form.Item<ITrain>
-                label="Bus Route"
-                name="busroutes"
+                label="Train Route"
+                name="routes"
                 initialValue={payload?.busroutes}
                 rules={[{ required: true, message: "Please bus routes!" }]}
               >
@@ -153,9 +158,9 @@ const AddTrain: React.FC<IAddProps<ITrain>> = ({
             </Col>
             <Col xs={24} sm={24} md={12}>
               <Form.Item<ITrain>
-                label="Bus Schedule"
-                name="busschedules"
-                rules={[{ required: true, message: "Please bus schedules" }]}
+                label="Schedule"
+                name="schedules"
+                rules={[{ required: true, message: "Please schedules" }]}
               >
                 <Select
                   showSearch
@@ -164,7 +169,7 @@ const AddTrain: React.FC<IAddProps<ITrain>> = ({
                   // onChange={onPricingChange}
                   optionLabelProp="label"
                   options={schedules.map((item: ISchedule) => ({
-                    label: `${item.timeOfOperation}`,
+                    label: `${item.timeOfOperation} ${item.departureTime}`,
                     value: item.id,
                   }))}
                   filterOption={(input, option) =>
@@ -176,52 +181,10 @@ const AddTrain: React.FC<IAddProps<ITrain>> = ({
                 ></Select>
               </Form.Item>
             </Col>
-            <Col xs={24} sm={24} md={8}>
-              <Form.Item
-                name="airCondition"
-                label="Air condiction"
-                valuePropName="checked"
-                initialValue={payload?.airCondition}
-              >
-                <Switch
-                  defaultValue={payload?.airCondition}
-                  unCheckedChildren="No Air condiction"
-                  checkedChildren="Air condiction"
-                />
-              </Form.Item>
-            </Col>
-            <Col xs={24} sm={24} md={8}>
-              <Form.Item
-                name="tv"
-                label="Television"
-                valuePropName="checked"
-                initialValue={payload?.tv}
-              >
-                <Switch
-                  defaultValue={payload?.tv}
-                  unCheckedChildren="No Television"
-                  checkedChildren="Television"
-                />
-              </Form.Item>
-            </Col>
-            <Col xs={24} sm={24} md={8}>
-              <Form.Item
-                name="camera"
-                label="Camera"
-                valuePropName="checked"
-                initialValue={payload?.camera}
-              >
-                <Switch
-                  defaultValue={payload?.camera}
-                  unCheckedChildren="No Camera"
-                  checkedChildren="Camera"
-                />
-              </Form.Item>
-            </Col>
             <Col xs={24}>
               <Form.Item<ITrain>
                 name="description"
-                label="Bus Description"
+                label="Description"
                 initialValue={payload?.description}
               >
                 <Input.TextArea

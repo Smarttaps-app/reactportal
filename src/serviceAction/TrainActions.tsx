@@ -20,12 +20,17 @@ import {
   addSchedule,
   getSchedules,
   getTrainStations,
+  getSeats,
+  getSeat,
+  addSeat,
+  deleteSeat,
 } from "../services/TrainService";
 import {
   IBus,
   IPark,
   IRoute,
   ISchedule,
+  ISeat,
   IStation,
   ITrain,
 } from "../utils/type";
@@ -153,6 +158,40 @@ export async function deleteBusAction(id: number) {
   }
   throw new Error(response.data);
 }
+
+export async function getSeatsAction() {
+  const response = await getSeats();
+  if (response.status == 200) {
+    console.log(response.data.data);
+    return response.data.data;
+  }
+  throw new Error(response.data);
+}
+export async function getSeatAction(id: string) {
+  const response = await getSeat(id);
+  if (response.status == 200) {
+    console.log(response.data);
+    return response.data;
+  }
+  throw new Error(response.data);
+}
+export async function addSeatAction(payload: ISeat) {
+  const response = await addSeat(payload);
+  if (response.status == 200) {
+    console.log(response.data);
+    return response.data;
+  }
+  throw new Error(response.data);
+}
+export async function deleteSeatAction(id: number) {
+  const response = await deleteSeat(id);
+  if (response.status == 200) {
+    console.log(response.data);
+    return response.data;
+  }
+  throw new Error(response.data);
+}
+
 // action for Park
 export async function getSchedulesAction() {
   const response = await getSchedules();

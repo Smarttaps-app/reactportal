@@ -40,14 +40,7 @@ export default function StationsScreen() {
         title: "Mode",
         dataIndex: "mode",
         key: "mode",
-        width: "6%",
-      },
-      {
-        title: "Date",
-        dataIndex: "created_at",
-        key: "created_at",
-        render: (created: string) => Common.formatDate(created),
-        ellipsis: true,
+        width: "8%",
       },
       {
         title: "Updated",
@@ -59,8 +52,8 @@ export default function StationsScreen() {
       {
         title: "Actions",
         dataIndex: "",
-        width: "12%",
-        render: (key: string, station: IStation) => (
+        width: "15%",
+        render: (station: IStation) => (
           <Flex gap="small" align="center" wrap>
             <Button
               color="cyan"
@@ -113,7 +106,7 @@ export default function StationsScreen() {
   return (
     <>
       <Card
-        title="Parks"
+        title="Stations"
         className="!shadow-sm !rounded-lg"
         loading={loading}
         extra={
@@ -121,7 +114,7 @@ export default function StationsScreen() {
             <div className="relative flex-1 max-w-md">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
               <Input
-                placeholder="Search ..."
+                placeholder="Search Station..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-10 py-6 bg-gray-50 border-gray-200 focus-visible:outline-none focus:ring-2 focus:!ring-primary focus:bg-white !ease-linear !duration-200 !transition-all"
@@ -130,14 +123,14 @@ export default function StationsScreen() {
             <span className="text-sm text-gray-500">Total: {data.length}</span>
             <Button
               icon={<PlusOutlined />}
-              title="New Park"
+              title="New Station"
               type="primary"
               onClick={() => {
                 setItem(undefined);
                 setAdd(true);
               }}
             >
-              New Park
+              New Station
             </Button>
           </Space>
         }

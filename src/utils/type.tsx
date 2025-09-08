@@ -197,7 +197,7 @@ export interface ITrain {
   trainName: string;
   trainNumber: string;
   image: string;
-  name: string;
+  description: string;
   schedules: ISchedule[];
   seats: ISeat[];
   created_at: string;
@@ -255,11 +255,12 @@ export interface IRoute {
   buses: IBus[];
 }
 export interface ISeat {
-  id: string;
+  id: number;
   seatNumber: string;
   classType: string;
   availabilityStatus: string;
   price: string;
+  admin_id: number;
   created_at: string;
   updated_at: string;
 }

@@ -10,28 +10,28 @@ import {
   Select,
 } from "antd";
 import { Grid } from "antd";
+import { IAddProps, ISeat, IUser } from "../../../../utils/type";
 import { useQueryClient } from "@tanstack/react-query";
-import { IAddProps, IStation, IUser } from "../../../../utils/type";
-import { useAddStation } from "./useBus";
-import { Common } from "../../../../utils/Common";
 import states from "../../../../utils/states";
+import { Common } from "../../../../utils/Common";
 import { useUser } from "../../../../context/useUser";
 import { useAdmins } from "../../../../hooks/useAdmin";
+import { useAddSeat } from "./useTrain";
 const { useBreakpoint } = Grid;
 const { Option } = Select;
 
-const AddStation: React.FC<IAddProps<IStation>> = ({
+const AddSeat: React.FC<IAddProps<ISeat>> = ({
   payload,
   isOpen = false,
   onCancel,
 }) => {
   const { user } = useUser();
-  const { isPending, data: providers } = useAdmins("busprovider");
+  const { isPending, data: providers } = useAdmins("trainprovider");
   const client = useQueryClient();
   const screens = useBreakpoint();
-  const { addStation, isAdding } = useAddStation();
-  const onFinish = async (values: IStation) => {
-    addStation(values, {
+  const { addSeat, isAdding } = useAddSeat();
+  const onFinish = async (values: ISeat) => {
+    addSeat(values, {
       onSuccess: (data) => {
         message.success(data.statusDescription);
         onCancel();
@@ -40,7 +40,7 @@ const AddStation: React.FC<IAddProps<IStation>> = ({
         message.error(Common.formatError(error));
         onCancel();
       },
-      onSettled: () => client.invalidateQueries({ queryKey: ["busstations"] }),
+      onSettled: () => client.invalidateQueries({ queryKey: ["seats"] }),
     });
   };
   return (
@@ -54,13 +54,13 @@ const AddStation: React.FC<IAddProps<IStation>> = ({
       footer={null}
       width={screens.xs ? "100%" : 450}
     >
-      <Card title="Add Park">
+      <Card title="Add Seat">
         <Form
           layout="vertical"
           initialValues={{
-            mode: "bus",
-            stationName: payload?.stationName,
-            location: payload?.location,
+            mode: "train",
+            stationName: payload?.classType,
+            location: payload?.price,
             admin_id: payload?.admin_id,
           }}
           onFinish={onFinish}
@@ -68,9 +68,10 @@ const AddStation: React.FC<IAddProps<IStation>> = ({
         >
           <Row gutter={[16, 16]}>
             <Col xs={24} sm={24} md={24}>
-              <Form.Item<IStation>
-                name="stationName"
-                label="Park Name"
+              <Form.Item<ISeat>
+                name="classType"
+                label="Seat Class"
+                initialValue={payload?.classType}
                 rules={[
                   { required: true, message: "Please enter station name!" },
                 ]}
@@ -81,14 +82,15 @@ const AddStation: React.FC<IAddProps<IStation>> = ({
                 />
               </Form.Item>
             </Col>
+
             <Col xs={24} sm={24} md={24}>
-              <Form.Item<IStation>
-                name="location"
-                label="Select Location"
+              <Form.Item<ISeat>
+                name="classType"
+                label="Select seat class"
                 rules={[
                   {
                     required: true,
-                    message: "Please choose station location!",
+                    message: "Please choose seat class!",
                   },
                 ]}
               >
@@ -97,7 +99,7 @@ const AddStation: React.FC<IAddProps<IStation>> = ({
                   loading={isAdding}
                   disabled={isAdding}
                   size="large"
-                  placeholder="Choose station location"
+                  placeholder="Choose seat class"
                   optionLabelProp="label"
                   options={states.map((item) => ({
                     label: item.state,
@@ -112,17 +114,14 @@ const AddStation: React.FC<IAddProps<IStation>> = ({
                 />
               </Form.Item>
             </Col>
+
             <Col xs={24} sm={24} md={24}>
-              {user?.tag == "busprovider" ? (
-                <Form.Item<IStation>
-                  name="admin_id"
-                  initialValue={user.id}
-                  hidden
-                >
+              {user?.tag == "trainprovider" ? (
+                <Form.Item<ISeat> name="admin_id" initialValue={user.id} hidden>
                   <Input />
                 </Form.Item>
               ) : (
-                <Form.Item<IStation>
+                <Form.Item<ISeat>
                   label="Select a provider"
                   name="admin_id"
                   rules={[
@@ -141,15 +140,6 @@ const AddStation: React.FC<IAddProps<IStation>> = ({
                   </Select>
                 </Form.Item>
               )}
-            </Col>
-            <Col xs={24} sm={24} md={24}>
-              <Form.Item<IStation>
-                name="mode"
-                hidden
-                initialValue={payload?.mode}
-              >
-                <Input />
-              </Form.Item>
             </Col>
             <Col xs={24} sm={24} md={24}>
               <Form.Item>
@@ -171,4 +161,4 @@ const AddStation: React.FC<IAddProps<IStation>> = ({
     </Modal>
   );
 };
-export default AddStation;
+export default AddSeat;

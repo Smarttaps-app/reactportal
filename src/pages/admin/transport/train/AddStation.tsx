@@ -3,7 +3,6 @@ import {
   Card,
   Col,
   Form,
-  FormProps,
   Input,
   message,
   Modal,
@@ -13,10 +12,11 @@ import {
 import { Grid } from "antd";
 import { IAddProps, IStation, IUser } from "../../../../utils/type";
 import { useQueryClient } from "@tanstack/react-query";
-import { useAddStation } from "../../../../hooks/useTransport";
+import states from "../../../../utils/states";
 import { Common } from "../../../../utils/Common";
 import { useUser } from "../../../../context/useUser";
 import { useAdmins } from "../../../../hooks/useAdmin";
+import { useAddStation } from "./useTrain";
 const { useBreakpoint } = Grid;
 const { Option } = Select;
 
@@ -30,19 +30,18 @@ const AddStation: React.FC<IAddProps<IStation>> = ({
   const client = useQueryClient();
   const screens = useBreakpoint();
   const { addStation, isAdding } = useAddStation();
-  const onFinish: FormProps<IStation>["onFinish"] = (values) => {
-    console.log("Success:", values);
+  const onFinish = async (values: IStation) => {
     addStation(values, {
       onSuccess: (data) => {
         message.success(data.statusDescription);
         onCancel();
       },
       onError: (error) => {
-        console.log(error);
         message.error(Common.formatError(error));
         onCancel();
       },
-      onSettled: () => client.invalidateQueries({ queryKey: ["stations"] }),
+      onSettled: () =>
+        client.invalidateQueries({ queryKey: ["trainstations"] }),
     });
   };
   return (
@@ -56,7 +55,7 @@ const AddStation: React.FC<IAddProps<IStation>> = ({
       footer={null}
       width={screens.xs ? "100%" : 450}
     >
-      <Card title="Add Park">
+      <Card title="Add Station">
         <Form
           layout="vertical"
           initialValues={{
@@ -72,7 +71,7 @@ const AddStation: React.FC<IAddProps<IStation>> = ({
             <Col xs={24} sm={24} md={24}>
               <Form.Item<IStation>
                 name="stationName"
-                label="Park Name"
+                label="Station Name"
                 initialValue={payload?.stationName}
                 rules={[
                   { required: true, message: "Please enter station name!" },
@@ -88,15 +87,31 @@ const AddStation: React.FC<IAddProps<IStation>> = ({
             <Col xs={24} sm={24} md={24}>
               <Form.Item<IStation>
                 name="location"
-                label="Location "
-                initialValue={payload?.location}
+                label="Select Location"
                 rules={[
-                  { required: true, message: "Please enter station location!" },
+                  {
+                    required: true,
+                    message: "Please choose station location!",
+                  },
                 ]}
               >
-                <Input
-                  placeholder="Enter station location"
-                  className="!rounded-md !py-2"
+                <Select
+                  showSearch
+                  loading={isAdding}
+                  disabled={isAdding}
+                  size="large"
+                  placeholder="Choose station location"
+                  optionLabelProp="label"
+                  options={states.map((item) => ({
+                    label: item.state,
+                    value: item.state,
+                  }))}
+                  filterOption={(input, option) =>
+                    (option?.label ?? "")
+                      .toString()
+                      .toLowerCase()
+                      .includes(input.toLowerCase())
+                  }
                 />
               </Form.Item>
             </Col>
@@ -130,6 +145,13 @@ const AddStation: React.FC<IAddProps<IStation>> = ({
                   </Select>
                 </Form.Item>
               )}
+              <Form.Item<IStation>
+                name="mode"
+                hidden
+                initialValue={payload?.mode}
+              >
+                <Input />
+              </Form.Item>
             </Col>
             <Col xs={24} sm={24} md={24}>
               <Form.Item>

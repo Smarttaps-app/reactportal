@@ -4,6 +4,7 @@ import {
   IPark,
   IRoute,
   ISchedule,
+  ISeat,
   IStation,
   ITrain,
 } from "../utils/type";
@@ -15,6 +16,15 @@ export const addRoute = async (payload: IRoute) =>
   await api.post(`admin/route/add`, payload);
 export const deleteRoute = async (id: number) =>
   await api.delete(`admin/route/${id}/delete`);
+
+// service for Seat
+export const getSeats = async () => await api.get(`admin/seats`);
+export const getSeat = async (id: string) => await api.get(`admin/seat/${id}`);
+export const addSeat = async (payload: ISeat) =>
+  await api.post(`admin/seat/add`, payload);
+export const deleteSeat = async (id: number) =>
+  await api.delete(`admin/seat/${id}/delete`);
+
 // service for Stations
 export const getBusStations = async () => await api.get(`admin/bus/stations`);
 export const getTrainStations = async () =>

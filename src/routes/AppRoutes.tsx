@@ -6,6 +6,7 @@ import {
   busproviderRoutes,
   protectedRoutes,
   supportRoutes,
+  trainproviderRoutes,
 } from "./routes";
 import ProtectedRouted from "./ProtectedRoute";
 import Login from "../pages/auth/login";
@@ -31,32 +32,13 @@ export default function AppRouted() {
         path="/admin"
         element={
           <UserProvider>
-            <ProtectedRouted allowedRole={["superadmin"]}>
+            <ProtectedRouted allowedRole={["superadmin", "admin"]}>
               <AdministratorLayout />
             </ProtectedRouted>
           </UserProvider>
         }
       >
-        {protectedRoutes.map(({ path, Component, children }) => (
-          <Route
-            key={path}
-            path={path}
-            element={
-              <ProtectedRouted allowedRole={["superadmin"]}>
-                <Component />
-              </ProtectedRouted>
-            }
-          >
-            {children &&
-              children.map(({ path: childPath, Component: ChildComp }) => (
-                <Route
-                  key={childPath}
-                  path={childPath}
-                  element={<ChildComp />}
-                />
-              ))}
-          </Route>
-        ))}
+        {renderRoutes(protectedRoutes)}
         <Route path="product/:id" element={<ProductDetailScreen />} />
         <Route path="biller/:id" element={<BillerDetailScreen />} />
       </Route>
@@ -73,6 +55,18 @@ export default function AppRouted() {
         {renderRoutes(busproviderRoutes)}
       </Route>
       <Route
+        path="/trainprovider"
+        element={
+          <UserProvider>
+            <ProtectedRouted allowedRole={["trainprovider"]}>
+              <AdministratorLayout />
+            </ProtectedRouted>
+          </UserProvider>
+        }
+      >
+        {renderRoutes(trainproviderRoutes)}
+      </Route>
+      <Route
         path="/business"
         element={
           <UserProvider>
@@ -82,17 +76,7 @@ export default function AppRouted() {
           </UserProvider>
         }
       >
-        {businessRoutes.map(({ path, Component }) => (
-          <Route
-            key={path}
-            path={path}
-            element={
-              <ProtectedRouted allowedRole={["business"]}>
-                <Component />
-              </ProtectedRouted>
-            }
-          />
-        ))}
+        {renderRoutes(businessRoutes)}
       </Route>
       <Route
         path="/accountant"
@@ -104,17 +88,7 @@ export default function AppRouted() {
           </UserProvider>
         }
       >
-        {accountantRoutes.map(({ path, Component }) => (
-          <Route
-            key={path}
-            path={path}
-            element={
-              <ProtectedRouted allowedRole={["accountant"]}>
-                <Component />
-              </ProtectedRouted>
-            }
-          />
-        ))}
+        {renderRoutes(accountantRoutes)}
       </Route>
       <Route
         path="/audit"
@@ -126,17 +100,7 @@ export default function AppRouted() {
           </UserProvider>
         }
       >
-        {auditRoutes.map(({ path, Component }) => (
-          <Route
-            key={path}
-            path={path}
-            element={
-              <ProtectedRouted allowedRole={["audit"]}>
-                <Component />
-              </ProtectedRouted>
-            }
-          />
-        ))}
+        {renderRoutes(auditRoutes)}
       </Route>
       <Route
         path="/support"
@@ -148,17 +112,7 @@ export default function AppRouted() {
           </UserProvider>
         }
       >
-        {supportRoutes.map(({ path, Component }) => (
-          <Route
-            key={path}
-            path={path}
-            element={
-              <ProtectedRouted allowedRole={["support"]}>
-                <Component />
-              </ProtectedRouted>
-            }
-          />
-        ))}
+        {renderRoutes(supportRoutes)}
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

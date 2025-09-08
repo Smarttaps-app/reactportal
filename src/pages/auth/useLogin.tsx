@@ -20,6 +20,8 @@ export const useLogin = () => {
           navigate("/admin", { replace: true });
         } else if (response.data.data.tag === "busprovider") {
           navigate("/provider", { replace: true });
+        } else if (response.data.data.tag === "trainprovider") {
+          navigate("/trainprovider", { replace: true });
         } else if (response.data.data.tag === "support") {
           navigate("/support", { replace: true });
         } else if (response.data.data.tag === "business") {
