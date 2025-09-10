@@ -224,6 +224,8 @@ export interface IBus {
 }
 export interface ISchedule {
   id: number;
+  admin_id: number;
+  mode: string;
   daysOfOperation: string | null;
   timeOfOperation: string | null;
   departureTime: string;

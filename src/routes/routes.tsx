@@ -40,6 +40,8 @@ import BusDashboard from "../pages/admin/transport/bus/BusDashboard";
 import CashoutsScreen from "../pages/admin/cashout/Index";
 import TrainRoutesScreen from "../pages/admin/transport/train/TrainRoutes";
 import SeatsScreen from "../pages/admin/transport/train/Seats";
+import TrainSchedulesScreen from "../pages/admin/transport/train/TrainSchedules";
+import BusSchedulesScreen from "../pages/admin/transport/bus/BusSchedules";
 
 export const protectedRoutes = [
   {
@@ -94,6 +96,11 @@ export const protectedRoutes = [
       { path: "buses", Component: BusesScreen, showInMenu: true },
       { path: "bus-routes", Component: BusRoutesScreen, showInMenu: true },
       { path: "bus-parks", Component: BusStationsScreen, showInMenu: true },
+      {
+        path: "bus-schedules",
+        Component: BusSchedulesScreen,
+        showInMenu: true,
+      },
     ],
   },
   {
@@ -105,6 +112,12 @@ export const protectedRoutes = [
       { path: "trains", Component: TrainsScreen, showInMenu: true },
       { path: "train-routes", Component: TrainRoutesScreen, showInMenu: true },
       { path: "train-stations", Component: StationsScreen, showInMenu: true },
+      { path: "train-class", Component: SeatsScreen, showInMenu: true },
+      {
+        path: "train-schedules",
+        Component: TrainSchedulesScreen,
+        showInMenu: true,
+      },
     ],
   },
   {
@@ -181,6 +194,11 @@ export const busproviderRoutes = [
       { path: "buses", Component: BusesScreen, showInMenu: true },
       { path: "bus-routes", Component: BusRoutesScreen, showInMenu: true },
       { path: "bus-parks", Component: BusStationsScreen, showInMenu: true },
+      {
+        path: "bus-schedules",
+        Component: BusSchedulesScreen,
+        showInMenu: true,
+      },
     ],
   },
   {
@@ -234,6 +252,11 @@ export const trainproviderRoutes = [
       { path: "train-routes", Component: TrainRoutesScreen, showInMenu: true },
       { path: "train-stations", Component: StationsScreen, showInMenu: true },
       { path: "train-class", Component: SeatsScreen, showInMenu: true },
+      {
+        path: "train-schedules",
+        Component: TrainSchedulesScreen,
+        showInMenu: true,
+      },
     ],
   },
   {

@@ -139,7 +139,7 @@ export function useDeleteTrain() {
   });
   return { isdeleting, deleteTrain };
 }
-export function useTSchedules() {
+export function useSchedules() {
   const {
     isPending: loading,
     data: schedules = [],
@@ -151,7 +151,7 @@ export function useTSchedules() {
   });
   return { loading, schedules, error };
 }
-export function useAddTSchedule() {
+export function useAddSchedule() {
   const { mutate: addSchedule, isPending: isAdding } = useMutation({
     mutationFn: addScheduleAction,
     onError: (error) => {
@@ -160,7 +160,7 @@ export function useAddTSchedule() {
   });
   return { isAdding, addSchedule };
 }
-export function useDeleteTSchedule() {
+export function useDeleteSchedule() {
   const { mutate: deleteSchedule, isPending: isdeleting } = useMutation({
     mutationFn: deleteScheduleAction,
     onError: (error) => {
