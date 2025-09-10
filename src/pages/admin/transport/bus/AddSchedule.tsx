@@ -144,7 +144,7 @@ const AddSchedule: React.FC<IAddProps<ISchedule>> = ({
               </Form.Item>
             </Col>
             <Col xs={24} sm={24} md={24}>
-              {user?.tag == "trainprovider" ? (
+              {user?.tag == "busprovider" ? (
                 <Form.Item<ISchedule>
                   name="admin_id"
                   initialValue={user.id}
