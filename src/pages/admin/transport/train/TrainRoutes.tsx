@@ -71,6 +71,7 @@ export default function TrainRoutesScreen() {
           <Flex gap="small" align="center" wrap>
             <Button
               color="cyan"
+              size="small"
               variant="solid"
               onClick={() => {
                 setItem(route);
@@ -81,6 +82,7 @@ export default function TrainRoutesScreen() {
             </Button>
             <Button
               type="primary"
+              size="small"
               danger
               disabled={isdeleting}
               loading={isdeleting}

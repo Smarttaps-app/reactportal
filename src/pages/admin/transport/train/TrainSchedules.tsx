@@ -72,6 +72,7 @@ export default function TrainSchedulesScreen() {
           <Flex gap="small" align="center" wrap>
             <Button
               color="cyan"
+              size="small"
               variant="solid"
               onClick={() => {
                 setItem(schedule);
@@ -83,6 +84,7 @@ export default function TrainSchedulesScreen() {
             <Button
               type="primary"
               danger
+              size="small"
               disabled={isdeleting}
               loading={isdeleting}
               onClick={() =>

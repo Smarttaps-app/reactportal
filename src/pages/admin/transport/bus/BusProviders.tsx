@@ -85,6 +85,7 @@ export default function ParksScreen() {
           <Flex gap="small" align="center" wrap>
             <Button
               type="primary"
+              size="small"
               icon={<EyeOutlined />}
               onClick={() => {
                 setItem(park);
@@ -100,6 +101,7 @@ export default function ParksScreen() {
             <Button
               type="primary"
               danger
+              size="small"
               icon={<DeleteOutlined />}
               // loading={loadings[2]}
               //onClick={() => enterLoading(2)}

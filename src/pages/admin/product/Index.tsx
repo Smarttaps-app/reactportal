@@ -1,19 +1,33 @@
-import { Button, Card, Empty, Flex, Row, Space, Table, Tag } from "antd";
+import {
+  App,
+  Button,
+  Card,
+  Empty,
+  Flex,
+  Input,
+  Row,
+  Space,
+  Table,
+  Tag,
+} from "antd";
 import { useMemo, useState } from "react";
 import { Common } from "../../../utils/Common";
-import {
-  DeleteOutlined,
-  EyeOutlined,
-  PlusOutlined,
-  RedoOutlined,
-} from "@ant-design/icons";
+import { PlusOutlined } from "@ant-design/icons";
 import { IBiller, IProduct } from "../../../utils/type";
 import ProductCard from "./ProductCard";
 import { useProducts } from "../../../hooks/useProduct";
-import Product from "./Product";
+import AddProduct from "./AddProduct";
 import { useNavigate } from "react-router-dom";
+import { useDeleteProduct } from "./useService";
+import { useQueryClient } from "@tanstack/react-query";
+import { Search } from "lucide-react";
 
 export default function ProductsScreen() {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [item, setItem] = useState<IProduct>();
+  const { message } = App.useApp();
+  const client = useQueryClient();
+  const { isdeleting, deleteProduct } = useDeleteProduct();
   const navigate = useNavigate();
   const [show, setShow] = useState(false);
   const { loading, products, error } = useProducts();
@@ -62,28 +76,23 @@ export default function ProductsScreen() {
         ),
       },
       {
-        title: "Date",
-        dataIndex: "created_at",
-        key: "created_at",
-        render: (created: string) => Common.formatDate(created),
-        ellipsis: true,
-      },
-      {
         title: "Updated",
         dataIndex: "updated_at",
         key: "updated_at",
+        width: "9%",
         render: (updated: string) => Common.formatDate(updated),
         ellipsis: true,
       },
       {
         title: "Actions",
         dataIndex: "",
-        width: "12%",
-        render: (key: string, product: IProduct) => (
+        width: "20%",
+        render: (product: IProduct) => (
           <Flex gap="small" align="center" wrap>
             <Button
-              type="primary"
-              icon={<EyeOutlined />}
+              color="cyan"
+              variant="solid"
+              size="small"
               onClick={() =>
                 navigate(`/admin/product/${product.id}`, {
                   state: {
@@ -91,20 +100,38 @@ export default function ProductsScreen() {
                   },
                 })
               }
-            />
+            >
+              View
+            </Button>
             <Button
-              type="primary"
-              icon={<RedoOutlined />}
-              // loading={loadings[2]}
-              //onClick={() => enterLoading(2)}
-            />
+              color="default"
+              size="small"
+              variant="solid"
+              onClick={() => {
+                setItem(product);
+                setShow(true);
+              }}
+            >
+              Edit
+            </Button>
             <Button
               type="primary"
               danger
-              icon={<DeleteOutlined />}
-              // loading={loadings[2]}
-              //onClick={() => enterLoading(2)}
-            />
+              size="small"
+              disabled={isdeleting}
+              loading={isdeleting}
+              onClick={() =>
+                deleteProduct(product.id, {
+                  onSuccess: (response) =>
+                    message.success(response.statusDescription),
+                  onError: (error) => message.error(Common.formatError(error)),
+                  onSettled: () =>
+                    client.invalidateQueries({ queryKey: ["products"] }),
+                })
+              }
+            >
+              Delete
+            </Button>
           </Flex>
         ),
       },
@@ -118,7 +145,15 @@ export default function ProductsScreen() {
       </Row>
     );
 
-  const data: IProduct[] = products || [];
+  const data =
+    products.filter(
+      (product: IProduct) =>
+        product.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.customerField
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase()) ||
+        product.description?.toLowerCase().includes(searchTerm.toLowerCase())
+    ) || [];
 
   return (
     <>
@@ -155,6 +190,15 @@ export default function ProductsScreen() {
         extra={
           <Space className="flex items-center">
             <span className="text-sm text-gray-500">Total: {data.length}</span>
+            <div className="relative flex-1 max-w-md">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+              <Input
+                placeholder="Search products..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10 py-6 bg-gray-50 border-gray-200 focus-visible:outline-none focus:ring-2 focus:!ring-primary focus:bg-white !ease-linear !duration-200 !transition-all"
+              />
+            </div>
             <Button
               icon={<PlusOutlined />}
               title="New Product"
@@ -174,7 +218,11 @@ export default function ProductsScreen() {
           dataSource={data}
           scroll={{ x: "max-content" }}
         />
-        <Product isOpen={show} onCancel={() => setShow(false)} />
+        <AddProduct
+          product={item}
+          isOpen={show}
+          onCancel={() => setShow(false)}
+        />
       </Card>
     </>
   );

@@ -57,6 +57,7 @@ export default function StationsScreen() {
           <Flex gap="small" align="center" wrap>
             <Button
               color="cyan"
+              size="small"
               variant="solid"
               onClick={() => {
                 setItem(station);
@@ -68,6 +69,7 @@ export default function StationsScreen() {
             <Button
               type="primary"
               danger
+              size="small"
               disabled={isdeleting}
               loading={isdeleting}
               onClick={() =>

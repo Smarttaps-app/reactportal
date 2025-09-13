@@ -72,6 +72,7 @@ export default function BusRoutesScreen() {
           <Flex gap="small" align="center" wrap>
             <Button
               color="cyan"
+              size="small"
               variant="solid"
               onClick={() => {
                 setItem(route);
@@ -83,6 +84,7 @@ export default function BusRoutesScreen() {
             <Button
               type="primary"
               danger
+              size="small"
               disabled={isdeleting}
               loading={isdeleting}
               onClick={() =>

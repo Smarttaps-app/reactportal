@@ -96,6 +96,7 @@ export default function BusesScreen() {
             <Button
               color="cyan"
               variant="solid"
+              size="small"
               onClick={() => {
                 setItem(bus);
                 setAdd(true);
@@ -106,6 +107,7 @@ export default function BusesScreen() {
             <Button
               type="primary"
               danger
+              size="small"
               disabled={isdeleting}
               loading={isdeleting}
               onClick={() =>

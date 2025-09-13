@@ -48,12 +48,7 @@ export interface IShowPaymentProps {
   onCancel: () => void;
   onOK?: () => void;
 }
-export interface IProductProps {
-  product?: IProduct;
-  isOpen?: boolean;
-  onCancel: () => void;
-  onOK?: () => void;
-}
+
 export interface ICustomer {
   id: number;
   phonenumber: string;
@@ -132,7 +127,7 @@ export interface IProduct {
   icon: string;
   id: 1;
   name: string;
-  status: true;
+  status: boolean | true;
   updated_at: string;
   vasType: string;
   billers: IBiller[] | [];
@@ -148,6 +143,7 @@ export interface IBiller {
   hasPackages: boolean;
   id: number;
   logo: string;
+  status: boolean | true;
   maxAmountLimit: number;
   minAmountLimit: number;
   network: string;

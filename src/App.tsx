@@ -15,7 +15,7 @@ function App() {
             theme={{
               components: {
                 Table: {
-                  cellPaddingBlock: 10,
+                  cellPaddingBlock: 5,
                   cellFontSize: 10,
                   headerBg: "#ff9900",
                   headerColor: "#ffffff",

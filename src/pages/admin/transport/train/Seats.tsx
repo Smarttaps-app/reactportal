@@ -67,6 +67,7 @@ export default function SeatsScreen() {
           <Flex gap="small" align="center" wrap>
             <Button
               color="cyan"
+              size="small"
               variant="solid"
               onClick={() => {
                 setItem(seat);
@@ -78,6 +79,7 @@ export default function SeatsScreen() {
             <Button
               type="primary"
               danger
+              size="small"
               disabled={isdeleting}
               loading={isdeleting}
               onClick={() =>

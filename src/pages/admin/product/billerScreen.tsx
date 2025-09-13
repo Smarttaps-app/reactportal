@@ -1,31 +1,21 @@
-import {
-  Button,
-  Card,
-  Col,
-  Flex,
-  Form,
-  Input,
-  Select,
-  Space,
-  Switch,
-  Table,
-  Tag,
-} from "antd";
+import { App, Button, Card, Flex, Input, Space, Table, Tag } from "antd";
 import { useMemo, useState } from "react";
 import { Common } from "../../../utils/Common";
-import {
-  ArrowLeftOutlined,
-  DeleteOutlined,
-  EyeOutlined,
-  PlusOutlined,
-  RedoOutlined,
-} from "@ant-design/icons";
-import { IBiller, IPackage } from "../../../utils/type";
+import { ArrowLeftOutlined, PlusOutlined } from "@ant-design/icons";
+import { IPackage } from "../../../utils/type";
 import { useLocation, useNavigate } from "react-router-dom";
 
-import Package from "./Package";
+import AddPackage from "./AddPackage";
+import { useQueryClient } from "@tanstack/react-query";
+import { useDeletePackage } from "./useService";
+import { Search } from "lucide-react";
 
 export default function BillerDetailScreen() {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [item, setItem] = useState<IPackage>();
+  const { message } = App.useApp();
+  const client = useQueryClient();
+  const { isdeleting, deletePackage } = useDeletePackage();
   const location = useLocation();
   const { payload } = location.state || {};
   const navigate = useNavigate();
@@ -45,23 +35,23 @@ export default function BillerDetailScreen() {
         width: "20%",
       },
       {
-        title: "Package Code",
+        title: "Code",
         dataIndex: "packageCode",
         key: "packageCode",
-        width: "15%",
+        width: "5%",
       },
       {
         title: "Amount",
         dataIndex: "amount",
         key: "amount",
-        width: "15%",
+        width: "10%",
         render: (amount: string) => Common.formatAsCurrency(Number(amount)),
       },
       {
-        title: "Has Validity",
+        title: "Validity",
         dataIndex: "hasValidity",
         key: "hasValidity",
-        width: "10%",
+        width: "5%",
         render: (hasValidity: boolean) => (
           <Tag color={`${hasValidity ? "green" : "red"}`}>
             {hasValidity ? "Yes" : "No"}
@@ -69,10 +59,16 @@ export default function BillerDetailScreen() {
         ),
       },
       {
+        title: "Period",
+        dataIndex: "validity",
+        key: "validity",
+        width: "5%",
+      },
+      {
         title: "Status",
         dataIndex: "status",
         key: "status",
-        width: "10%",
+        width: "5%",
         render: (status: boolean) => (
           <Tag color={`${status ? "green" : "red"}`}>
             {status ? "Active" : "Inactive"}
@@ -89,37 +85,51 @@ export default function BillerDetailScreen() {
       {
         title: "Actions",
         dataIndex: "",
-        width: "12%",
-        render: (key: string, record: IPackage) => (
+        width: "15%",
+        render: (record: IPackage) => (
           <Flex gap="small" align="center" wrap>
             <Button
-              type="primary"
-              icon={<EyeOutlined />}
+              color="default"
+              size="small"
+              variant="solid"
               onClick={() => {
-                //setProduct(biller);
-                // setShow(true);
+                setItem(record);
+                setShow(true);
               }}
-            />
-            <Button
-              type="primary"
-              icon={<RedoOutlined />}
-              // loading={loadings[2]}
-              //onClick={() => enterLoading(2)}
-            />
+            >
+              Edit
+            </Button>
             <Button
               type="primary"
               danger
-              icon={<DeleteOutlined />}
-              // loading={loadings[2]}
-              //onClick={() => enterLoading(2)}
-            />
+              size="small"
+              disabled={isdeleting}
+              loading={isdeleting}
+              onClick={() =>
+                deletePackage(record.id, {
+                  onSuccess: (response) =>
+                    message.success(response.statusDescription),
+                  onError: (error) => message.error(Common.formatError(error)),
+                  onSettled: () =>
+                    client.invalidateQueries({ queryKey: ["packages"] }),
+                })
+              }
+            >
+              Delete
+            </Button>
           </Flex>
         ),
       },
     ],
     []
   );
-  const data: IPackage[] = payload.packages || [];
+  const data =
+    payload.packages.filter(
+      (pack: IPackage) =>
+        pack.packageCode?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        pack.amount.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        pack.description?.toLowerCase().includes(searchTerm.toLowerCase())
+    ) || [];
   return (
     <>
       <Card
@@ -137,123 +147,29 @@ export default function BillerDetailScreen() {
         extra={
           <Space className="flex items-center">
             <span className="text-sm text-gray-500">Total: {data.length}</span>
+            <div className="relative flex-1 max-w-md">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+              <Input
+                placeholder="Search products..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10 py-6 bg-gray-50 border-gray-200 focus-visible:outline-none focus:ring-2 focus:!ring-primary focus:bg-white !ease-linear !duration-200 !transition-all"
+              />
+            </div>
             <Button
               icon={<PlusOutlined />}
               title="New Package"
               type="primary"
-              onClick={() => setShow(true)}
+              onClick={() => {
+                setItem({ product_type_id: payload.id } as IPackage);
+                setShow(true);
+              }}
             >
               New Package
             </Button>
           </Space>
         }
       >
-        <Space direction="vertical" className="w-full">
-          <Form
-            //form={form}
-            layout="vertical"
-            //onFinish={onFinish}
-            initialValues={{ remember: true }}
-            style={{ minWidth: 320 }}
-          >
-            <Flex justify="space-evenly">
-              <Col span={6}>
-                <Form.Item<IBiller>
-                  name="billerName"
-                  label="Biller Name"
-                  initialValue={payload?.name}
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please Enter Biller Name!",
-                    },
-                  ]}
-                  className="lg"
-                >
-                  <Input
-                    placeholder="Password"
-                    defaultValue={payload?.name}
-                    className="!rounded-md !py-3"
-                  />
-                </Form.Item>
-                <Form.Item<IBiller>
-                  name="customerField"
-                  label="customer Field"
-                  initialValue={payload?.customerField}
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please input your Confirm Password!",
-                    },
-                    {
-                      min: 5,
-                      message: "Password needs a minimum of 6 characters",
-                    },
-                  ]}
-                  className="lg"
-                >
-                  <Input placeholder="Password" className="!rounded-md !py-3" />
-                </Form.Item>
-              </Col>
-              <Col span={6}>
-                <Form.Item<IBiller>
-                  label="Biller Type"
-                  name="billerType"
-                  rules={[
-                    { required: true, message: "Please select product!" },
-                  ]}
-                >
-                  <Select
-                    defaultValue={payload?.vasType}
-                    size="large"
-                    options={[
-                      { value: "airtime", label: "Airtime" },
-                      { value: "data", label: "Data" },
-                      { value: "cable", label: "Data" },
-                      { value: "utility", label: "Utility" },
-                      { value: "payment", label: "Payment" },
-                      { value: "transport", label: "Transport" },
-                    ]}
-                  />
-                </Form.Item>
-                <Form.Item<IBiller>
-                  name="name"
-                  label="Biller Description"
-                  initialValue={payload?.description}
-                  className="lg"
-                >
-                  <Input.TextArea
-                    placeholder="Password"
-                    defaultValue={payload?.description}
-                    className="!rounded-md !py-3"
-                  />
-                </Form.Item>
-              </Col>
-              <Col span={6}>
-                <Form.Item
-                  name="status"
-                  label="Biller Status"
-                  initialValue={payload?.status}
-                  valuePropName="checked"
-                >
-                  <Switch defaultValue={payload?.status} />
-                </Form.Item>
-                <Form.Item>
-                  <Button
-                    block
-                    type="primary"
-                    //loading={loading}
-                    //disabled={loading}
-                    htmlType="submit"
-                    className="!rounded-md !shadow-md !py-5"
-                  >
-                    Submit
-                  </Button>
-                </Form.Item>
-              </Col>
-            </Flex>
-          </Form>
-        </Space>
         <Table
           rowKey="id"
           size="small"
@@ -262,7 +178,11 @@ export default function BillerDetailScreen() {
           dataSource={data}
           scroll={{ x: "max-content" }}
         />
-        <Package isOpen={show} onCancel={() => setShow(false)} />
+        <AddPackage
+          product={item}
+          isOpen={show}
+          onCancel={() => setShow(false)}
+        />
       </Card>
     </>
   );
