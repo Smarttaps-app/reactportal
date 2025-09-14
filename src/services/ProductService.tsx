@@ -30,3 +30,4 @@ export const deletePackage = async (id: number) =>
 
 // services
 export const getServices = async () => await api.get(`admin/services`);
+export const getProviders = async () => await api.get(`admin/providers`);

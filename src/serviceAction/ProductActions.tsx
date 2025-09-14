@@ -12,6 +12,7 @@ import {
   addPackage,
   getPackage,
   getPackages,
+  getProviders,
 } from "../services/ProductService";
 import { IBiller, IPackage, IProduct } from "../utils/type";
 
@@ -118,6 +119,15 @@ export async function deletePackageAction(id: number) {
 // action for services
 export async function getServicesAction() {
   const response = await getServices();
+  if (response.status == 200) {
+    console.log(response.data.data);
+    return response.data.data;
+  }
+  throw new Error(response.data);
+}
+// action for services
+export async function getProvidersAction() {
+  const response = await getProviders();
   if (response.status == 200) {
     console.log(response.data.data);
     return response.data.data;

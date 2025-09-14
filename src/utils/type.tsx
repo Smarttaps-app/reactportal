@@ -343,6 +343,7 @@ export interface IDiscount {
   provider_discount_rate: string;
   provider_discount_type: string;
   product_type_id: string;
+  gl_to_provider: string;
   admin_id: string;
   active: boolean;
   created_at: string;

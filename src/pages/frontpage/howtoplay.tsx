@@ -36,7 +36,7 @@ export default function HowToPlay() {
                 </Tooltip>
               </div>
             }
-            bordered={false}
+            variant="borderless"
           >
             {import.meta.env.VITE_APP_NAME} is a an online game where users
             answer simple questions and stand a chance to win big. Users can win

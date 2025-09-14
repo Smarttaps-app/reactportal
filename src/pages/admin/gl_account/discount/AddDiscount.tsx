@@ -3,20 +3,30 @@ import {
   Card,
   Col,
   Form,
-  FormProps,
   InputNumber,
-  message,
   Modal,
   Row,
   Select,
+  App,
+  Switch,
+  Input,
 } from "antd";
 import { Grid } from "antd";
-import { IAddProps, IBiller, IDiscount, IUser } from "../../../../utils/type";
+import {
+  IAddProps,
+  IBiller,
+  IDiscount,
+  ILedger,
+  IUser,
+} from "../../../../utils/type";
 import { useQueryClient } from "@tanstack/react-query";
 import { Common } from "../../../../utils/Common";
-import { useAddDiscount } from "../../../../hooks/useAccounting";
-import { useAdmins } from "../../../../hooks/useAdmin";
-import { useProductServices } from "../../../../hooks/useProduct";
+import {
+  useAddDiscount,
+  useLedgers,
+  useProductServices,
+  useProviders,
+} from "../useAccounting";
 const { useBreakpoint } = Grid;
 
 const AddDiscount: React.FC<IAddProps<IDiscount>> = ({
@@ -24,13 +34,14 @@ const AddDiscount: React.FC<IAddProps<IDiscount>> = ({
   isOpen = false,
   onCancel,
 }) => {
+  const { message } = App.useApp();
   const client = useQueryClient();
   const screens = useBreakpoint();
-  const { isPending, data } = useAdmins("provider");
+  const { loading: isPending, providers } = useProviders();
   const { loading, services } = useProductServices();
+  const { loading: waiting, ledgers } = useLedgers();
   const { addDiscount, isAdding } = useAddDiscount();
-  const onFinish: FormProps<IDiscount>["onFinish"] = (values) => {
-    console.log("Success:", values);
+  const onFinish = async (values: IDiscount) => {
     addDiscount(values, {
       onSuccess: (data) => {
         message.success(data.statusDescription);
@@ -71,6 +82,9 @@ const AddDiscount: React.FC<IAddProps<IDiscount>> = ({
           style={{ minWidth: 320 }}
         >
           <Row gutter={[16, 16]}>
+            <Form.Item<IBiller> name="id" hidden>
+              <Input />
+            </Form.Item>
             <Col xs={24} sm={24} md={24}>
               <Form.Item<IDiscount>
                 label="Provider"
@@ -86,7 +100,7 @@ const AddDiscount: React.FC<IAddProps<IDiscount>> = ({
                   showSearch
                   loading={isPending}
                   optionLabelProp="label"
-                  options={data.map((item: IUser) => ({
+                  options={providers.map((item: IUser) => ({
                     label: `${item.firstname} → ${item.lastname}`,
                     value: item.id,
                   }))}
@@ -140,9 +154,9 @@ const AddDiscount: React.FC<IAddProps<IDiscount>> = ({
               >
                 <InputNumber
                   suffix="Rate"
-                  className="!rounded-md "
                   style={{ width: "100%" }}
-                  min={5}
+                  min={1}
+                  stringMode
                 />
               </Form.Item>
             </Col>
@@ -160,6 +174,47 @@ const AddDiscount: React.FC<IAddProps<IDiscount>> = ({
                     { value: "percentage", label: "Percentage" },
                     { value: "calculated", label: "Calculated" },
                   ]}
+                />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={24} md={24}>
+              <Form.Item<IDiscount>
+                label="Account GL"
+                name="gl_to_provider"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please select a GL Account!",
+                  },
+                ]}
+              >
+                <Select
+                  showSearch
+                  loading={waiting}
+                  optionLabelProp="label"
+                  options={ledgers.map((item: ILedger) => ({
+                    label: `${item.name}`,
+                    value: item.code,
+                  }))}
+                  filterOption={(input, option) =>
+                    (option?.label ?? "")
+                      .toString()
+                      .toLowerCase()
+                      .includes(input.toLowerCase())
+                  }
+                />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={24} md={24}>
+              <Form.Item<IDiscount>
+                name="active"
+                label="Discount Status"
+                valuePropName="checked"
+              >
+                <Switch
+                  style={{ width: "100%" }}
+                  unCheckedChildren="Not Active"
+                  checkedChildren="Active"
                 />
               </Form.Item>
             </Col>
