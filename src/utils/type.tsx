@@ -99,6 +99,7 @@ export interface IUser {
   phonenumber: string;
   tag: string;
   email: string;
+  billerId: string;
   status: boolean;
   avatar: string | null;
   created_at: string;

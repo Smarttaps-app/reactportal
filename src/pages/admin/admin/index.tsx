@@ -57,7 +57,12 @@ export default function Index() {
       {
         title: "Email",
         dataIndex: "email",
-        key: "moemailde",
+        key: "email",
+      },
+      {
+        title: "Code",
+        dataIndex: "billerId",
+        key: "billerId",
       },
       {
         title: "Status",
@@ -80,7 +85,7 @@ export default function Index() {
       {
         title: "Actions",
         dataIndex: "",
-        width: "12%",
+        width: "10%",
         render: (key: string, data: IUser) => (
           <Flex gap="small" align="center" wrap>
             <Button
