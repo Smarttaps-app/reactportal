@@ -334,6 +334,7 @@ export interface ICommission {
   commission_rate: string;
   commission_type: string;
   product_type_id: string;
+  glcode: string;
   admin_id: string;
   created_at: string;
   updated_at: string;

@@ -11,12 +11,19 @@ import {
   Select,
 } from "antd";
 import { Grid } from "antd";
-import { IAddProps, IBiller, ICommission, IUser } from "../../../../utils/type";
+import {
+  IAddProps,
+  IBiller,
+  ICommission,
+  ILedger,
+  IUser,
+} from "../../../../utils/type";
 import { useQueryClient } from "@tanstack/react-query";
 import { Common } from "../../../../utils/Common";
 import { useAddCommission } from "../../../../hooks/useAccounting";
 import { useAdmins } from "../../../../hooks/useAdmin";
 import { useProductServices } from "../../../../hooks/useProduct";
+import { useLedgers } from "../useAccounting";
 const { useBreakpoint } = Grid;
 
 const AddCommission: React.FC<IAddProps<ICommission>> = ({
@@ -28,6 +35,7 @@ const AddCommission: React.FC<IAddProps<ICommission>> = ({
   const screens = useBreakpoint();
   const { isPending, data } = useAdmins("business");
   const { loading, services } = useProductServices();
+  const { loading: waiting, ledgers } = useLedgers();
   const { addCommission, isAdding } = useAddCommission();
   const onFinish: FormProps<ICommission>["onFinish"] = (values) => {
     console.log("Success:", values);
@@ -159,6 +167,34 @@ const AddCommission: React.FC<IAddProps<ICommission>> = ({
                     { value: "percentage", label: "Percentage" },
                     { value: "calculated", label: "Calculated" },
                   ]}
+                />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={24} md={24}>
+              <Form.Item<ICommission>
+                label="Account GL"
+                name="glcode"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please select a GL Account!",
+                  },
+                ]}
+              >
+                <Select
+                  showSearch
+                  loading={waiting}
+                  optionLabelProp="label"
+                  options={ledgers.map((item: ILedger) => ({
+                    label: `${item.name}`,
+                    value: item.code,
+                  }))}
+                  filterOption={(input, option) =>
+                    (option?.label ?? "")
+                      .toString()
+                      .toLowerCase()
+                      .includes(input.toLowerCase())
+                  }
                 />
               </Form.Item>
             </Col>

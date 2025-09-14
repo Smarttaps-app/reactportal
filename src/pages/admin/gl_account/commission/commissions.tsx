@@ -19,8 +19,8 @@ export default function CommissionsScreen() {
     () => [
       {
         title: "ID",
-        dataIndex: "id",
-        key: "id",
+        dataIndex: "glcode",
+        key: "glcode",
         width: "5%",
       },
       {
