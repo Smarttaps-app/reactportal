@@ -58,6 +58,7 @@ export default function BusStationsScreen() {
             <Button
               color="cyan"
               variant="solid"
+              size="small"
               onClick={() => {
                 setItem(station);
                 setAdd(true);
@@ -67,6 +68,7 @@ export default function BusStationsScreen() {
             </Button>
             <Button
               type="primary"
+              size="small"
               danger
               disabled={isdeleting}
               loading={isdeleting}

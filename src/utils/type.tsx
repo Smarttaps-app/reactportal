@@ -101,6 +101,7 @@ export interface IUser {
   email: string;
   billerId: string;
   status: boolean;
+  wallet: IWallet | null;
   avatar: string | null;
   created_at: string;
   updated_at: string;

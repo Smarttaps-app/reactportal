@@ -9,6 +9,7 @@ import {
   Layout,
   Space,
   Spin,
+  Tag,
   theme,
   Tooltip,
   Typography,
@@ -23,6 +24,7 @@ import {
 import { Grid } from "antd";
 import { useUser } from "../../context/useUser";
 import SidebarMenu from "./SidebarMenu";
+import { Common } from "../../utils/Common";
 const { Header, Sider, Content } = Layout;
 const { useBreakpoint } = Grid;
 // image
@@ -78,7 +80,12 @@ const AdministratorLayout: React.FC = () => {
               icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
             />
 
-            <Space className="pe-2">
+            <Space size="large" className="mr-4">
+              <Tag color="green">
+                {Common.formatAsCurrency(
+                  Number(user.wallet?.availableBalance ?? 0)
+                )}
+              </Tag>
               <CommentOutlined />
               <Link to="profile">
                 <Avatar src={profile} />

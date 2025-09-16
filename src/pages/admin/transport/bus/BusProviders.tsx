@@ -94,6 +94,7 @@ export default function ParksScreen() {
             />
             <Button
               type="primary"
+              size="small"
               icon={<RedoOutlined />}
               // loading={loadings[2]}
               //onClick={() => enterLoading(2)}

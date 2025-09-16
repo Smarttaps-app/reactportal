@@ -26,7 +26,7 @@ import ViewScreen from "./View";
 import { Search } from "lucide-react";
 const { RangePicker } = DatePicker;
 
-export default function CashoutsScreen() {
+export default function AdminCashoutsScreen() {
   const [searchTerm, setSearchTerm] = useState("");
   const [show, setShow] = useState(false);
   const [cashout, setCashout] = useState<ICashout>();
