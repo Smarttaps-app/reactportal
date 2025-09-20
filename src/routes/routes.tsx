@@ -36,12 +36,12 @@ import { TrainIcon, UserCog2 } from "lucide-react";
 import TrainsScreen from "../pages/admin/transport/train/Trains";
 import BusRoutesScreen from "../pages/admin/transport/bus/BusRoutes";
 import BusStationsScreen from "../pages/admin/transport/bus/parks";
-import BusDashboard from "../pages/admin/transport/bus/BusDashboard";
 import CashoutsScreen from "../pages/admin/cashout/Index";
 import TrainRoutesScreen from "../pages/admin/transport/train/TrainRoutes";
 import SeatsScreen from "../pages/admin/transport/train/Seats";
 import TrainSchedulesScreen from "../pages/admin/transport/train/TrainSchedules";
 import BusSchedulesScreen from "../pages/admin/transport/bus/BusSchedules";
+import BusDashboard from "../pages/admin/dashboard/BusDashboard";
 
 export const protectedRoutes = [
   {

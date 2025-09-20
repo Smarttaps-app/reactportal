@@ -13,14 +13,14 @@ function SummaryCard({
 }) {
   return (
     <div
-      className={`text-black border-l-12 p-3 rounded-xl text-card-foreground shadow-lg transition-all duration-300 hover:shadow-xl shadow hover:-translate-y-0.5 ease-linear transition-transform duration-300 ${color}`}
+      className={`text-black border-l-10 p-2 rounded-lg text-card-foreground shadow-lg transition-all duration-300 hover:shadow-xl shadow hover:-translate-y-0.5 ease-linear transition-transform duration-300 ${color}`}
     >
       <div className="flex items-center justify-between">
-        <div className="space-y-1">
-          <p className={`mb-2 text-xl font-medium text-black`}>{value}</p>
+        <div className="">
+          <p className={`mb-1 text-lg font-medium text-black`}>{value}</p>
 
           <p
-            className={`text-xs font-semibold text-black uppercase tracking-wide`}
+            className={`text-xs font-medium text-black uppercase tracking-wide`}
           >
             {title}
           </p>

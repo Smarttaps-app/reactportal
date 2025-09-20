@@ -106,7 +106,7 @@ const AdministratorLayout: React.FC = () => {
             margin: "12px 8px",
             padding: 24,
             minHeight: window.screen.height - 100,
-            background: colorBgContainer,
+            //background: colorBgContainer,
             borderRadius: borderRadiusLG,
             overflow: "initial",
           }}

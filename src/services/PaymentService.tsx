@@ -14,6 +14,9 @@ export function getPayments(
     params,
   });
 }
+export function getLastTenDaysPayments() {
+  return api.get(`admin/payment-analytics`);
+}
 
 export const getPayment = async (id: string) =>
   await api.get(`admin/payment/${id}`);
