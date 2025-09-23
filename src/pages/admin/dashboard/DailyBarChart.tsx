@@ -1,4 +1,3 @@
-// DailyPaymentsChart.js
 import { useMemo } from "react";
 import {
   Chart as ChartJS,

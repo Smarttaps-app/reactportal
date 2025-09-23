@@ -13,7 +13,7 @@ function SummaryCard({
 }) {
   return (
     <div
-      className={`text-black border-l-10 p-2 rounded-lg text-card-foreground shadow-lg transition-all duration-300 hover:shadow-xl shadow hover:-translate-y-0.5 ease-linear transition-transform duration-300 ${color}`}
+      className={`text-black border-l-10 px-3 py-1 rounded-lg text-card-foreground shadow-sm transition-all duration-300 hover:shadow-sm shadow hover:-translate-y-0.5 ease-linear transition-transform duration-300 ${color}`}
     >
       <div className="flex items-center justify-between">
         <div className="">
@@ -25,7 +25,7 @@ function SummaryCard({
             {title}
           </p>
 
-          <div className="space-y-1">{children}</div>
+          <div className="">{children}</div>
         </div>
       </div>
     </div>

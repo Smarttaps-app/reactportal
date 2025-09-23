@@ -1,5 +1,5 @@
-import { Typography, Tag, Spin, Button, Table, Flex } from "antd";
-import { pieoptions, datas, options, useAnalytics } from "./useAnalytics";
+import { Typography, Tag, Spin, Button, Table } from "antd";
+import { datas, options, useAnalytics } from "./useAnalytics";
 import SummaryCard from "../../../widgets/SummaryCard";
 import {
   Chart as ChartJS,
@@ -13,15 +13,12 @@ import {
   LineElement,
   PointElement,
 } from "chart.js";
-import { Bar, Doughnut, Pie, Line } from "react-chartjs-2";
+import { Line } from "react-chartjs-2";
 import { Common } from "../../../utils/Common";
 import DailyPaymentsChart from "./DailyBarChart";
-import dayjs, { Dayjs } from "dayjs";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { usePayment10Days } from "../../../hooks/usePayments";
-import { useTicket } from "../../../hooks/useTicket";
 import { useUser } from "../../../context/useUser";
-import { IPayment } from "../../../utils/type";
 import PaymentsPie from "./PieChart";
 
 ChartJS.register(
@@ -39,7 +36,6 @@ export default function Dashboard() {
   const { user } = useUser();
   const { loading, payments } = usePayment10Days();
   const { isPending, data, error } = useAnalytics();
-  console.log(data);
   const columns = useMemo(
     () => [
       {

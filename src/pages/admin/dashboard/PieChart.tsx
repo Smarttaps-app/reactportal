@@ -2,7 +2,6 @@ import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement } from "chart.js";
 import { Pie } from "react-chartjs-2";
 import { IPayment } from "../../../utils/type";
 
-// Register Chart.js modules
 ChartJS.register(Title, Tooltip, Legend, ArcElement);
 
 function PaymentsPie({ payments = [] }: { payments: IPayment[] }) {

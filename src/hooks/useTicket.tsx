@@ -9,7 +9,7 @@ export function useTicket(selectedDates: [dayjs.Dayjs, dayjs.Dayjs]) {
     error,
     refetch,
   } = useQuery({
-    queryKey: ["tickets"],
+    queryKey: ["tickets", selectedDates],
     queryFn: () =>
       getTicketsAction(
         selectedDates?.[0]?.format("YYYY-MM-DD"),
