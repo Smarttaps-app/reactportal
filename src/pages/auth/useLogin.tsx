@@ -18,6 +18,11 @@ export const useLogin = () => {
         console.log(response.data.data.tag);
         if (response.data.data.tag === "superadmin") {
           navigate("/admin", { replace: true });
+        } else {
+          navigate(`/${response.data.data.tag}`, { replace: true });
+        }
+        /* if (response.data.data.tag === "superadmin") {
+          navigate("/admin", { replace: true });
         } else if (response.data.data.tag === "busprovider") {
           navigate("/provider", { replace: true });
         } else if (response.data.data.tag === "trainprovider") {
@@ -28,7 +33,7 @@ export const useLogin = () => {
           navigate("/business", { replace: true });
         } else {
           navigate("auth/login", { replace: true });
-        }
+        }*/
       }
     },
     onError: (error) => {

@@ -43,7 +43,7 @@ export default function AppRouted() {
         <Route path="biller/:id" element={<BillerDetailScreen />} />
       </Route>
       <Route
-        path="/provider"
+        path="/busprovider"
         element={
           <UserProvider>
             <ProtectedRouted allowedRole={["busprovider"]}>

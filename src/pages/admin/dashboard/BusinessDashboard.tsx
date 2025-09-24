@@ -29,18 +29,11 @@ import DailyPaymentsChart from "./DailyBarChart";
 import { useMemo, useState } from "react";
 import PaymentsPie from "./PieChart";
 import { DownOutlined } from "@ant-design/icons";
-import { useBuses, useStations, useTRoutes } from "../transport/bus/useBus";
 import { usePayments } from "../../../hooks/usePayments";
 import { useCashouts } from "../cashout/useCashout";
-import { useTicket } from "../../../hooks/useTicket";
-import CountCard from "../../../widgets/CountCard";
-import { INotification, ITicket } from "../../../utils/type";
-import { useCustomers } from "../../../hooks/useCustomers";
-import { useAdmins } from "../../../hooks/useAdmin";
-import { useProducts } from "../product/useService";
-import { useTrains } from "../transport/train/useTrain";
-import TicketsPie from "./TicketPieChart";
+import { INotification } from "../../../utils/type";
 import { useNotifications } from "../../../hooks/useNotification";
+import { useUser } from "../../../context/useUser";
 
 ChartJS.register(
   ArcElement,
@@ -53,33 +46,19 @@ ChartJS.register(
   Tooltip,
   Legend
 );
-export default function Dashboard() {
-  const { loading: trying, trains } = useTrains();
-  const { loading: bussing, buses } = useBuses();
-  const { loading: parking, routes } = useTRoutes();
-  const { loading: stationing, stations } = useStations();
+export default function BusinessDashboard() {
+  const [show, setShow] = useState(false);
+  const { user } = useUser();
   const [range, setRange] = useState("daily");
   const [selectedDates, setSelectedDates] = useState<
     [dayjs.Dayjs, dayjs.Dayjs]
   >([dayjs().subtract(30, "day"), dayjs()]);
-  const {
-    loading: ticketing,
-    error: ticketError,
-    tickets,
-  } = useTicket(selectedDates);
-  const {
-    loading: loads,
-    error: productError,
-    payments,
-  } = usePayments(selectedDates);
+  const { loading, error, payments } = usePayments(selectedDates);
   const {
     loading: cashing,
     error: cashError,
     cashouts,
   } = useCashouts(selectedDates);
-  const { loading: getting, customers } = useCustomers(selectedDates);
-  const { isPending, data: admins, error: adminError } = useAdmins("");
-  const { loading, products, error } = useProducts();
   const {
     loading: notifying,
     notifications,
@@ -243,41 +222,6 @@ export default function Dashboard() {
                 color="bg-white border-red-600"
               />
               <SummaryCard
-                title="Total Tickets Sales"
-                value={
-                  ticketError
-                    ? "0"
-                    : Common.formatAsCurrency(
-                        (tickets as ITicket[] | undefined)?.reduce(
-                          (a, b) => a + (Number(b.price) || 0),
-                          0
-                        ) ?? 0
-                      ).toString()
-                }
-                children={
-                  ticketing ? (
-                    <Spin />
-                  ) : (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="20"
-                      height="20"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="1.5"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      className="lucide lucide-arrow-up-right-icon lucide-arrow-up-right my-1 text-cyan-600"
-                    >
-                      <path d="M7 7h10v10" />
-                      <path d="M7 17 17 7" />
-                    </svg>
-                  )
-                }
-                color="bg-white border-cyan-600"
-              />
-              <SummaryCard
                 title="Total Cashout "
                 value={
                   cashError
@@ -333,62 +277,28 @@ export default function Dashboard() {
           </div>
         </div>
         <div className="lg:col-span-1 space-y-4">
-          <div className="grid grid-cols-2 gap-3 mb-4">
-            <CountCard
-              title="Total Customers"
-              value={error ? 0 : customers?.length}
-              color="bg-white border-blue-600"
-              children={getting && <Spin />}
-            />
-            <CountCard
-              title="Total Products"
-              value={productError ? 0 : products?.length}
-              color="bg-white border-blue-600"
-              children={loads && <Spin />}
-            />
-            <CountCard
-              title="Total Buses"
-              value={error ? 0 : buses?.length}
-              color="bg-white border-yellow-600"
-              children={bussing && <Spin />}
-            />
-            <CountCard
-              title="Total Trains"
-              value={trying ? 0 : trains?.length}
-              color="bg-white border-yellow-600"
-              children={trying && <Spin />}
-            />
-            <CountCard
-              title="Total Parks"
-              value={error ? 0 : stations?.length}
-              color="bg-white border-cyan-600"
-              children={stationing && <Spin />}
-            />
-            <CountCard
-              title="Total Routes"
-              value={error ? 0 : routes?.length}
-              color="bg-white border-cyan-600"
-              children={parking && <Spin />}
-            />
-            <CountCard
-              title="Total Ticket"
-              value={ticketError ? 0 : tickets?.length}
-              color="bg-white border-pink-600"
-              children={ticketing && <Spin />}
-            />
-            <CountCard
-              title="Total Admins"
-              value={adminError ? 0 : admins?.length}
-              color="bg-white border-pink-600"
-              children={isPending && <Spin />}
-            />
-          </div>
+          <SummaryCard
+            title="Purse balance"
+            value={Common.formatAsCurrency(
+              Number(user?.wallet?.availableBalance ?? 0)
+            )}
+            color="bg-white border-yellow-600"
+            children={
+              <Button
+                onClick={() => setShow(!show)}
+                className="my-2"
+                color="primary"
+                variant="solid"
+              >
+                Cashout
+              </Button>
+            }
+          />
           <Line
             className="p-3 bg-white rounded-md"
             options={options}
             data={datas}
           />
-          <TicketsPie tickets={tickets} />
           <div className="p-3 bg-white rounded-md h-84">
             <Typography.Title level={4} className="font-md">
               Latest Notifications

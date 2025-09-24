@@ -16,7 +16,7 @@ export function useCashouts(selectedDates: [dayjs.Dayjs, dayjs.Dayjs]) {
     error,
     refetch,
   } = useQuery({
-    queryKey: ["cashouts"],
+    queryKey: ["cashouts", selectedDates],
     queryFn: () =>
       getCashoutsAction(
         selectedDates?.[0]?.format("YYYY-MM-DD"),

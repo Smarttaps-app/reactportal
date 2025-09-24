@@ -14,7 +14,7 @@ export function useNotifications(selectedDates: [dayjs.Dayjs, dayjs.Dayjs]) {
     error,
     refetch,
   } = useQuery({
-    queryKey: ["notifications"],
+    queryKey: ["notifications", selectedDates],
     queryFn: () =>
       getAllNotifications(
         selectedDates?.[0]?.format("YYYY-MM-DD"),

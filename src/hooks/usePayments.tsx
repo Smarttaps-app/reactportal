@@ -12,7 +12,7 @@ export function usePayments(selectedDates: [dayjs.Dayjs, dayjs.Dayjs]) {
     error,
     refetch,
   } = useQuery({
-    queryKey: ["payments"],
+    queryKey: ["payments", selectedDates],
     queryFn: () =>
       getPaymentsAction(
         selectedDates?.[0]?.format("YYYY-MM-DD"),

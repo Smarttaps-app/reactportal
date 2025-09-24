@@ -8,7 +8,7 @@ export function useCustomers(selectedDates: [dayjs.Dayjs, dayjs.Dayjs]) {
     error,
     refetch,
   } = useQuery({
-    queryKey: ["customers"],
+    queryKey: ["customers", selectedDates],
     queryFn: () =>
       getCustomersAction(
         selectedDates?.[0]?.format("YYYY-MM-DD"),

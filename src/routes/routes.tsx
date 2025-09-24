@@ -43,6 +43,7 @@ import TrainSchedulesScreen from "../pages/admin/transport/train/TrainSchedules"
 import BusSchedulesScreen from "../pages/admin/transport/bus/BusSchedules";
 import BusDashboard from "../pages/admin/dashboard/BusDashboard";
 import AddCashoutAccunt from "../pages/admin/profile/AddCashoutAccount";
+import BusinessDashboard from "../pages/admin/dashboard/BusinessDashboard";
 
 export const protectedRoutes = [
   {
@@ -285,7 +286,7 @@ export const trainproviderRoutes = [
 export const businessRoutes = [
   {
     path: "",
-    Component: Dashboard,
+    Component: BusinessDashboard,
     title: "Dasboard",
     icon: <DashboardOutlined />,
   },

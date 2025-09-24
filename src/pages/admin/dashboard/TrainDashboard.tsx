@@ -41,6 +41,7 @@ import TicketsPie from "./TicketPieChart";
 import { ITicket } from "../../../utils/type";
 import { DownOutlined } from "@ant-design/icons";
 import { useCashouts } from "../cashout/useCashout";
+import AddCashout from "./AddCashout";
 
 ChartJS.register(
   ArcElement,
@@ -54,6 +55,7 @@ ChartJS.register(
   Legend
 );
 export default function TrainDashboard() {
+  const [show, setShow] = useState(false);
   const { user } = useUser();
   const { loading: bussing, trains } = useTrains();
   const { loading: parking, routes } = useTRoutes();
@@ -365,6 +367,7 @@ export default function TrainDashboard() {
           />
         </div>
       </div>
+      <AddCashout isOpen={show} onCancel={() => setShow(false)} />
     </div>
   );
 }

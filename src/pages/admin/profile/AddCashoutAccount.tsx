@@ -1,5 +1,4 @@
 import { Flex, Form, Input, Button, Card, Select } from "antd";
-import { LockOutlined } from "@ant-design/icons";
 import { AddCashoutBank, IBank } from "../../../utils/type";
 import { useBanks, useCashoutBank } from "./useProfile";
 

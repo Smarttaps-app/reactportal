@@ -1,14 +1,4 @@
-import {
-  App,
-  Button,
-  Card,
-  Form,
-  Grid,
-  Input,
-  Modal,
-  Select,
-  Switch,
-} from "antd";
+import { App, Button, Card, Form, Grid, Input, Modal } from "antd";
 import { ICashout } from "../../../utils/type";
 import { useQueryClient } from "@tanstack/react-query";
 import { Common } from "../../../utils/Common";
