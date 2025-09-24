@@ -1,6 +1,7 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import {
+  addCashoutAction,
   approveCashoutAction,
   getCashoutsAction,
   rejectCashoutAction,
@@ -25,6 +26,17 @@ export function useCashouts(selectedDates: [dayjs.Dayjs, dayjs.Dayjs]) {
   });
   return { loading, cashouts, isError, error, refetch };
 }
+
+export function useAddCashout() {
+  const { message } = App.useApp();
+  const { mutate: addCashout, isPending: isAdding } = useMutation({
+    mutationFn: addCashoutAction,
+    onError: (error) => {
+      message.error(Common.formatError(error));
+    },
+  });
+  return { isAdding, addCashout };
+}
 export function useCashoutApproval() {
   const { message } = App.useApp();
   const { mutate: approved, isPending: isApproving } = useMutation({
@@ -35,7 +47,6 @@ export function useCashoutApproval() {
   });
   return { isApproving, approved };
 }
-
 export function useCashoutReject() {
   const { message } = App.useApp();
   const { mutate: rejected, isPending: rejecting } = useMutation({

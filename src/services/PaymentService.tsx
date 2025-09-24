@@ -1,5 +1,8 @@
 import { api } from "../utils/AxiosInstance";
+import { AddCashoutBank, ICashout } from "../utils/type";
 
+// get banks
+export const getBanks = () => api.get(`admin/banks`);
 // service for Payments
 export function getPayments(
   startDate?: string | null,
@@ -34,6 +37,10 @@ export function getCashouts(
     params,
   });
 }
+export const addCashout = async (payload: ICashout) =>
+  await api.post(`admin/cashout/add`, payload);
+export const addCashoutBank = async (payload: AddCashoutBank) =>
+  await api.post(`admin/cashout/recipient`, payload);
 export const approveCashout = async (id: string) =>
   await api.get(`admin/cashout/${id}/approval`);
 export const rejectCashout = async (id: string) =>

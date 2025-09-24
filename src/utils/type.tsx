@@ -11,6 +11,9 @@ export interface ICashout {
   statusDescription: string;
   reference: string;
   reason: string;
+  pin: string;
+  admin_id: number;
+  customerId: string;
   created_at: string;
   updated_at: string;
 }
@@ -350,6 +353,19 @@ export interface IDiscount {
   gl_to_provider: string;
   admin_id: string;
   active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+export interface AddCashoutBank {
+  bankCode: string;
+  accountNumber: string;
+  pin: string;
+}
+export interface IBank {
+  code: string;
+  id: number;
+  name: string;
+  slug: string;
   created_at: string;
   updated_at: string;
 }

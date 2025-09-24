@@ -8,7 +8,7 @@ import {
   Space,
   MenuProps,
 } from "antd";
-import { datas, options, useAnalytics } from "./useAnalytics";
+import { datas, options } from "./useAnalytics";
 import SummaryCard from "../../../widgets/SummaryCard";
 import {
   Chart as ChartJS,
@@ -22,18 +22,20 @@ import {
   LineElement,
   PointElement,
 } from "chart.js";
-import dayjs, { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 import { Line } from "react-chartjs-2";
 import { Common } from "../../../utils/Common";
 import DailyPaymentsChart from "./DailyBarChart";
 import { useMemo, useState } from "react";
-import { usePayment10Days } from "../../../hooks/usePayments";
+import { usePayments } from "../../../hooks/usePayments";
 import { useUser } from "../../../context/useUser";
-import PaymentsPie from "./PieChart";
 import { useBuses, useStations, useTRoutes } from "../transport/bus/useBus";
 import { DownOutlined } from "@ant-design/icons";
 import { useTicket } from "../../../hooks/useTicket";
 import { ITicket } from "../../../utils/type";
+import TicketsPie from "./TicketPieChart";
+import { useCashouts } from "../cashout/useCashout";
+import AddCashout from "./AddCashout";
 
 ChartJS.register(
   ArcElement,
@@ -47,17 +49,27 @@ ChartJS.register(
   Legend
 );
 export default function BusDashboard() {
+  //const [item, setItem] = useState<ICashout>();
+  const [show, setShow] = useState(false);
   const { user } = useUser();
-  const { loading, payments } = usePayment10Days();
   const { loading: bussing, buses } = useBuses();
   const { loading: parking, routes } = useTRoutes();
   const { loading: stationing, stations } = useStations();
-  const { isPending, data, error } = useAnalytics();
   const [range, setRange] = useState("daily");
   const [selectedDates, setSelectedDates] = useState<
     [dayjs.Dayjs, dayjs.Dayjs]
   >([dayjs().subtract(30, "day"), dayjs()]);
-  const { loading: ticketing, tickets } = useTicket(selectedDates);
+  const {
+    loading: ticketing,
+    error: ticketError,
+    tickets,
+  } = useTicket(selectedDates);
+  const { loading, error, payments } = usePayments(selectedDates);
+  const {
+    loading: cashing,
+    error: cashError,
+    cashouts,
+  } = useCashouts(selectedDates);
   const columns = useMemo(
     () => [
       {
@@ -136,7 +148,6 @@ export default function BusDashboard() {
       setRange("monthly");
       setSelectedDates([dayjs().subtract(30, "day"), dayjs()]);
     }
-    // refetch happens automatically since queryKey changes
   };
   return (
     <div className="grid gap-1 items-end">
@@ -154,7 +165,6 @@ export default function BusDashboard() {
       <div className="grid gap-2 sm:grid-col-2  md:grid-cols-3 lg:grid-cols-4 p-4">
         <div className="sm:col-span-1 md:col-span-3 lg:col-span-3 grid space-y-4">
           <div className="">
-            {isPending && <Spin />}
             <div className="mx-auto flex-col space-y-3">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <SummaryCard
@@ -163,7 +173,7 @@ export default function BusDashboard() {
                     error
                       ? "0"
                       : Common.formatAsCurrency(
-                          data?.credit?.total_amount
+                          Common.sumByPaymentType(payments, "CREDIT")
                         ).toString()
                   }
                   children={
@@ -191,32 +201,36 @@ export default function BusDashboard() {
                     error
                       ? "0"
                       : Common.formatAsCurrency(
-                          data?.debit?.total_amount
+                          Common.sumByPaymentType(payments, "DEBIT")
                         ).toString()
                   }
                   children={
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="20"
-                      height="20"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="1.5"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      className="lucide lucide-arrow-down-left-icon lucide-arrow-down-left my-2 text-red-600"
-                    >
-                      <path d="M17 7 7 17" />
-                      <path d="M17 17H7V7" />
-                    </svg>
+                    loading ? (
+                      <Spin />
+                    ) : (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        className="lucide lucide-arrow-down-left-icon lucide-arrow-down-left my-2 text-red-600"
+                      >
+                        <path d="M17 7 7 17" />
+                        <path d="M17 17H7V7" />
+                      </svg>
+                    )
                   }
                   color="bg-white border-red-600"
                 />
                 <SummaryCard
                   title="Total Tickets Sales"
                   value={
-                    error
+                    ticketError
                       ? "0"
                       : Common.formatAsCurrency(
                           (tickets as ITicket[] | undefined)?.reduce(
@@ -226,49 +240,57 @@ export default function BusDashboard() {
                         ).toString()
                   }
                   children={
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="20"
-                      height="20"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="1.5"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      className="lucide lucide-arrow-up-right-icon lucide-arrow-up-right my-1 text-cyan-600"
-                    >
-                      <path d="M7 7h10v10" />
-                      <path d="M7 17 17 7" />
-                    </svg>
+                    ticketing ? (
+                      <Spin />
+                    ) : (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        className="lucide lucide-arrow-up-right-icon lucide-arrow-up-right my-1 text-cyan-600"
+                      >
+                        <path d="M7 7h10v10" />
+                        <path d="M7 17 17 7" />
+                      </svg>
+                    )
                   }
                   color="bg-white border-cyan-600"
                 />
                 <SummaryCard
                   title="Total Cashout "
                   value={
-                    error
+                    cashError
                       ? "0"
                       : Common.formatAsCurrency(
-                          data?.debit?.total_amount
+                          Common.sumTotalByKey(cashouts, "amount")
                         ).toString()
                   }
                   children={
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="20"
-                      height="20"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="1.5"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      className="lucide lucide-arrow-up-right-icon lucide-arrow-up-right my-1 text-green-600"
-                    >
-                      <path d="M7 7h10v10" />
-                      <path d="M7 17 17 7" />
-                    </svg>
+                    cashing ? (
+                      <Spin />
+                    ) : (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        className="lucide lucide-arrow-up-right-icon lucide-arrow-up-right my-1 text-green-600"
+                      >
+                        <path d="M7 7h10v10" />
+                        <path d="M7 17 17 7" />
+                      </svg>
+                    )
                   }
                   color="bg-white border-green-600"
                 />
@@ -280,13 +302,13 @@ export default function BusDashboard() {
               <DailyPaymentsChart payments={payments} />
             </div>
             <div className="p-3 bg-white rounded-md h-84 shadow-sm transition-all duration-300 hover:shadow-sm shadow hover:-translate-y-0.5 ease-linear transition-transform duration-300">
-              <PaymentsPie payments={payments} />
+              <TicketsPie tickets={tickets} />
             </div>
           </div>
           <div className="md:grid-cols-2 bg-white p-4 rounded-lg shadow">
-            <Typography.Title level={4} className="font-md">
+            <Typography.Text className="font-md">
               Latest Payments
-            </Typography.Title>
+            </Typography.Text>
             <Table
               rowKey="id"
               loading={loading}
@@ -304,15 +326,15 @@ export default function BusDashboard() {
             )}
             color="bg-white border-yellow-600"
             children={
-              <Button className="my-2" color="primary" variant="solid">
+              <Button
+                onClick={() => setShow(!show)}
+                className="my-2"
+                color="primary"
+                variant="solid"
+              >
                 Cashout
               </Button>
             }
-          />
-          <Line
-            className="p-3 bg-white rounded-md shadow-sm transition-all duration-300 hover:shadow-sm shadow hover:-translate-y-0.5 ease-linear transition-transform duration-300"
-            options={options}
-            data={datas}
           />
           <SummaryCard
             title="Total Buses"
@@ -326,6 +348,11 @@ export default function BusDashboard() {
             color="bg-white border-cyan-600"
             children={stationing && <Spin />}
           />
+          <Line
+            className="p-3 bg-white rounded-md shadow-sm transition-all duration-300 hover:shadow-sm shadow hover:-translate-y-0.5 ease-linear transition-transform duration-300"
+            options={options}
+            data={datas}
+          />
           <SummaryCard
             title="Total Routes"
             value={error ? 0 : routes?.length}
@@ -334,12 +361,17 @@ export default function BusDashboard() {
           />
           <SummaryCard
             title="Total Ticket"
-            value={error ? 0 : tickets?.length}
+            value={ticketError ? 0 : tickets?.length}
             color="bg-white border-cyan-600"
             children={ticketing && <Spin />}
           />
         </div>
       </div>
+      <AddCashout
+        //product={item}
+        isOpen={show}
+        onCancel={() => setShow(false)}
+      />
     </div>
   );
 }

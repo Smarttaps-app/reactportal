@@ -1,4 +1,5 @@
 import { message } from "antd";
+import { IPayment } from "./type";
 export class Common {
   static formatPhoneNumber(phoneNumber: string) {
     let pNumber;
@@ -202,5 +203,15 @@ export class Common {
       }
       return acc;
     }, 0);
+  }
+  static sumByPaymentType(arr: IPayment[], status: string): number {
+    return arr.reduce(
+      (acc, item) =>
+        acc +
+        (item?.payment_type?.toLowerCase() === status.toLowerCase()
+          ? Number(item.amount)
+          : 0),
+      0
+    );
   }
 }

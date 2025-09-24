@@ -42,6 +42,7 @@ import SeatsScreen from "../pages/admin/transport/train/Seats";
 import TrainSchedulesScreen from "../pages/admin/transport/train/TrainSchedules";
 import BusSchedulesScreen from "../pages/admin/transport/bus/BusSchedules";
 import BusDashboard from "../pages/admin/dashboard/BusDashboard";
+import AddCashoutAccunt from "../pages/admin/profile/AddCashoutAccount";
 
 export const protectedRoutes = [
   {
@@ -214,6 +215,11 @@ export const busproviderRoutes = [
     icon: <UserCog2 />,
     children: [
       { path: "change-password", Component: Changepassword, showInMenu: false },
+      {
+        path: "cash-out-account",
+        Component: AddCashoutAccunt,
+        showInMenu: false,
+      },
     ],
   },
 ];
