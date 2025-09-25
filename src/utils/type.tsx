@@ -369,3 +369,26 @@ export interface IBank {
   created_at: string;
   updated_at: string;
 }
+export interface IComment {
+  id: number;
+  comment: string;
+  attachment: string;
+  ticket_id: number;
+  user_id: number;
+  admin_id: string;
+  created_at: string;
+  updated_at: string;
+}
+export interface ISupportTicket {
+  id: number;
+  subject: string;
+  description: string;
+  status: string;
+  priority: string;
+  admin: { firstname: string; lastname: string } | null;
+  user: { firstname: string; lastname: string } | null;
+  comments: IComment[];
+  assigned_to: string;
+  created_at: string;
+  updated_at: string;
+}

@@ -13,6 +13,7 @@ import {
   ProfileOutlined,
   RocketOutlined,
   SettingOutlined,
+  SubnodeOutlined,
   TagsOutlined,
   TeamOutlined,
 } from "@ant-design/icons";
@@ -44,6 +45,7 @@ import BusSchedulesScreen from "../pages/admin/transport/bus/BusSchedules";
 import BusDashboard from "../pages/admin/dashboard/BusDashboard";
 import AddCashoutAccunt from "../pages/admin/profile/AddCashoutAccount";
 import BusinessDashboard from "../pages/admin/dashboard/BusinessDashboard";
+import SupportTicketScreen from "../pages/admin/support";
 
 export const protectedRoutes = [
   {
@@ -138,6 +140,12 @@ export const protectedRoutes = [
     Component: NotificationScreen,
     title: "Notifications",
     icon: <InfoCircleOutlined />,
+  },
+  {
+    path: "support-tickets",
+    Component: SupportTicketScreen,
+    title: "Support Tickets",
+    icon: <SubnodeOutlined />,
   },
   {
     path: "settings",
@@ -389,12 +397,6 @@ export const supportRoutes = [
     icon: <DashboardOutlined />,
   },
   {
-    path: "payments",
-    Component: PaymentsScreen,
-    title: "Payments",
-    icon: <TeamOutlined />,
-  },
-  {
     path: "customers",
     Component: CustomersScreen,
     title: "Customers",
@@ -411,6 +413,12 @@ export const supportRoutes = [
     Component: NotificationScreen,
     title: "Notifications",
     icon: <InfoCircleOutlined />,
+  },
+  {
+    path: "support-tickets",
+    Component: SupportTicketScreen,
+    title: "Support Tickets",
+    icon: <SubnodeOutlined />,
   },
   {
     path: "profile",

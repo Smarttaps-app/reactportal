@@ -107,7 +107,14 @@ export class Common {
     if (position === 5) return "fifth";
     return "fifth";
   }
-
+  static colorCode(position: string) {
+    if (position.toLocaleLowerCase() === "open") return "red";
+    if (position.toLocaleLowerCase() === "closed") return "green";
+    if (position.toLocaleLowerCase() === "pending") return "yellow";
+    if (position.toLocaleLowerCase() === "high") return "red";
+    if (position.toLocaleLowerCase() === "medium") return "yellow";
+    return "cyan";
+  }
   static formatError(error) {
     console.log(error);
     if (error.response) {
