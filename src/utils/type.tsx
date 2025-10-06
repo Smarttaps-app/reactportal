@@ -201,7 +201,6 @@ export interface ITrain {
   image: string;
   description: string;
   schedules: ISchedule[];
-  seats: ISeat[];
   routes: IRoute[];
   created_at: string;
   updated_at: string;
@@ -258,6 +257,7 @@ export interface IRoute {
   destinationStation: IStation;
   trains: ITrain[];
   buses: IBus[];
+  seats: ISeat[];
 }
 export interface ISeat {
   id: number;

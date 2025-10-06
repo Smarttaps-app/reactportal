@@ -3,7 +3,7 @@ import { useMemo, useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import { useQueryClient } from "@tanstack/react-query";
 import { useDeleteTRoute, useTRoutes } from "./useTrain";
-import { IRoute, IStation } from "../../../../utils/type";
+import { IRoute, ISeat, IStation } from "../../../../utils/type";
 import { Common } from "../../../../utils/Common";
 import AddRoute from "./AddRoute";
 
@@ -27,7 +27,7 @@ export default function TrainRoutesScreen() {
         title: "Route Name",
         dataIndex: "routeName",
         key: "routeName",
-        width: "20%",
+        width: "12%",
       },
       {
         title: "Departure",
@@ -51,8 +51,25 @@ export default function TrainRoutesScreen() {
           <span className="text-xs text-gray-500">
             {routeName}
             {record.trains.length > 0
-              ? ` ${record.buses.length} Trains`
+              ? ` ${record.trains.length} Trains`
               : `No Train`}
+          </span>
+        ),
+      },
+      {
+        title: "Price",
+        dataIndex: "seats",
+        key: "seats",
+        width: "15%",
+        render: (seat: ISeat, record: IRoute) => (
+          <span className="text-xs text-gray-500">
+            {record.seats.length > 0
+              ? record.seats.map((seat, idx) => (
+                  <span key={idx}>{`${
+                    seat.classType
+                  } - ${Common.formatAsCurrency(Number(seat.price))}\n`}</span>
+                ))
+              : `No Seat`}
           </span>
         ),
       },
@@ -66,7 +83,7 @@ export default function TrainRoutesScreen() {
       {
         title: "Actions",
         dataIndex: "",
-        width: "15%",
+        width: "12%",
         render: (route: IRoute) => (
           <Flex gap="small" align="center" wrap>
             <Button

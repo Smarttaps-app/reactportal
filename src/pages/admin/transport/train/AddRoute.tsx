@@ -1,13 +1,14 @@
 import {
+  App,
   Button,
   Card,
   Col,
   Form,
   Input,
-  message,
   Modal,
   Row,
   Select,
+  Space,
 } from "antd";
 import { Grid } from "antd";
 import { IAddProps, IRoute, IStation, IUser } from "../../../../utils/type";
@@ -17,6 +18,7 @@ import { useAddTRoute, useStations } from "../../../../hooks/useTransport";
 import { useEffect, useMemo } from "react";
 import { useUser } from "../../../../context/useUser";
 import { useAdmins } from "../../../../hooks/useAdmin";
+import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 const { useBreakpoint } = Grid;
 const { Option } = Select;
 
@@ -25,6 +27,7 @@ const AddRoute: React.FC<IAddProps<IRoute>> = ({
   isOpen = false,
   onCancel,
 }) => {
+  const { message } = App.useApp();
   const { user } = useUser();
   const { isPending, data: providers } = useAdmins("trainprovider");
   const client = useQueryClient();
@@ -210,6 +213,69 @@ const AddRoute: React.FC<IAddProps<IRoute>> = ({
                   </Select>
                 </Form.Item>
               )}
+            </Col>
+            <Col xs={24} sm={24} md={24}>
+              <Form.List name="seats">
+                {(fields, { add, remove }) => (
+                  <>
+                    {fields.map(({ key, name, ...restField }) => (
+                      <Space
+                        key={key}
+                        style={{ display: "flex", marginBottom: 8 }}
+                        align="baseline"
+                      >
+                        <Form.Item
+                          {...restField}
+                          name={[name, "classType"]}
+                          initialValue={payload?.seats}
+                          rules={[
+                            {
+                              required: true,
+                              message: "Seat class is missing",
+                            },
+                          ]}
+                        >
+                          <Select
+                            showSearch
+                            loading={isAdding}
+                            disabled={isAdding}
+                            placeholder="Choose seat class"
+                            options={[
+                              { value: "FIRST", label: "first class" },
+                              { value: "BUSINESS", label: "Business class" },
+                              { value: "ADULT", label: "Standard Adult" },
+                              { value: "MINOR", label: "Standard Minor" },
+                            ]}
+                          />
+                        </Form.Item>
+                        <Form.Item
+                          {...restField}
+                          name={[name, "price"]}
+                          rules={[
+                            {
+                              required: true,
+                              message: "Seat Price is missing",
+                            },
+                          ]}
+                        >
+                          <Input placeholder="Seat Price" />
+                        </Form.Item>
+                        <MinusCircleOutlined onClick={() => remove(name)} />
+                      </Space>
+                    ))}
+                    <Form.Item>
+                      <Button
+                        type="dashed"
+                        onClick={() => add()}
+                        block
+                        icon={<PlusOutlined />}
+                      >
+                        Add Price
+                      </Button>
+                    </Form.Item>
+                  </>
+                )}
+              </Form.List>
             </Col>
             <Col span={24}>
               <Form.Item>
