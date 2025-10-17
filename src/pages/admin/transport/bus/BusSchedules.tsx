@@ -87,7 +87,7 @@ export default function BusSchedulesScreen() {
               disabled={isdeleting}
               loading={isdeleting}
               onClick={() =>
-                deleteSchedule(schedule.id, {
+                deleteSchedule(schedule.identifier, {
                   onSuccess: (response) =>
                     message.success(response.statusDescription),
                   onError: (error) => message.error(Common.formatError(error)),

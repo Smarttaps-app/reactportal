@@ -1,14 +1,4 @@
-import {
-  Button,
-  Card,
-  Col,
-  Form,
-  Input,
-  message,
-  Modal,
-  Row,
-  Select,
-} from "antd";
+import { App, Button, Card, Col, Form, Input, Modal, Row, Select } from "antd";
 import { Grid } from "antd";
 import { useQueryClient } from "@tanstack/react-query";
 import { IAddProps, IStation, IUser } from "../../../../utils/type";
@@ -30,6 +20,7 @@ const AddStation: React.FC<IAddProps<IStation>> = ({
   const client = useQueryClient();
   const screens = useBreakpoint();
   const { addStation, isAdding } = useAddStation();
+  const { message } = App.useApp();
   const onFinish = async (values: IStation) => {
     addStation(values, {
       onSuccess: (data) => {
@@ -59,6 +50,7 @@ const AddStation: React.FC<IAddProps<IStation>> = ({
           layout="vertical"
           initialValues={{
             mode: "bus",
+            id: payload?.identifier,
             stationName: payload?.stationName,
             location: payload?.location,
             admin_id: payload?.admin_id,
@@ -116,7 +108,7 @@ const AddStation: React.FC<IAddProps<IStation>> = ({
               {user?.tag == "busprovider" ? (
                 <Form.Item<IStation>
                   name="admin_id"
-                  initialValue={user.id}
+                  initialValue={user.identifier}
                   hidden
                 >
                   <Input />
@@ -134,7 +126,7 @@ const AddStation: React.FC<IAddProps<IStation>> = ({
                     loading={isPending}
                   >
                     {providers?.map((item: IUser) => (
-                      <Option key={item.id} value={item.id}>
+                      <Option key={item.identifier} value={item.identifier}>
                         {item.lastname} {item.firstname}
                       </Option>
                     ))}
@@ -147,6 +139,13 @@ const AddStation: React.FC<IAddProps<IStation>> = ({
                 name="mode"
                 hidden
                 initialValue={payload?.mode}
+              >
+                <Input />
+              </Form.Item>
+              <Form.Item<IStation>
+                name="identifier"
+                hidden
+                initialValue={payload?.identifier}
               >
                 <Input />
               </Form.Item>

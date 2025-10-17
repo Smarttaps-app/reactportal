@@ -1,6 +1,12 @@
 import { Route } from "react-router-dom";
 
-export const renderRoutes = (routes: any[], basePath = "") =>
+interface AppRoute {
+  path: string;
+  Component: React.ComponentType;
+  children?: AppRoute[];
+}
+
+export const renderRoutes = (routes: AppRoute[], basePath = "") =>
   routes.map((route, index) => {
     const fullPath = basePath ? `${basePath}/${route.path}` : route.path;
 

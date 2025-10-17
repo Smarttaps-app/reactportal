@@ -21,8 +21,8 @@ export default function BusStationsScreen() {
     () => [
       {
         title: "ID",
-        dataIndex: "id",
-        key: "id",
+        dataIndex: "identifier",
+        key: "identifier",
         width: "5%",
       },
       {
@@ -73,7 +73,7 @@ export default function BusStationsScreen() {
               disabled={isdeleting}
               loading={isdeleting}
               onClick={() =>
-                deleteStation(station.id, {
+                deleteStation(station.identifier, {
                   onSuccess: (response) =>
                     message.success(response.statusDescription),
                   onError: (error) => message.error(Common.formatError(error)),

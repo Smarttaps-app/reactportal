@@ -111,7 +111,7 @@ export default function BusesScreen() {
               disabled={isdeleting}
               loading={isdeleting}
               onClick={() =>
-                deleteBus(bus.id, {
+                deleteBus(bus.identifier, {
                   onSuccess: (response) =>
                     message.success(response.statusDescription),
                   onError: (error) => message.error(Common.formatError(error)),

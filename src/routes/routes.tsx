@@ -46,8 +46,9 @@ import BusDashboard from "../pages/admin/dashboard/BusDashboard";
 import AddCashoutAccunt from "../pages/admin/profile/AddCashoutAccount";
 import BusinessDashboard from "../pages/admin/dashboard/BusinessDashboard";
 import SupportTicketScreen from "../pages/admin/support";
+import { IAppRoute } from "../utils/type";
 
-export const protectedRoutes = [
+export const protectedRoutes: IAppRoute[] = [
   {
     path: "",
     Component: Dashboard,
@@ -170,7 +171,7 @@ export const protectedRoutes = [
   },
 ];
 
-export const busproviderRoutes = [
+export const busproviderRoutes: IAppRoute[] = [
   {
     path: "",
     Component: BusDashboard,
@@ -204,11 +205,6 @@ export const busproviderRoutes = [
       { path: "buses", Component: BusesScreen, showInMenu: true },
       { path: "bus-routes", Component: BusRoutesScreen, showInMenu: true },
       { path: "bus-parks", Component: BusStationsScreen, showInMenu: true },
-      {
-        path: "bus-schedules",
-        Component: BusSchedulesScreen,
-        showInMenu: true,
-      },
     ],
   },
   {
@@ -232,7 +228,7 @@ export const busproviderRoutes = [
     ],
   },
 ];
-export const trainproviderRoutes = [
+export const trainproviderRoutes: IAppRoute[] = [
   {
     path: "",
     Component: BusDashboard,
@@ -291,7 +287,7 @@ export const trainproviderRoutes = [
   },
 ];
 
-export const businessRoutes = [
+export const businessRoutes: IAppRoute[] = [
   {
     path: "",
     Component: BusinessDashboard,
@@ -343,7 +339,7 @@ export const businessRoutes = [
     ],
   },
 ];
-export const accountantRoutes = [
+export const accountantRoutes: IAppRoute[] = [
   {
     path: "",
     Component: Dashboard,
@@ -389,7 +385,7 @@ export const accountantRoutes = [
     ],
   },
 ];
-export const supportRoutes = [
+export const supportRoutes: IAppRoute[] = [
   {
     path: "",
     Component: Dashboard,
@@ -430,7 +426,7 @@ export const supportRoutes = [
     ],
   },
 ];
-export const auditRoutes = [
+export const auditRoutes: IAppRoute[] = [
   {
     path: "",
     Component: Dashboard,

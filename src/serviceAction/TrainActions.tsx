@@ -24,9 +24,14 @@ import {
   getSeat,
   addSeat,
   deleteSeat,
+  deleteBusRoute,
+  addBusRoute,
+  getBusRoutes,
+  getBusRoute,
 } from "../services/TrainService";
 import {
   IBus,
+  IBusRoute,
   IPark,
   IRoute,
   ISchedule,
@@ -51,7 +56,7 @@ export async function addParkAction(payload: IPark) {
   }
   throw new Error(response.data);
 }
-export async function deleteParkAction(id: number) {
+export async function deleteParkAction(id: string) {
   const response = await deletePark(id);
   if (response.status == 200) {
     console.log(response.data);
@@ -84,7 +89,7 @@ export async function addRouteAction(payload: IRoute) {
   }
   throw new Error(response.data);
 }
-export async function deleteRouteAction(id: number) {
+export async function deleteRouteAction(id: string) {
   const response = await deleteRoute(id);
   if (response.status == 200) {
     console.log(response.data);
@@ -125,7 +130,7 @@ export async function addStationAction(payload: IStation) {
   }
   throw new Error(response.data);
 }
-export async function deleteStationAction(id: number) {
+export async function deleteStationAction(id: string) {
   const response = await deleteStation(id);
   if (response.status == 200) {
     console.log(response.data);
@@ -134,6 +139,38 @@ export async function deleteStationAction(id: number) {
   throw new Error(response.data);
 }
 // action for Park
+export async function getBusRoutesAction() {
+  const response = await getBusRoutes();
+  if (response.status == 200) {
+    console.log(response.data.data);
+    return response.data.data;
+  }
+  throw new Error(response.data);
+}
+export async function getBusRouteAction(id: string) {
+  const response = await getBusRoute(id);
+  if (response.status == 200) {
+    console.log(response.data);
+    return response.data;
+  }
+  throw new Error(response.data);
+}
+export async function addBusRouteAction(payload: IBusRoute) {
+  const response = await addBusRoute(payload);
+  if (response.status == 200) {
+    console.log(response.data);
+    return response.data;
+  }
+  throw new Error(response.data);
+}
+export async function deleteBusRouteAction(id: string) {
+  const response = await deleteBusRoute(id);
+  if (response.status == 200) {
+    console.log(response.data);
+    return response.data;
+  }
+  throw new Error(response.data);
+}
 export async function getBusesAction() {
   const response = await getBuses();
   if (response.status == 200) {
@@ -150,7 +187,7 @@ export async function addBusAction(payload: IBus) {
   }
   throw new Error(response.data);
 }
-export async function deleteBusAction(id: number) {
+export async function deleteBusAction(id: string) {
   const response = await deleteBus(id);
   if (response.status == 200) {
     console.log(response.data);
@@ -183,7 +220,7 @@ export async function addSeatAction(payload: ISeat) {
   }
   throw new Error(response.data);
 }
-export async function deleteSeatAction(id: number) {
+export async function deleteSeatAction(id: string) {
   const response = await deleteSeat(id);
   if (response.status == 200) {
     console.log(response.data);
@@ -209,7 +246,7 @@ export async function addScheduleAction(payload: ISchedule) {
   }
   throw new Error(response.data);
 }
-export async function deleteScheduleAction(id: number) {
+export async function deleteScheduleAction(id: string) {
   const response = await deleteSchedule(id);
   if (response.status == 200) {
     console.log(response.data);
@@ -234,7 +271,7 @@ export async function addTrainAction(payload: ITrain) {
   }
   throw new Error(response.data);
 }
-export async function deleteTrainAction(id: number) {
+export async function deleteTrainAction(id: string) {
   const response = await deleteTrain(id);
   if (response.status == 200) {
     console.log(response.data);

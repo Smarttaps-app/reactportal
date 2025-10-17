@@ -3,7 +3,7 @@ import { useMemo, useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import { Search } from "lucide-react";
 import AddRoute from "./AddRoute";
-import { IRoute, IStation } from "../../../../utils/type";
+import { IBusRoute, IStation } from "../../../../utils/type";
 import { useDeleteTRoute, useTRoutes } from "./useBus";
 import { Common } from "../../../../utils/Common";
 
@@ -11,7 +11,7 @@ export default function BusRoutesScreen() {
   const { message } = App.useApp();
   const [searchTerm, setSearchTerm] = useState("");
   const [add, setAdd] = useState(false);
-  const [item, setItem] = useState<IRoute>();
+  const [item, setItem] = useState<IBusRoute>();
   const { loading, routes, error } = useTRoutes();
   const { isdeleting, deleteRoute } = useDeleteTRoute();
 
@@ -43,11 +43,19 @@ export default function BusRoutesScreen() {
           destinationStation?.stationName,
       },
       {
+        title: "Price",
+        dataIndex: "baseprice",
+        key: "baseprice",
+        width: "10%",
+        render: (baseprice: string) =>
+          Common.formatAsCurrency(Number(baseprice)),
+      },
+      {
         title: "Mode",
         dataIndex: "mode",
         key: "mode",
         width: "8%",
-        render: (routeName: string, record: IRoute) => (
+        render: (routeName: string, record: IBusRoute) => (
           <span className="text-xs text-gray-500">
             {routeName}
             {record.buses.length > 0
@@ -68,7 +76,7 @@ export default function BusRoutesScreen() {
         title: "Actions",
         dataIndex: "",
         width: "15%",
-        render: (route: IRoute) => (
+        render: (route: IBusRoute) => (
           <Flex gap="small" align="center" wrap>
             <Button
               color="cyan"
@@ -88,7 +96,7 @@ export default function BusRoutesScreen() {
               disabled={isdeleting}
               loading={isdeleting}
               onClick={() =>
-                deleteRoute(route.id, {
+                deleteRoute(route.identifier, {
                   onSuccess: (response) =>
                     message.success(response.statusDescription),
                   onError: (error) => message.error(Common.formatError(error)),
@@ -112,7 +120,7 @@ export default function BusRoutesScreen() {
 
   const data =
     routes.filter(
-      (route: IRoute) =>
+      (route: IBusRoute) =>
         route.routeName.toLowerCase().includes(searchTerm.toLowerCase()) ||
         route.sourceStation.location
           .toLowerCase()

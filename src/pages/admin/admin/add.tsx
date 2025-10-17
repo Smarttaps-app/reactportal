@@ -1,10 +1,10 @@
 import {
+  App,
   Button,
   Card,
   Form,
   FormProps,
   Input,
-  message,
   Modal,
   Select,
   Switch,
@@ -21,6 +21,7 @@ const Add: React.FC<IAddProps<IUser>> = ({
   isOpen = false,
   onCancel,
 }) => {
+  const { message } = App.useApp();
   const client = useQueryClient();
   const { isShowing, roles } = useRoles();
   const { addAdmin, isAdding } = useAddAdmin();

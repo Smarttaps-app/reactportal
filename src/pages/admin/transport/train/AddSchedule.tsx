@@ -67,7 +67,7 @@ const AddSchedule: React.FC<IAddProps<ISchedule>> = ({
             timeOfOperation: payload?.timeOfOperation,
             arrivalTime: payload?.arrivalTime,
             departureTime: payload?.departureTime,
-            id: payload?.id,
+            identifier: payload?.identifier,
             admin_id: payload?.admin_id,
           }}
           onFinish={onFinish}
@@ -79,7 +79,7 @@ const AddSchedule: React.FC<IAddProps<ISchedule>> = ({
             </Form.Item>
             <Form.Item<ISchedule>
               name="admin_id"
-              initialValue={user?.id}
+              initialValue={user?.identifier}
               hidden
             >
               <Input />
@@ -147,7 +147,7 @@ const AddSchedule: React.FC<IAddProps<ISchedule>> = ({
               {user?.tag == "trainprovider" ? (
                 <Form.Item<ISchedule>
                   name="admin_id"
-                  initialValue={user.id}
+                  initialValue={user.identifier}
                   hidden
                 >
                   <Input />
@@ -165,7 +165,7 @@ const AddSchedule: React.FC<IAddProps<ISchedule>> = ({
                     loading={isPending}
                   >
                     {providers?.map((item: IUser) => (
-                      <Option key={item.id} value={item.id}>
+                      <Option key={item.identifier} value={item.identifier}>
                         {item.lastname} {item.firstname}
                       </Option>
                     ))}

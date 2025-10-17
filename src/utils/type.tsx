@@ -1,4 +1,12 @@
 import { ReactNode } from "react";
+export interface IAppRoute {
+  path: string;
+  Component: React.ComponentType<any>;
+  title?: string;
+  icon?: React.ReactNode;
+  showInMenu?: boolean;
+  children?: IAppRoute[];
+}
 export interface ICashout {
   id: number;
   walletCashout: string;
@@ -54,7 +62,7 @@ export interface IShowPaymentProps {
 }
 
 export interface ICustomer {
-  id: number;
+  identifier: string;
   phonenumber: string;
   firstname: string;
   lastname: string;
@@ -97,7 +105,7 @@ export interface IAddRequest {
   password: string;
 }
 export interface IUser {
-  id: number;
+  identifier: string;
   lastname: string;
   firstname: string;
   phonenumber: string;
@@ -184,7 +192,7 @@ export interface IBeneficiary {
   created_at: string;
 }
 export interface IStation {
-  id: number;
+  identifier: string;
   stationName: string;
   location: string;
   parkImage: string;
@@ -194,7 +202,7 @@ export interface IStation {
   created_at: string;
 }
 export interface ITrain {
-  id: number;
+  identifier: string;
   admin_id: number;
   trainName: string;
   trainNumber: string;
@@ -206,7 +214,7 @@ export interface ITrain {
   updated_at: string;
 }
 export interface IBus {
-  id: number;
+  identifier: string;
   admin_id: number;
   name: string;
   tv: boolean;
@@ -216,15 +224,15 @@ export interface IBus {
   seatCount: string;
   types: string | null;
   bus_number: string | null;
-  busroutes: string[];
-  busschedules: string[];
+  routes: IBusRoute[];
+  schedules: ISchedule[];
   busImage: string | null;
   description: string | null;
   created_at: string;
   updated_at: string;
 }
 export interface ISchedule {
-  id: number;
+  identifier: string;
   admin_id: number;
   mode: string;
   daysOfOperation: string | null;
@@ -248,7 +256,7 @@ export interface ITicket {
   ticket_number: string;
 }
 export interface IRoute {
-  id: number;
+  identifier: string;
   admin_id: number;
   routeName: string;
   sourceStation: IStation;
@@ -259,8 +267,19 @@ export interface IRoute {
   buses: IBus[];
   seats: ISeat[];
 }
+export interface IBusRoute {
+  identifier: string;
+  admin_id: string;
+  routeName: string;
+  sourceStation: IStation;
+  startId: number;
+  stopId: number;
+  destinationStation: IStation;
+  baseprice: string;
+  buses: IBus[];
+}
 export interface ISeat {
-  id: number;
+  identifier: string;
   seatNumber: string;
   classType: string;
   availabilityStatus: string;
@@ -270,7 +289,7 @@ export interface ISeat {
   updated_at: string;
 }
 export interface IPark {
-  id: number;
+  identifier: string;
   name: string;
   parkImage: string;
   address: string;

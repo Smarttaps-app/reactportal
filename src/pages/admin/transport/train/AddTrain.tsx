@@ -84,7 +84,11 @@ const AddTrain: React.FC<IAddProps<ITrain>> = ({
           style={{ minWidth: 320 }}
         >
           <Row gutter={[16, 16]}>
-            <Form.Item<ITrain> name="id" hidden initialValue={payload?.id}>
+            <Form.Item<ITrain>
+              name="identifier"
+              hidden
+              initialValue={payload?.identifier}
+            >
               <Input hidden />
             </Form.Item>
             <Col xs={24} sm={24} md={12}>
@@ -130,7 +134,7 @@ const AddTrain: React.FC<IAddProps<ITrain>> = ({
                   optionLabelProp="label"
                   options={seats.map((item: ISeat) => ({
                     label: `${item.classType}`,
-                    value: item.id,
+                    value: item.identifier,
                   }))}
                   filterOption={(input, option) =>
                     (option?.label ?? "")
@@ -156,7 +160,7 @@ const AddTrain: React.FC<IAddProps<ITrain>> = ({
                   optionLabelProp="label"
                   options={routes.map((item: IRoute) => ({
                     label: `${item.routeName}`,
-                    value: item.id,
+                    value: item.identifier,
                   }))}
                   filterOption={(input, option) =>
                     (option?.label ?? "")
@@ -180,7 +184,7 @@ const AddTrain: React.FC<IAddProps<ITrain>> = ({
                   optionLabelProp="label"
                   options={schedules.map((item: ISchedule) => ({
                     label: `${item.timeOfOperation} ${item.departureTime}`,
-                    value: item.id,
+                    value: item.identifier,
                   }))}
                   filterOption={(input, option) =>
                     (option?.label ?? "")
@@ -195,7 +199,7 @@ const AddTrain: React.FC<IAddProps<ITrain>> = ({
               {user?.tag == "trainprovider" ? (
                 <Form.Item<ITrain>
                   name="admin_id"
-                  initialValue={user.id}
+                  initialValue={user.identifier}
                   hidden
                 >
                   <Input />
@@ -210,7 +214,7 @@ const AddTrain: React.FC<IAddProps<ITrain>> = ({
                 >
                   <Select loading={isPending}>
                     {providers?.map((item: IUser) => (
-                      <Option key={item.id} value={item.id}>
+                      <Option key={item.identifier} value={item.identifier}>
                         {item.lastname} {item.firstname}
                       </Option>
                     ))}

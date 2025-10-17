@@ -51,6 +51,12 @@ function App() {
                 borderRadius: 5,
               },
             }}
+            pagination={{
+              //defaultPageSize: 50, // ✅ Global default page size for all tables
+              showSizeChanger: true,
+              //pageSize: 10, // Removed because 'pageSize' is not a valid property here
+              //pageSizeOptions: [10, 20, 50, 100],
+            }}
           >
             <Antd>
               <AppRouted />

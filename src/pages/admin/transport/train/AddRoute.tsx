@@ -43,11 +43,12 @@ const AddRoute: React.FC<IAddProps<IRoute>> = ({
   const filteredStopStations = useMemo(() => {
     if (!stations || !selectedStartId) return [];
     const selectedStart = stations.find(
-      (station: IStation) => station.id === selectedStartId
+      (station: IStation) => station.identifier === selectedStartId
     );
     return stations.filter(
       (station: IStation) =>
-        station.mode === selectedStart?.mode && station.id !== selectedStartId
+        station.mode === selectedStart?.mode &&
+        station.identifier !== selectedStartId
     );
   }, [stations, selectedStartId]);
   console.log("selectedStartId", selectedStartId);
@@ -84,8 +85,8 @@ const AddRoute: React.FC<IAddProps<IRoute>> = ({
           preserve={false}
           initialValues={{
             routeName: payload?.routeName,
-            startId: payload?.sourceStation?.id,
-            stopId: payload?.destinationStation?.id,
+            startId: payload?.sourceStation?.identifier,
+            stopId: payload?.destinationStation?.identifier,
             admin_id: payload?.admin_id,
           }}
           onFinish={onFinish}
@@ -142,7 +143,7 @@ const AddRoute: React.FC<IAddProps<IRoute>> = ({
                         label: `${
                           item.stationName
                         } → ${item.mode.toUpperCase()}`,
-                        value: item.id,
+                        value: item.identifier,
                       }))}
                       filterOption={(input, option) =>
                         (option?.label ?? "")
@@ -173,7 +174,7 @@ const AddRoute: React.FC<IAddProps<IRoute>> = ({
                   optionLabelProp="label"
                   options={filteredStopStations.map((item: IStation) => ({
                     label: `${item.stationName} → ${item.mode.toUpperCase()}`,
-                    value: item.id,
+                    value: item.identifier,
                   }))}
                   filterOption={(input, option) =>
                     (option?.label ?? "")
@@ -188,7 +189,7 @@ const AddRoute: React.FC<IAddProps<IRoute>> = ({
               {user?.tag == "trainprovider" ? (
                 <Form.Item<IRoute>
                   name="admin_id"
-                  initialValue={user.id}
+                  initialValue={user.identifier}
                   hidden
                 >
                   <Input />
@@ -206,7 +207,7 @@ const AddRoute: React.FC<IAddProps<IRoute>> = ({
                     loading={isPending}
                   >
                     {providers?.map((item: IUser) => (
-                      <Option key={item.id} value={item.id}>
+                      <Option key={item.identifier} value={item.identifier}>
                         {item.lastname} {item.firstname}
                       </Option>
                     ))}

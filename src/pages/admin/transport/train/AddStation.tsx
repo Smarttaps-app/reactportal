@@ -120,7 +120,7 @@ const AddStation: React.FC<IAddProps<IStation>> = ({
               {user?.tag == "trainprovider" ? (
                 <Form.Item<IStation>
                   name="admin_id"
-                  initialValue={user.id}
+                  initialValue={user.identifier}
                   hidden
                 >
                   <Input />
@@ -138,7 +138,7 @@ const AddStation: React.FC<IAddProps<IStation>> = ({
                     loading={isPending}
                   >
                     {providers?.map((item: IUser) => (
-                      <Option key={item.id} value={item.id}>
+                      <Option key={item.identifier} value={item.identifier}>
                         {item.lastname} {item.firstname}
                       </Option>
                     ))}

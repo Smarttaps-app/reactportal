@@ -1,16 +1,6 @@
-import {
-  Button,
-  Card,
-  Col,
-  Form,
-  Input,
-  message,
-  Modal,
-  Row,
-  Select,
-} from "antd";
+import { App, Button, Card, Col, Form, Input, Modal, Row, Select } from "antd";
 import { Grid } from "antd";
-import { IAddProps, IRoute, IStation, IUser } from "../../../../utils/type";
+import { IAddProps, IBusRoute, IStation, IUser } from "../../../../utils/type";
 import { useQueryClient } from "@tanstack/react-query";
 import { Common } from "../../../../utils/Common";
 import { useAddTRoute, useStations } from "./useBus";
@@ -20,11 +10,12 @@ import { useUser } from "../../../../context/useUser";
 const { useBreakpoint } = Grid;
 const { Option } = Select;
 
-const AddRoute: React.FC<IAddProps<IRoute>> = ({
+const AddRoute: React.FC<IAddProps<IBusRoute>> = ({
   payload,
   isOpen = false,
   onCancel,
 }) => {
+  const { message } = App.useApp();
   const { user } = useUser();
   const { isPending, data: providers } = useAdmins("busprovider");
   const client = useQueryClient();
@@ -40,14 +31,15 @@ const AddRoute: React.FC<IAddProps<IRoute>> = ({
   const filteredStopStations = useMemo(() => {
     if (!stations || !selectedStartId) return [];
     const selectedStart = stations.find(
-      (station: IStation) => station.id === selectedStartId
+      (station: IStation) => station.identifier === selectedStartId
     );
     return stations.filter(
       (station: IStation) =>
-        station.mode === selectedStart?.mode && station.id !== selectedStartId
+        station.mode === selectedStart?.mode &&
+        station.identifier !== selectedStartId
     );
   }, [stations, selectedStartId]);
-  const onFinish = async (values: IRoute) => {
+  const onFinish = async (values: IBusRoute) => {
     console.log("Success:", values);
     addRoute(values, {
       onSuccess: (data) => {
@@ -58,7 +50,7 @@ const AddRoute: React.FC<IAddProps<IRoute>> = ({
         message.error(Common.formatError(error));
         onCancel();
       },
-      onSettled: () => client.invalidateQueries({ queryKey: ["routes"] }),
+      onSettled: () => client.invalidateQueries({ queryKey: ["busroutes"] }),
     });
   };
   return (
@@ -79,16 +71,18 @@ const AddRoute: React.FC<IAddProps<IRoute>> = ({
           preserve={false}
           initialValues={{
             routeName: payload?.routeName,
-            startId: payload?.sourceStation?.id,
-            stopId: payload?.destinationStation?.id,
+            id: payload?.identifier,
+            startId: payload?.sourceStation?.identifier,
+            stopId: payload?.destinationStation?.identifier,
             admin_id: payload?.admin_id,
+            baseprice: payload?.baseprice,
           }}
           onFinish={onFinish}
           style={{ minWidth: 320 }}
         >
           <Row gutter={[16, 16]}>
             <Col xs={24} sm={24} md={24}>
-              <Form.Item<IRoute>
+              <Form.Item<IBusRoute>
                 name="routeName"
                 label="Route Name"
                 rules={[
@@ -107,7 +101,7 @@ const AddRoute: React.FC<IAddProps<IRoute>> = ({
                 noStyle
               >
                 {() => (
-                  <Form.Item<IRoute>
+                  <Form.Item<IBusRoute>
                     label="Starting Park"
                     name="startId"
                     rules={[
@@ -137,7 +131,7 @@ const AddRoute: React.FC<IAddProps<IRoute>> = ({
                         label: `${
                           item.stationName
                         } → ${item.mode.toUpperCase()}`,
-                        value: item.id,
+                        value: item.identifier,
                       }))}
                       filterOption={(input, option) =>
                         (option?.label ?? "")
@@ -151,7 +145,7 @@ const AddRoute: React.FC<IAddProps<IRoute>> = ({
               </Form.Item>
             </Col>
             <Col xs={24} sm={24} md={24}>
-              <Form.Item<IRoute>
+              <Form.Item<IBusRoute>
                 label="Destination Park"
                 name="stopId"
                 rules={[
@@ -168,7 +162,7 @@ const AddRoute: React.FC<IAddProps<IRoute>> = ({
                   optionLabelProp="label"
                   options={filteredStopStations.map((item: IStation) => ({
                     label: `${item.stationName} → ${item.mode.toUpperCase()}`,
-                    value: item.id,
+                    value: item.identifier,
                   }))}
                   filterOption={(input, option) =>
                     (option?.label ?? "")
@@ -181,15 +175,15 @@ const AddRoute: React.FC<IAddProps<IRoute>> = ({
             </Col>
             <Col xs={24} sm={24} md={24}>
               {user?.tag == "busprovider" ? (
-                <Form.Item<IRoute>
+                <Form.Item<IBusRoute>
                   name="admin_id"
-                  initialValue={user.id}
+                  initialValue={user.identifier}
                   hidden
                 >
                   <Input />
                 </Form.Item>
               ) : (
-                <Form.Item<IRoute>
+                <Form.Item<IBusRoute>
                   label="Select a provider"
                   name="admin_id"
                   rules={[
@@ -201,13 +195,34 @@ const AddRoute: React.FC<IAddProps<IRoute>> = ({
                     loading={isPending}
                   >
                     {providers?.map((item: IUser) => (
-                      <Option key={item.id} value={item.id}>
+                      <Option key={item.identifier} value={item.identifier}>
                         {item.lastname} {item.firstname}
                       </Option>
                     ))}
                   </Select>
                 </Form.Item>
               )}
+            </Col>
+            <Col xs={24} sm={24} md={24}>
+              <Form.Item<IBusRoute>
+                name="baseprice"
+                label="Route Price"
+                rules={[
+                  { required: true, message: "Please enter route price!" },
+                ]}
+              >
+                <Input
+                  placeholder="Enter route price"
+                  className="!rounded-md !py-2"
+                />
+              </Form.Item>
+              <Form.Item<IBusRoute>
+                name="identifier"
+                hidden
+                initialValue={payload?.identifier}
+              >
+                <Input />
+              </Form.Item>
             </Col>
             <Col span={24}>
               <Form.Item>

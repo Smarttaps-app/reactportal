@@ -1,4 +1,5 @@
 // routesConfig.ts
+import { IAppRoute } from "../utils/type";
 import {
   protectedRoutes,
   busproviderRoutes,
@@ -9,7 +10,7 @@ import {
   trainproviderRoutes,
 } from "./routes";
 
-export const roleRoutesMap: Record<string, any[]> = {
+export const roleRoutesMap: Record<string, IAppRoute[]> = {
   superadmin: protectedRoutes,
   busprovider: busproviderRoutes,
   trainprovider: trainproviderRoutes,

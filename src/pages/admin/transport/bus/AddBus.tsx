@@ -5,21 +5,21 @@ import {
   Col,
   Form,
   Input,
-  InputNumber,
   Modal,
   Row,
   Select,
   Switch,
+  TimePicker,
 } from "antd";
 import { Grid } from "antd";
-import { IAddProps, IBus, IRoute, ISchedule } from "../../../../utils/type";
+import { IAddProps, IBus, IRoute, IStation } from "../../../../utils/type";
 import { useQueryClient } from "@tanstack/react-query";
-import {
-  useAddBus,
-  useTRoutes,
-  useTSchedules,
-} from "../../../../hooks/useTransport";
+//import { useAddBus, useTRoutes } from "../../../../hooks/useTransport";
 import { Common } from "../../../../utils/Common";
+import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
+import { useUser } from "../../../../context/useUser";
+import { useAddBus, useStations, useTRoutes } from "./useBus";
+import { useEffect } from "react";
 const { useBreakpoint } = Grid;
 
 const AddBus: React.FC<IAddProps<IBus>> = ({
@@ -27,11 +27,12 @@ const AddBus: React.FC<IAddProps<IBus>> = ({
   isOpen = false,
   onCancel,
 }) => {
+  const { user } = useUser();
   const { message } = App.useApp();
   const client = useQueryClient();
   const screens = useBreakpoint();
   const { loading, routes } = useTRoutes();
-  const { loading: waiting, schedules } = useTSchedules();
+  const { loading: pending, stations } = useStations();
   const { addBus, isAdding } = useAddBus();
   const onFinish = async (values: IBus) => {
     addBus(values, {
@@ -46,6 +47,52 @@ const AddBus: React.FC<IAddProps<IBus>> = ({
       onSettled: () => client.invalidateQueries({ queryKey: ["buses"] }),
     });
   };
+  const [form] = Form.useForm();
+  useEffect(() => {
+    if (isOpen) {
+      handleOpenModal(payload);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen, payload]);
+  //const [form] = Form.useForm();
+  //const isEditMode = Boolean(payload);
+  //const title = isEditMode ? "Edit Bus" : "Add Bus";
+  //const actionText = isEditMode ? "Update" : "Submit";
+  const handleOpenModal = (busData?: IBus) => {
+    if (busData) {
+      // Editing existing bus
+      form.setFieldsValue({
+        ...busData,
+        routes: busData.routes?.length
+          ? busData.routes
+          : [{ departure: undefined, arrival: undefined, price: "" }],
+        schedules: busData.schedules?.length
+          ? busData.schedules
+          : [
+              {
+                timeOfOperation: "",
+                departureTime: "",
+                arrivalTime: "",
+                price: "",
+              },
+            ],
+      });
+    } else {
+      // Adding new bus
+      form.resetFields();
+      form.setFieldsValue({
+        routes: [{ departure: undefined, arrival: undefined, price: "" }],
+        schedules: [
+          {
+            timeOfOperation: "",
+            departureTime: undefined,
+            arrivalTime: undefined,
+            price: "",
+          },
+        ],
+      });
+    }
+  };
   return (
     <Modal
       style={{ top: 20 }}
@@ -55,17 +102,41 @@ const AddBus: React.FC<IAddProps<IBus>> = ({
       onCancel={onCancel}
       destroyOnHidden
       footer={null}
-      width={screens.xs ? "100%" : 650}
+      width={screens.xs ? "100%" : 850}
     >
       <Card title="Add Bus">
         <Form
           layout="vertical"
-          initialValues={{ remember: true }}
+          form={form}
+          initialValues={{
+            identifier: payload?.identifier,
+            admin_id: user?.identifier,
+            airCondition: false,
+            tv: false,
+            camera: false,
+            name: payload?.name,
+            bus_number: payload?.bus_number,
+            base_price: payload?.base_price,
+            description: payload?.description,
+            routes: [{ departure: undefined, arrival: undefined, price: "" }],
+            schedules: [
+              {
+                timeOfOperation: "",
+                departureTime: undefined,
+                arrivalTime: undefined,
+                price: "",
+              },
+            ],
+          }}
           onFinish={onFinish}
           style={{ minWidth: 320 }}
         >
-          <Row gutter={[16, 16]}>
-            <Form.Item<IBus> name="id" hidden initialValue={payload?.id}>
+          <Row gutter={[8, 8]}>
+            <Form.Item<IBus>
+              name="identifier"
+              hidden
+              initialValue={payload?.identifier}
+            >
               <Input hidden />
             </Form.Item>
             <Col xs={24} sm={24} md={12}>
@@ -96,7 +167,7 @@ const AddBus: React.FC<IAddProps<IBus>> = ({
             <Col xs={24} sm={24} md={12}>
               <Form.Item<IBus>
                 name="base_price"
-                label="base price"
+                label="Addon price"
                 initialValue={payload?.base_price}
                 rules={[
                   { required: true, message: "Please enter base price!" },
@@ -110,116 +181,6 @@ const AddBus: React.FC<IAddProps<IBus>> = ({
             </Col>
             <Col xs={24} sm={24} md={12}>
               <Form.Item<IBus>
-                label="Seat Count"
-                name="seatCount"
-                initialValue={payload?.seatCount}
-                rules={[
-                  { required: true, message: "Please seat count is required!" },
-                ]}
-              >
-                <InputNumber
-                  suffix="Seat"
-                  className="!rounded-md "
-                  style={{ width: "100%" }}
-                  min={5}
-                />
-              </Form.Item>
-            </Col>
-            <Col xs={24} sm={24} md={12}>
-              <Form.Item<IBus>
-                label="Bus Route"
-                name="busroutes"
-                initialValue={payload?.busroutes}
-                rules={[{ required: true, message: "Please bus routes!" }]}
-              >
-                <Select
-                  showSearch
-                  loading={loading}
-                  mode="multiple"
-                  // onChange={onPricingChange}
-                  optionLabelProp="label"
-                  options={routes.map((item: IRoute) => ({
-                    label: `${item.routeName}`,
-                    value: item.id,
-                  }))}
-                  filterOption={(input, option) =>
-                    (option?.label ?? "")
-                      .toString()
-                      .toLowerCase()
-                      .includes(input.toLowerCase())
-                  }
-                ></Select>
-              </Form.Item>
-            </Col>
-            <Col xs={24} sm={24} md={12}>
-              <Form.Item<IBus>
-                label="Bus Schedule"
-                name="busschedules"
-                rules={[{ required: true, message: "Please bus schedules" }]}
-              >
-                <Select
-                  showSearch
-                  loading={waiting}
-                  mode="multiple"
-                  // onChange={onPricingChange}
-                  optionLabelProp="label"
-                  options={schedules.map((item: ISchedule) => ({
-                    label: `${item.timeOfOperation}  ${item.departureTime}`,
-                    value: item.id,
-                  }))}
-                  filterOption={(input, option) =>
-                    (option?.label ?? "")
-                      .toString()
-                      .toLowerCase()
-                      .includes(input.toLowerCase())
-                  }
-                ></Select>
-              </Form.Item>
-            </Col>
-            <Col xs={24} sm={24} md={8}>
-              <Form.Item
-                name="airCondition"
-                label="Air condiction"
-                valuePropName="checked"
-                initialValue={payload?.airCondition}
-              >
-                <Switch
-                  defaultValue={payload?.airCondition}
-                  unCheckedChildren="No Air condiction"
-                  checkedChildren="Air condiction"
-                />
-              </Form.Item>
-            </Col>
-            <Col xs={24} sm={24} md={8}>
-              <Form.Item
-                name="tv"
-                label="Television"
-                valuePropName="checked"
-                initialValue={payload?.tv}
-              >
-                <Switch
-                  defaultValue={payload?.tv}
-                  unCheckedChildren="No Television"
-                  checkedChildren="Television"
-                />
-              </Form.Item>
-            </Col>
-            <Col xs={24} sm={24} md={8}>
-              <Form.Item
-                name="camera"
-                label="Camera"
-                valuePropName="checked"
-                initialValue={payload?.camera}
-              >
-                <Switch
-                  defaultValue={payload?.camera}
-                  unCheckedChildren="No Camera"
-                  checkedChildren="Camera"
-                />
-              </Form.Item>
-            </Col>
-            <Col xs={24}>
-              <Form.Item<IBus>
                 name="description"
                 label="Bus Description"
                 initialValue={payload?.description}
@@ -227,8 +188,232 @@ const AddBus: React.FC<IAddProps<IBus>> = ({
                 <Input.TextArea
                   placeholder="Enter description"
                   className="!rounded-md "
-                  rows={4}
+                  rows={1}
                 />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={24} md={8}>
+              <Form.Item name="airCondition" label="AC" valuePropName="checked">
+                <Switch
+                  unCheckedChildren="No AC"
+                  checkedChildren="AC"
+                  className="!w-full"
+                />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={24} md={8}>
+              <Form.Item name="tv" label="TV" valuePropName="checked">
+                <Switch
+                  unCheckedChildren="No Television"
+                  checkedChildren="Television"
+                  className="!w-full"
+                />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={24} md={8}>
+              <Form.Item name="camera" label="Camera" valuePropName="checked">
+                <Switch
+                  unCheckedChildren="No Camera"
+                  checkedChildren="Camera"
+                  className="!w-full"
+                />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={24} md={24}>
+              <Form.List name="routes">
+                {(fields, { add, remove }) => (
+                  <>
+                    {fields.map(({ key, name, ...restField }) => (
+                      <div
+                        key={key}
+                        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 items-center mb-2"
+                      >
+                        <Form.Item
+                          {...restField}
+                          name={[name, "departure"]}
+                          label="Select Source Station"
+                          rules={[
+                            {
+                              required: true,
+                              message: "Please choose a station",
+                            },
+                          ]}
+                        >
+                          <Select
+                            showSearch
+                            loading={pending}
+                            optionLabelProp="label"
+                            options={stations.map((item: IStation) => ({
+                              label: item.stationName,
+                              value: item.identifier,
+                            }))}
+                          />
+                        </Form.Item>
+                        <Form.Item
+                          {...restField}
+                          name={[name, "arrival"]}
+                          label="Select Destination Station"
+                          rules={[
+                            {
+                              required: true,
+                              message: "Please choose destination!",
+                            },
+                          ]}
+                        >
+                          <Select
+                            showSearch
+                            loading={pending}
+                            optionLabelProp="label"
+                            options={stations.map((item: IStation) => ({
+                              label: item.stationName,
+                              value: item.identifier,
+                            }))}
+                          />
+                        </Form.Item>
+                        <Form.Item
+                          {...restField}
+                          name={[name, "price"]}
+                          label="Price"
+                          rules={[
+                            { required: true, message: "Price is missing" },
+                          ]}
+                        >
+                          <Input
+                            placeholder="Please input Price"
+                            suffix={
+                              <MinusCircleOutlined
+                                onClick={() => remove(name)}
+                              />
+                            }
+                          />
+                        </Form.Item>
+                      </div>
+                    ))}
+                    <Form.Item>
+                      <Button
+                        type="dashed"
+                        onClick={() => add()}
+                        block
+                        icon={<PlusOutlined />}
+                      >
+                        Add Bus Route
+                      </Button>
+                    </Form.Item>
+                  </>
+                )}
+              </Form.List>
+            </Col>
+            <Col xs={24} sm={24} md={24}>
+              <Form.List name="schedules">
+                {(fields, { add, remove }) => (
+                  <>
+                    {fields.map(({ key, name, ...restField }) => (
+                      <div
+                        key={key}
+                        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 items-center mb-2"
+                      >
+                        <Form.Item
+                          {...restField}
+                          name={[name, "timeOfOperation"]}
+                          label="Select Period"
+                          //initialValue={payload?.seatCount}
+                          rules={[
+                            {
+                              required: true,
+                              message: "Please choose a period",
+                            },
+                          ]}
+                        >
+                          <Select
+                            showSearch
+                            loading={isAdding}
+                            disabled={isAdding}
+                            placeholder="Choose Period"
+                            options={[
+                              { value: "Morning", label: "Morning" },
+                              { value: "Afternoon", label: "Afternoon" },
+                              { value: "Evening", label: "Evening" },
+                              { value: "Night", label: "Night" },
+                            ]}
+                          />
+                        </Form.Item>
+                        <Form.Item
+                          {...restField}
+                          name={[name, "departureTime"]}
+                          label="Departure"
+                          rules={[
+                            {
+                              required: true,
+                              message: "Please enter departure time!",
+                            },
+                          ]}
+                        >
+                          <TimePicker
+                            className="w-full"
+                            use12Hours
+                            format="h:mm a"
+                          />
+                        </Form.Item>
+                        <Form.Item
+                          {...restField}
+                          name={[name, "arrivalTime"]}
+                          label="Arrival"
+                          rules={[
+                            {
+                              required: true,
+                              message: "Please enter arrival time!",
+                            },
+                          ]}
+                        >
+                          <TimePicker
+                            className="w-full"
+                            use12Hours
+                            format="h:mm a"
+                          />
+                        </Form.Item>
+                        <Form.Item
+                          {...restField}
+                          name={[name, "price"]}
+                          label="Price"
+                          rules={[
+                            {
+                              required: true,
+                              message: "Price is missing",
+                            },
+                          ]}
+                        >
+                          <Input
+                            placeholder="Please input Price"
+                            suffix={
+                              <MinusCircleOutlined
+                                onClick={() => remove(name)}
+                              />
+                            }
+                          />
+                        </Form.Item>
+                      </div>
+                    ))}
+                    <Form.Item>
+                      <Button
+                        type="dashed"
+                        onClick={() => add()}
+                        block
+                        icon={<PlusOutlined />}
+                      >
+                        Add Bus Schedule
+                      </Button>
+                    </Form.Item>
+                  </>
+                )}
+              </Form.List>
+            </Col>
+            <Col xs={24} sm={24} md={24}>
+              <Form.Item<IRoute>
+                name="admin_id"
+                initialValue={user?.identifier}
+                hidden
+              >
+                <Input />
               </Form.Item>
             </Col>
             <Col xs={24} sm={24} md={24}>

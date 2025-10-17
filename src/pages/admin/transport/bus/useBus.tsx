@@ -1,11 +1,8 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   getBusStationsAction,
-  getRoutesAction,
   getParksAction,
   getBusesAction,
-  addRouteAction,
-  deleteRouteAction,
   addStationAction,
   deleteStationAction,
   addParkAction,
@@ -15,6 +12,9 @@ import {
   getSchedulesAction,
   addScheduleAction,
   deleteScheduleAction,
+  getBusRoutesAction,
+  addBusRouteAction,
+  deleteBusRouteAction,
 } from "../../../../serviceAction/TrainActions";
 import { message } from "antd";
 import { Common } from "../../../../utils/Common";
@@ -24,15 +24,15 @@ export function useTRoutes() {
     data: routes = [],
     error,
   } = useQuery({
-    queryKey: ["routes"],
-    queryFn: getRoutesAction,
+    queryKey: ["busroutes"],
+    queryFn: getBusRoutesAction,
     refetchOnWindowFocus: false,
   });
   return { loading, routes, error };
 }
 export function useAddTRoute() {
   const { mutate: addRoute, isPending: isAdding } = useMutation({
-    mutationFn: addRouteAction,
+    mutationFn: addBusRouteAction,
     onError: (error) => {
       message.error(Common.formatError(error));
     },
@@ -41,7 +41,7 @@ export function useAddTRoute() {
 }
 export function useDeleteTRoute() {
   const { mutate: deleteRoute, isPending: isdeleting } = useMutation({
-    mutationFn: deleteRouteAction,
+    mutationFn: deleteBusRouteAction,
     onError: (error) => {
       message.error(Common.formatError(error));
     },
