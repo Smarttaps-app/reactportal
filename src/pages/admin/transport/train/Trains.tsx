@@ -13,7 +13,7 @@ import {
 import { useMemo, useState } from "react";
 import { Common } from "../../../../utils/Common";
 import { BarsOutlined, PlusOutlined } from "@ant-design/icons";
-import { ITrain } from "../../../../utils/type";
+import { ISchedule, ITrain } from "../../../../utils/type";
 import { useTrains } from "../../../../hooks/useTransport";
 import AddTrain from "./AddTrain";
 import { useDeleteTrain } from "./useTrain";
@@ -57,24 +57,11 @@ export default function TrainsScreen() {
         dataIndex: "schedules",
         key: "schedules",
         width: "15%",
-        render: (record: ITrain) => (
+        render: (schedule: ISchedule, record: ITrain) => (
           <span className="text-xs text-gray-500">
             {record.schedules?.length > 0
-              ? ` ${record.schedules?.length} Schedule`
+              ? ` ${record.schedules?.length} Schedules`
               : `No Schedule`}
-          </span>
-        ),
-      },
-      {
-        title: "Seat Class",
-        dataIndex: "seats",
-        key: "seats",
-        width: "15%",
-        render: (record: ITrain) => (
-          <span className="text-xs text-gray-500">
-            {record.seats?.length > 0
-              ? ` ${record.seats?.length} Class`
-              : `No Class`}
           </span>
         ),
       },
@@ -109,7 +96,7 @@ export default function TrainsScreen() {
               disabled={isdeleting}
               loading={isdeleting}
               onClick={() =>
-                deleteTrain(train.id, {
+                deleteTrain(train.identifier, {
                   onSuccess: (response) =>
                     message.success(response.statusDescription),
                   onError: (error) => message.error(Common.formatError(error)),

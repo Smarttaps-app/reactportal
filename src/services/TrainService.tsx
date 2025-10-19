@@ -3,7 +3,7 @@ import {
   IBus,
   IBusRoute,
   IPark,
-  IRoute,
+  ITrainRoute,
   ISchedule,
   ISeat,
   IStation,
@@ -13,7 +13,7 @@ import {
 export const getRoutes = async () => await api.get(`admin/routes`);
 export const getRoute = async (id: string) =>
   await api.get(`admin/route/${id}`);
-export const addRoute = async (payload: IRoute) =>
+export const addRoute = async (payload: ITrainRoute) =>
   await api.post(`admin/route/add`, payload);
 export const deleteRoute = async (id: string) =>
   await api.delete(`admin/route/${id}/delete`);

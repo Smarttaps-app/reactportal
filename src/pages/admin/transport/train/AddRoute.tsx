@@ -1,17 +1,11 @@
-import {
-  App,
-  Button,
-  Card,
-  Col,
-  Form,
-  Input,
-  Modal,
-  Row,
-  Select,
-  Space,
-} from "antd";
+import { App, Button, Card, Col, Form, Input, Modal, Row, Select } from "antd";
 import { Grid } from "antd";
-import { IAddProps, IRoute, IStation, IUser } from "../../../../utils/type";
+import {
+  IAddProps,
+  ITrainRoute,
+  IStation,
+  IUser,
+} from "../../../../utils/type";
 import { useQueryClient } from "@tanstack/react-query";
 import { Common } from "../../../../utils/Common";
 import { useAddTRoute, useStations } from "../../../../hooks/useTransport";
@@ -22,7 +16,7 @@ import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 const { useBreakpoint } = Grid;
 const { Option } = Select;
 
-const AddRoute: React.FC<IAddProps<IRoute>> = ({
+const AddRoute: React.FC<IAddProps<ITrainRoute>> = ({
   payload,
   isOpen = false,
   onCancel,
@@ -53,7 +47,7 @@ const AddRoute: React.FC<IAddProps<IRoute>> = ({
   }, [stations, selectedStartId]);
   console.log("selectedStartId", selectedStartId);
   console.log("filteredStopStations", filteredStopStations);
-  const onFinish = async (values: IRoute) => {
+  const onFinish = async (values: ITrainRoute) => {
     console.log("Success:", values);
     addRoute(values, {
       onSuccess: (data) => {
@@ -94,26 +88,12 @@ const AddRoute: React.FC<IAddProps<IRoute>> = ({
         >
           <Row gutter={[16, 16]}>
             <Col xs={24} sm={24} md={24}>
-              <Form.Item<IRoute>
-                name="routeName"
-                label="Route Name"
-                rules={[
-                  { required: true, message: "Please enter route name!" },
-                ]}
-              >
-                <Input
-                  placeholder="Enter route name"
-                  className="!rounded-md !py-2"
-                />
-              </Form.Item>
-            </Col>
-            <Col xs={24} sm={24} md={24}>
               <Form.Item
                 shouldUpdate={(prev, curr) => prev.startId !== curr.startId}
                 noStyle
               >
                 {() => (
-                  <Form.Item<IRoute>
+                  <Form.Item<ITrainRoute>
                     label="Starting Station"
                     name="startId"
                     rules={[
@@ -157,7 +137,7 @@ const AddRoute: React.FC<IAddProps<IRoute>> = ({
               </Form.Item>
             </Col>
             <Col xs={24} sm={24} md={24}>
-              <Form.Item<IRoute>
+              <Form.Item<ITrainRoute>
                 label="Destination Park"
                 name="stopId"
                 rules={[
@@ -187,7 +167,7 @@ const AddRoute: React.FC<IAddProps<IRoute>> = ({
             </Col>
             <Col xs={24} sm={24} md={24}>
               {user?.tag == "trainprovider" ? (
-                <Form.Item<IRoute>
+                <Form.Item<ITrainRoute>
                   name="admin_id"
                   initialValue={user.identifier}
                   hidden
@@ -195,7 +175,7 @@ const AddRoute: React.FC<IAddProps<IRoute>> = ({
                   <Input />
                 </Form.Item>
               ) : (
-                <Form.Item<IRoute>
+                <Form.Item<ITrainRoute>
                   label="Select a provider"
                   name="admin_id"
                   rules={[
@@ -220,10 +200,9 @@ const AddRoute: React.FC<IAddProps<IRoute>> = ({
                 {(fields, { add, remove }) => (
                   <>
                     {fields.map(({ key, name, ...restField }) => (
-                      <Space
+                      <div
                         key={key}
-                        style={{ display: "flex", marginBottom: 8 }}
-                        align="baseline"
+                        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-7 gap-4 items-center mb-2"
                       >
                         <Form.Item
                           {...restField}
@@ -235,6 +214,7 @@ const AddRoute: React.FC<IAddProps<IRoute>> = ({
                               message: "Seat class is missing",
                             },
                           ]}
+                          className="col-span-3"
                         >
                           <Select
                             showSearch
@@ -258,11 +238,18 @@ const AddRoute: React.FC<IAddProps<IRoute>> = ({
                               message: "Seat Price is missing",
                             },
                           ]}
+                          className="col-span-3"
                         >
                           <Input placeholder="Seat Price" />
                         </Form.Item>
-                        <MinusCircleOutlined onClick={() => remove(name)} />
-                      </Space>
+                        <Form.Item>
+                          <Button
+                            icon={<MinusCircleOutlined />}
+                            type="primary"
+                            onClick={() => remove(name)}
+                          ></Button>
+                        </Form.Item>
+                      </div>
                     ))}
                     <Form.Item>
                       <Button

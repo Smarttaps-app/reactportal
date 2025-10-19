@@ -209,7 +209,6 @@ export interface ITrain {
   image: string;
   description: string;
   schedules: ISchedule[];
-  routes: IRoute[];
   created_at: string;
   updated_at: string;
 }
@@ -250,22 +249,20 @@ export interface ITicket {
   mode: string;
   price: string;
   qr_code: string;
-  route: IRoute;
+  route: ITrainRoute;
   schedule: ISchedule;
   status: string;
   ticket_number: string;
 }
-export interface IRoute {
+export interface ITrainRoute {
   identifier: string;
   admin_id: number;
-  routeName: string;
   sourceStation: IStation;
   startId: number;
   stopId: number;
   destinationStation: IStation;
   trains: ITrain[];
-  buses: IBus[];
-  seats: ISeat[];
+  prices: ISeat[];
 }
 export interface IBusRoute {
   identifier: string;

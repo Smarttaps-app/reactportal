@@ -3,7 +3,7 @@ import { useMemo, useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import { useQueryClient } from "@tanstack/react-query";
 import { useDeleteTRoute, useTRoutes } from "./useTrain";
-import { IRoute, ISeat, IStation } from "../../../../utils/type";
+import { ITrainRoute, ISeat, IStation } from "../../../../utils/type";
 import { Common } from "../../../../utils/Common";
 import AddRoute from "./AddRoute";
 
@@ -11,7 +11,7 @@ export default function TrainRoutesScreen() {
   const { message } = App.useApp();
   const client = useQueryClient();
   const [add, setAdd] = useState(false);
-  const [item, setItem] = useState<IRoute>();
+  const [item, setItem] = useState<ITrainRoute>();
   const { loading, routes, error } = useTRoutes();
   const { isdeleting, deleteRoute } = useDeleteTRoute();
 
@@ -22,12 +22,6 @@ export default function TrainRoutesScreen() {
         dataIndex: "id",
         key: "id",
         width: "5%",
-      },
-      {
-        title: "Route Name",
-        dataIndex: "routeName",
-        key: "routeName",
-        width: "12%",
       },
       {
         title: "Departure",
@@ -47,7 +41,7 @@ export default function TrainRoutesScreen() {
         dataIndex: "mode",
         key: "mode",
         width: "6%",
-        render: (routeName: string, record: IRoute) => (
+        render: (routeName: string, record: ITrainRoute) => (
           <span className="text-xs text-gray-500">
             {routeName}
             {record.trains.length > 0
@@ -58,13 +52,13 @@ export default function TrainRoutesScreen() {
       },
       {
         title: "Price",
-        dataIndex: "seats",
-        key: "seats",
+        dataIndex: "prices",
+        key: "prices",
         width: "15%",
-        render: (seat: ISeat, record: IRoute) => (
+        render: (price: ISeat, record: ITrainRoute) => (
           <span className="text-xs text-gray-500">
-            {record.seats.length > 0
-              ? record.seats.map((seat, idx) => (
+            {record.prices?.length > 0
+              ? record?.prices.map((seat, idx) => (
                   <span key={idx}>{`${
                     seat.classType
                   } - ${Common.formatAsCurrency(Number(seat.price))}\n`}</span>
@@ -84,7 +78,7 @@ export default function TrainRoutesScreen() {
         title: "Actions",
         dataIndex: "",
         width: "12%",
-        render: (route: IRoute) => (
+        render: (route: ITrainRoute) => (
           <Flex gap="small" align="center" wrap>
             <Button
               color="cyan"
@@ -104,7 +98,7 @@ export default function TrainRoutesScreen() {
               disabled={isdeleting}
               loading={isdeleting}
               onClick={() =>
-                deleteRoute(route.id, {
+                deleteRoute(route.identifier, {
                   onSuccess: (response) =>
                     message.success(response.statusDescription),
                   onError: (error) => message.error(Common.formatError(error)),
@@ -128,7 +122,7 @@ export default function TrainRoutesScreen() {
       </Row>
     );
 
-  const data: IRoute[] = routes || [];
+  const data: ITrainRoute[] = routes || [];
 
   return (
     <>

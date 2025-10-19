@@ -1,23 +1,33 @@
-import { App, Button, Card, Col, Form, Input, Modal, Row, Select } from "antd";
+import {
+  Button,
+  Card,
+  Col,
+  Form,
+  Input,
+  message,
+  Modal,
+  Row,
+  Select,
+} from "antd";
 import { Grid } from "antd";
+import { IAddProps, IStation, IUser } from "../../../utils/type";
 import { useQueryClient } from "@tanstack/react-query";
-import { IAddProps, IStation } from "../../../../utils/type";
-import { useAddStation } from "./useBus";
-import { Common } from "../../../../utils/Common";
-import states from "../../../../utils/states";
-import { useUser } from "../../../../context/useUser";
+import states from "../../../utils/states";
+import { Common } from "../../../utils/Common";
+import { useAdmins } from "../../../hooks/useAdmin";
+import { useAddStation } from "../../../hooks/useTransport";
 const { useBreakpoint } = Grid;
+const { Option } = Select;
 
-const AddStation: React.FC<IAddProps<IStation>> = ({
+const AdminAddStation: React.FC<IAddProps<IStation>> = ({
   payload,
   isOpen = false,
   onCancel,
 }) => {
-  const { user } = useUser();
+  const { isPending, data: providers } = useAdmins("");
   const client = useQueryClient();
   const screens = useBreakpoint();
   const { addStation, isAdding } = useAddStation();
-  const { message } = App.useApp();
   const onFinish = async (values: IStation) => {
     addStation(values, {
       onSuccess: (data) => {
@@ -28,7 +38,8 @@ const AddStation: React.FC<IAddProps<IStation>> = ({
         message.error(Common.formatError(error));
         onCancel();
       },
-      onSettled: () => client.invalidateQueries({ queryKey: ["busstations"] }),
+      onSettled: () =>
+        client.invalidateQueries({ queryKey: ["trainstations"] }),
     });
   };
   return (
@@ -42,11 +53,11 @@ const AddStation: React.FC<IAddProps<IStation>> = ({
       footer={null}
       width={screens.xs ? "100%" : 450}
     >
-      <Card title="Add Park">
+      <Card title="Add Station">
         <Form
           layout="vertical"
           initialValues={{
-            mode: "bus",
+            mode: "train",
             id: payload?.identifier,
             stationName: payload?.stationName,
             location: payload?.location,
@@ -59,7 +70,8 @@ const AddStation: React.FC<IAddProps<IStation>> = ({
             <Col xs={24} sm={24} md={24}>
               <Form.Item<IStation>
                 name="stationName"
-                label="Park Name"
+                label="Station Name"
+                initialValue={payload?.stationName}
                 rules={[
                   { required: true, message: "Please enter station name!" },
                 ]}
@@ -70,6 +82,7 @@ const AddStation: React.FC<IAddProps<IStation>> = ({
                 />
               </Form.Item>
             </Col>
+
             <Col xs={24} sm={24} md={24}>
               <Form.Item<IStation>
                 name="location"
@@ -101,16 +114,26 @@ const AddStation: React.FC<IAddProps<IStation>> = ({
                 />
               </Form.Item>
             </Col>
+
             <Col xs={24} sm={24} md={24}>
               <Form.Item<IStation>
+                label="Select a provider"
                 name="admin_id"
-                initialValue={user?.identifier}
-                hidden
+                rules={[
+                  { required: true, message: "Please select a provider!" },
+                ]}
               >
-                <Input />
+                <Select
+                  //onChange={handleChange}
+                  loading={isPending}
+                >
+                  {providers?.map((item: IUser) => (
+                    <Option key={item.identifier} value={item.identifier}>
+                      {item.lastname} {item.firstname}
+                    </Option>
+                  ))}
+                </Select>
               </Form.Item>
-            </Col>
-            <Col xs={24} sm={24} md={24}>
               <Form.Item<IStation>
                 name="mode"
                 hidden
@@ -146,4 +169,4 @@ const AddStation: React.FC<IAddProps<IStation>> = ({
     </Modal>
   );
 };
-export default AddStation;
+export default AdminAddStation;

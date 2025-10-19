@@ -33,7 +33,7 @@ import {
   IBus,
   IBusRoute,
   IPark,
-  IRoute,
+  ITrainRoute,
   ISchedule,
   ISeat,
   IStation,
@@ -81,7 +81,7 @@ export async function getRouteAction(id: string) {
   }
   throw new Error(response.data);
 }
-export async function addRouteAction(payload: IRoute) {
+export async function addRouteAction(payload: ITrainRoute) {
   const response = await addRoute(payload);
   if (response.status == 200) {
     console.log(response.data);

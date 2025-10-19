@@ -203,7 +203,7 @@ export const busproviderRoutes: IAppRoute[] = [
     icon: <CarOutlined />,
     children: [
       { path: "buses", Component: BusesScreen, showInMenu: true },
-      { path: "bus-routes", Component: BusRoutesScreen, showInMenu: true },
+      //{ path: "bus-routes", Component: BusRoutesScreen, showInMenu: true },
       { path: "bus-parks", Component: BusStationsScreen, showInMenu: true },
     ],
   },
@@ -262,12 +262,12 @@ export const trainproviderRoutes: IAppRoute[] = [
       { path: "trains", Component: TrainsScreen, showInMenu: true },
       { path: "train-routes", Component: TrainRoutesScreen, showInMenu: true },
       { path: "train-stations", Component: StationsScreen, showInMenu: true },
-      { path: "train-class", Component: SeatsScreen, showInMenu: true },
-      {
+      //{ path: "train-class", Component: SeatsScreen, showInMenu: true },
+      /*{
         path: "train-schedules",
         Component: TrainSchedulesScreen,
         showInMenu: true,
-      },
+      },*/
     ],
   },
   {

@@ -12,13 +12,13 @@ import {
   TimePicker,
 } from "antd";
 import { Grid } from "antd";
-import { IAddProps, IBus, IRoute, IStation } from "../../../../utils/type";
+import { IAddProps, IBus, ITrainRoute, IStation } from "../../../../utils/type";
 import { useQueryClient } from "@tanstack/react-query";
 //import { useAddBus, useTRoutes } from "../../../../hooks/useTransport";
 import { Common } from "../../../../utils/Common";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import { useUser } from "../../../../context/useUser";
-import { useAddBus, useStations, useTRoutes } from "./useBus";
+import { useAddBus, useStations } from "./useBus";
 import { useEffect } from "react";
 const { useBreakpoint } = Grid;
 
@@ -31,7 +31,6 @@ const AddBus: React.FC<IAddProps<IBus>> = ({
   const { message } = App.useApp();
   const client = useQueryClient();
   const screens = useBreakpoint();
-  const { loading, routes } = useTRoutes();
   const { loading: pending, stations } = useStations();
   const { addBus, isAdding } = useAddBus();
   const onFinish = async (values: IBus) => {
@@ -408,7 +407,7 @@ const AddBus: React.FC<IAddProps<IBus>> = ({
               </Form.List>
             </Col>
             <Col xs={24} sm={24} md={24}>
-              <Form.Item<IRoute>
+              <Form.Item<ITrainRoute>
                 name="admin_id"
                 initialValue={user?.identifier}
                 hidden

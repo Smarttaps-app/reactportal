@@ -60,6 +60,7 @@ const AddStation: React.FC<IAddProps<IStation>> = ({
           layout="vertical"
           initialValues={{
             mode: "train",
+            id: payload?.identifier,
             stationName: payload?.stationName,
             location: payload?.location,
             admin_id: payload?.admin_id,
@@ -149,6 +150,13 @@ const AddStation: React.FC<IAddProps<IStation>> = ({
                 name="mode"
                 hidden
                 initialValue={payload?.mode}
+              >
+                <Input />
+              </Form.Item>
+              <Form.Item<IStation>
+                name="identifier"
+                hidden
+                initialValue={payload?.identifier}
               >
                 <Input />
               </Form.Item>
