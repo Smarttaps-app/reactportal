@@ -68,7 +68,7 @@ const AddTrain: React.FC<IAddProps<ITrain>> = ({
       footer={null}
       width={screens.xs ? "100%" : 650}
     >
-      <Card title="Add Train">
+      <Card title={payload ? "Edit Train" : "Add Train"}>
         <Form
           layout="vertical"
           initialValues={{

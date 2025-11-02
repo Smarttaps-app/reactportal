@@ -25,6 +25,18 @@ const AddRoute: React.FC<IAddProps<ITrainRoute>> = ({
   useEffect(() => {
     form.setFieldsValue({ stopId: payload?.destinationStation?.identifier });
   }, [payload?.destinationStation?.identifier, selectedStartId, form]);
+  useEffect(() => {
+    if (isOpen) {
+      form.resetFields();
+      if (payload) {
+        form.setFieldsValue({
+          startId: payload.sourceStation?.identifier,
+          stopId: payload.destinationStation?.identifier,
+          prices: payload.prices ?? [],
+        });
+      }
+    }
+  }, [isOpen, payload, form]);
   const filteredStopStations = useMemo(() => {
     if (!stations || !selectedStartId) return [];
     const selectedStart = stations.find(
@@ -63,19 +75,23 @@ const AddRoute: React.FC<IAddProps<ITrainRoute>> = ({
       footer={null}
       width={screens.xs ? "100%" : 450}
     >
-      <Card title="Add Route">
+      <Card title={payload ? "Edit Route" : "Add Route"}>
         <Form
           layout="vertical"
           form={form}
           initialValues={{
+            id: payload?.id,
+            identifier: payload?.identifier,
             startId: payload?.sourceStation?.identifier,
             stopId: payload?.destinationStation?.identifier,
-            prices: payload?.prices?.map((s) => ({
-              ...s,
-              classType: s.classType,
-              price: s.price,
-            })),
-            admin_id: payload?.admin_id,
+            prices:
+              payload?.prices?.map((s) => ({
+                ...s,
+                key: s.identifier,
+                classType: s.classType,
+                price: s.price,
+              })) ?? [],
+            admin_id: payload?.admin_id ?? user?.identifier,
           }}
           onFinish={onFinish}
           style={{ minWidth: 320 }}
@@ -143,7 +159,8 @@ const AddRoute: React.FC<IAddProps<ITrainRoute>> = ({
                 rules={[
                   {
                     required: true,
-                    message: "Please select a destionation park!",
+                    message:
+                      "Starting Station can't be the same as destination Station!",
                   },
                 ]}
               >
