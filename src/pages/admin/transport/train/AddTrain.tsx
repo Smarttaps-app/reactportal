@@ -12,6 +12,7 @@ import {
   TimePicker,
 } from "antd";
 import { Grid } from "antd";
+import dayjs from "dayjs";
 import { IAddProps, ITrain, ITrainRoute, IUser } from "../../../../utils/type";
 import { useQueryClient } from "@tanstack/react-query";
 import { useAddTrain, useTRoutes } from "../../../../hooks/useTransport";
@@ -35,7 +36,16 @@ const AddTrain: React.FC<IAddProps<ITrain>> = ({
   const { addTrain, isAdding } = useAddTrain();
   const { loading, routes } = useTRoutes();
   const onFinish: FormProps<ITrain>["onFinish"] = (values) => {
-    addTrain(values, {
+    const formattedSchedules = values.schedules?.map((schedule) => ({
+      ...schedule,
+      departureTime: schedule.departureTime?.format("HH:mm a").toUpperCase(),
+      arrivalTime: schedule.arrivalTime?.format("HH:mm a").toUpperCase(),
+    }));
+    const payloadToSend = {
+      ...values,
+      schedules: formattedSchedules,
+    };
+    addTrain(payloadToSend, {
       onSuccess: (data) => {
         message.success(data.statusDescription);
         onCancel();
@@ -62,22 +72,26 @@ const AddTrain: React.FC<IAddProps<ITrain>> = ({
         <Form
           layout="vertical"
           initialValues={{
+            id: payload?.id,
+            identifier: payload?.identifier,
             trainName: payload?.trainName,
             trainNumber: payload?.trainNumber,
-            seats: payload?.seats,
-            routes: payload?.routes,
-            schedules: payload?.schedules,
+            routes: payload?.routes?.map((r) => r.identifier),
+            schedules: payload?.schedules?.map((s) => ({
+              ...s,
+              departureTime: dayjs(s.departureTime, "HH:mm"),
+              arrivalTime: dayjs(s.arrivalTime, "HH:mm"),
+            })),
             description: payload?.description,
           }}
           onFinish={onFinish}
           style={{ minWidth: 320 }}
         >
           <Row gutter={[16, 16]}>
-            <Form.Item<ITrain>
-              name="identifier"
-              hidden
-              initialValue={payload?.identifier}
-            >
+            <Form.Item<ITrain> name="id" hidden>
+              <Input hidden />
+            </Form.Item>
+            <Form.Item<ITrain> name="identifier" hidden>
               <Input hidden />
             </Form.Item>
             <Col xs={24} sm={24} md={12}>
@@ -113,7 +127,6 @@ const AddTrain: React.FC<IAddProps<ITrain>> = ({
               <Form.Item<ITrain>
                 label="Train Route"
                 name="routes"
-                initialValue={payload?.routes}
                 rules={[{ required: true, message: "Please bus routes!" }]}
               >
                 <Select
@@ -182,11 +195,7 @@ const AddTrain: React.FC<IAddProps<ITrain>> = ({
                           ]}
                           className="col-span-2"
                         >
-                          <TimePicker
-                            className="w-full"
-                            use12Hours
-                            format="h:mm a"
-                          />
+                          <TimePicker className="w-full" format="HH:mm" />
                         </Form.Item>
                         <Form.Item
                           {...restField}
@@ -200,11 +209,7 @@ const AddTrain: React.FC<IAddProps<ITrain>> = ({
                           ]}
                           className="col-span-2"
                         >
-                          <TimePicker
-                            className="w-full"
-                            use12Hours
-                            format="h:mm a"
-                          />
+                          <TimePicker className="w-full" format="HH:mm" />
                         </Form.Item>
                         <Form.Item>
                           <Button
@@ -223,7 +228,7 @@ const AddTrain: React.FC<IAddProps<ITrain>> = ({
                         block
                         icon={<PlusOutlined />}
                       >
-                        Add Bus Schedule
+                        Add Train Schedule
                       </Button>
                     </Form.Item>
                   </>

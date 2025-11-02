@@ -202,12 +202,14 @@ export interface IStation {
   created_at: string;
 }
 export interface ITrain {
+  id: number;
   identifier: string;
   admin_id: number;
   trainName: string;
   trainNumber: string;
   image: string;
   description: string;
+  routes: ITrainRoute[];
   schedules: ISchedule[];
   created_at: string;
   updated_at: string;
@@ -255,6 +257,7 @@ export interface ITicket {
   ticket_number: string;
 }
 export interface ITrainRoute {
+  id: number;
   identifier: string;
   admin_id: number;
   sourceStation: IStation;

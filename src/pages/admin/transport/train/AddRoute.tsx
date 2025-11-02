@@ -1,20 +1,13 @@
 import { App, Button, Card, Col, Form, Input, Modal, Row, Select } from "antd";
 import { Grid } from "antd";
-import {
-  IAddProps,
-  ITrainRoute,
-  IStation,
-  IUser,
-} from "../../../../utils/type";
+import { IAddProps, ITrainRoute, IStation } from "../../../../utils/type";
 import { useQueryClient } from "@tanstack/react-query";
 import { Common } from "../../../../utils/Common";
 import { useAddTRoute, useStations } from "../../../../hooks/useTransport";
 import { useEffect, useMemo } from "react";
 import { useUser } from "../../../../context/useUser";
-import { useAdmins } from "../../../../hooks/useAdmin";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 const { useBreakpoint } = Grid;
-const { Option } = Select;
 
 const AddRoute: React.FC<IAddProps<ITrainRoute>> = ({
   payload,
@@ -23,17 +16,15 @@ const AddRoute: React.FC<IAddProps<ITrainRoute>> = ({
 }) => {
   const { message } = App.useApp();
   const { user } = useUser();
-  const { isPending, data: providers } = useAdmins("trainprovider");
   const client = useQueryClient();
   const screens = useBreakpoint();
   const { addRoute, isAdding } = useAddTRoute();
   const { loading, stations } = useStations();
-  //const { pending, buses, error } = useBuses();
   const [form] = Form.useForm();
   const selectedStartId = Form.useWatch("startId", form);
   useEffect(() => {
-    form.setFieldsValue({ stopId: undefined });
-  }, [selectedStartId, form]);
+    form.setFieldsValue({ stopId: payload?.destinationStation?.identifier });
+  }, [payload?.destinationStation?.identifier, selectedStartId, form]);
   const filteredStopStations = useMemo(() => {
     if (!stations || !selectedStartId) return [];
     const selectedStart = stations.find(
@@ -76,11 +67,14 @@ const AddRoute: React.FC<IAddProps<ITrainRoute>> = ({
         <Form
           layout="vertical"
           form={form}
-          preserve={false}
           initialValues={{
-            routeName: payload?.routeName,
             startId: payload?.sourceStation?.identifier,
             stopId: payload?.destinationStation?.identifier,
+            prices: payload?.prices?.map((s) => ({
+              ...s,
+              classType: s.classType,
+              price: s.price,
+            })),
             admin_id: payload?.admin_id,
           }}
           onFinish={onFinish}
@@ -88,6 +82,12 @@ const AddRoute: React.FC<IAddProps<ITrainRoute>> = ({
         >
           <Row gutter={[16, 16]}>
             <Col xs={24} sm={24} md={24}>
+              <Form.Item<ITrainRoute> name="id" hidden>
+                <Input hidden />
+              </Form.Item>
+              <Form.Item<ITrainRoute> name="identifier" hidden>
+                <Input hidden />
+              </Form.Item>
               <Form.Item
                 shouldUpdate={(prev, curr) => prev.startId !== curr.startId}
                 noStyle
@@ -166,37 +166,17 @@ const AddRoute: React.FC<IAddProps<ITrainRoute>> = ({
               </Form.Item>
             </Col>
             <Col xs={24} sm={24} md={24}>
-              {user?.tag == "trainprovider" ? (
-                <Form.Item<ITrainRoute>
-                  name="admin_id"
-                  initialValue={user.identifier}
-                  hidden
-                >
-                  <Input />
-                </Form.Item>
-              ) : (
-                <Form.Item<ITrainRoute>
-                  label="Select a provider"
-                  name="admin_id"
-                  rules={[
-                    { required: true, message: "Please select a provider!" },
-                  ]}
-                >
-                  <Select
-                    //onChange={handleChange}
-                    loading={isPending}
-                  >
-                    {providers?.map((item: IUser) => (
-                      <Option key={item.identifier} value={item.identifier}>
-                        {item.lastname} {item.firstname}
-                      </Option>
-                    ))}
-                  </Select>
-                </Form.Item>
-              )}
+              {" "}
+              <Form.Item<ITrainRoute>
+                name="admin_id"
+                initialValue={user?.identifier}
+                hidden
+              >
+                <Input />
+              </Form.Item>
             </Col>
             <Col xs={24} sm={24} md={24}>
-              <Form.List name="seats">
+              <Form.List name="prices">
                 {(fields, { add, remove }) => (
                   <>
                     {fields.map(({ key, name, ...restField }) => (
@@ -207,7 +187,6 @@ const AddRoute: React.FC<IAddProps<ITrainRoute>> = ({
                         <Form.Item
                           {...restField}
                           name={[name, "classType"]}
-                          initialValue={payload?.seats}
                           rules={[
                             {
                               required: true,
