@@ -44,8 +44,8 @@ export default function TrainRoutesScreen() {
         render: (routeName: string, record: ITrainRoute) => (
           <span className="text-xs text-gray-500">
             {routeName}
-            {record.trains.length > 0
-              ? ` ${record.trains.length} Trains`
+            {record.trains?.length > 0
+              ? ` ${record.trains?.length} Trains`
               : `No Train`}
           </span>
         ),
