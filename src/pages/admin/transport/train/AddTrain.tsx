@@ -13,15 +13,15 @@ import {
 } from "antd";
 import { Grid } from "antd";
 import dayjs from "dayjs";
-import { IAddProps, ITrain, ITrainRoute, IUser } from "../../../../utils/type";
+import { IAddProps, ITrain, ITrainRoute } from "../../../../utils/type";
 import { useQueryClient } from "@tanstack/react-query";
 import { useAddTrain, useTRoutes } from "../../../../hooks/useTransport";
 import { Common } from "../../../../utils/Common";
 import { useUser } from "../../../../context/useUser";
-import { useAdmins } from "../../../../hooks/useAdmin";
+//import { useAdmins } from "../../../../hooks/useAdmin";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 const { useBreakpoint } = Grid;
-const { Option } = Select;
+//const { Option } = Select;
 
 const AddTrain: React.FC<IAddProps<ITrain>> = ({
   payload,
@@ -29,17 +29,19 @@ const AddTrain: React.FC<IAddProps<ITrain>> = ({
   onCancel,
 }) => {
   const { user } = useUser();
-  const { isPending, data: providers } = useAdmins("trainprovider");
+  //const { isPending, data: providers } = useAdmins("trainprovider");
   const client = useQueryClient();
   const screens = useBreakpoint();
-  const { message } = App.useApp();
+  const { notification } = App.useApp();
   const { addTrain, isAdding } = useAddTrain();
   const { loading, routes } = useTRoutes();
   const onFinish: FormProps<ITrain>["onFinish"] = (values) => {
     const formattedSchedules = values.schedules?.map((schedule) => ({
       ...schedule,
-      departureTime: schedule.departureTime?.format("HH:mm a").toUpperCase(),
-      arrivalTime: schedule.arrivalTime?.format("HH:mm a").toUpperCase(),
+      departureTime: dayjs(schedule.departureTime).format("HH:mm A"),
+      arrivalTime: dayjs(schedule.arrivalTime).format("HH:mm A"),
+      //departureTime: schedule.departureTime?.format("HH:mm a").toUpperCase(),
+      //arrivalTime: schedule.arrivalTime?.format("HH:mm a").toUpperCase(),
     }));
     const payloadToSend = {
       ...values,
@@ -47,12 +49,18 @@ const AddTrain: React.FC<IAddProps<ITrain>> = ({
     };
     addTrain(payloadToSend, {
       onSuccess: (data) => {
-        message.success(data.statusDescription);
+        notification.success({
+          description: data.statusDescription,
+          message: "Add Train",
+        });
         onCancel();
       },
       onError: (error) => {
         console.log(error);
-        message.error(Common.formatError(error));
+        notification.error({
+          message: "Add Train",
+          description: Common.formatError(error),
+        });
       },
       onSettled: () => client.invalidateQueries({ queryKey: ["trains"] }),
     });
@@ -161,7 +169,6 @@ const AddTrain: React.FC<IAddProps<ITrain>> = ({
                           {...restField}
                           name={[name, "timeOfOperation"]}
                           label="Select Period"
-                          //initialValue={payload?.seatCount}
                           rules={[
                             {
                               required: true,
@@ -236,7 +243,14 @@ const AddTrain: React.FC<IAddProps<ITrain>> = ({
               </Form.List>
             </Col>
             <Col xs={24} sm={24} md={24}>
-              {user?.tag == "trainprovider" ? (
+              <Form.Item<ITrain>
+                name="admin_id"
+                initialValue={user?.identifier}
+                hidden
+              >
+                <Input />
+              </Form.Item>
+              {/*user?.tag == "trainprovider" ? (
                 <Form.Item<ITrain>
                   name="admin_id"
                   initialValue={user.identifier}
@@ -260,14 +274,10 @@ const AddTrain: React.FC<IAddProps<ITrain>> = ({
                     ))}
                   </Select>
                 </Form.Item>
-              )}
+              )*/}
             </Col>
             <Col xs={24}>
-              <Form.Item<ITrain>
-                name="description"
-                label="Description"
-                initialValue={payload?.description}
-              >
+              <Form.Item<ITrain> name="description" label="Description">
                 <Input.TextArea
                   placeholder="Enter description"
                   className="!rounded-md "

@@ -215,6 +215,7 @@ export interface ITrain {
   updated_at: string;
 }
 export interface IBus {
+  id: number;
   identifier: string;
   admin_id: number;
   name: string;
@@ -240,6 +241,7 @@ export interface ISchedule {
   timeOfOperation: string | null;
   departureTime: string;
   arrivalTime: string;
+  price: string | null;
 }
 export interface ITicket {
   booked_at: string;

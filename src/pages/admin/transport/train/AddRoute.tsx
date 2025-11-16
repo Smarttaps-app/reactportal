@@ -14,7 +14,7 @@ const AddRoute: React.FC<IAddProps<ITrainRoute>> = ({
   isOpen = false,
   onCancel,
 }) => {
-  const { message } = App.useApp();
+  const { notification } = App.useApp();
   const { user } = useUser();
   const client = useQueryClient();
   const screens = useBreakpoint();
@@ -54,11 +54,17 @@ const AddRoute: React.FC<IAddProps<ITrainRoute>> = ({
     console.log("Success:", values);
     addRoute(values, {
       onSuccess: (data) => {
-        message.success(data.statusDescription);
+        notification.success({
+          description: data.statusDescription,
+          message: "Add Route",
+        });
         onCancel();
       },
       onError: (error) => {
-        message.error(Common.formatError(error));
+        notification.error({
+          message: "Add Route",
+          description: Common.formatError(error),
+        });
         onCancel();
       },
       onSettled: () => client.invalidateQueries({ queryKey: ["routes"] }),

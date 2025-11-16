@@ -21,7 +21,7 @@ import { Search } from "lucide-react";
 
 export default function TrainSchedulesScreen() {
   const [searchTerm, setSearchTerm] = useState("");
-  const { message } = App.useApp();
+  const { notification } = App.useApp();
   const client = useQueryClient();
   const [add, setAdd] = useState(false);
   const [item, setItem] = useState<ISchedule>();
@@ -88,10 +88,17 @@ export default function TrainSchedulesScreen() {
               disabled={isdeleting}
               loading={isdeleting}
               onClick={() =>
-                deleteSchedule(schedule.id, {
+                deleteSchedule(schedule.identifier, {
                   onSuccess: (response) =>
-                    message.success(response.statusDescription),
-                  onError: (error) => message.error(Common.formatError(error)),
+                    notification.success({
+                      message: "Delete Schedule",
+                      description: response.statusDescription,
+                    }),
+                  onError: (error) =>
+                    notification.error({
+                      message: "Delete Schedule",
+                      description: Common.formatError(error),
+                    }),
                   onSettled: () =>
                     client.invalidateQueries({ queryKey: ["schedules"] }),
                 })

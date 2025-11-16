@@ -16,7 +16,7 @@ import {
   addSeatAction,
   deleteSeatAction,
 } from "../../../../serviceAction/TrainActions";
-import { message } from "antd";
+import { App } from "antd";
 import { Common } from "../../../../utils/Common";
 export function useTRoutes() {
   const {
@@ -31,19 +31,27 @@ export function useTRoutes() {
   return { loading, routes, error };
 }
 export function useAddTRoute() {
+  const { notification } = App.useApp();
   const { mutate: addRoute, isPending: isAdding } = useMutation({
     mutationFn: addRouteAction,
     onError: (error) => {
-      message.error(Common.formatError(error));
+      notification.error({
+        message: "Delete Schedule",
+        description: Common.formatError(error),
+      });
     },
   });
   return { isAdding, addRoute };
 }
 export function useDeleteTRoute() {
+  const { notification } = App.useApp();
   const { mutate: deleteRoute, isPending: isdeleting } = useMutation({
     mutationFn: deleteRouteAction,
     onError: (error) => {
-      message.error(Common.formatError(error));
+      notification.error({
+        message: "Delete Schedule",
+        description: Common.formatError(error),
+      });
     },
   });
   return { isdeleting, deleteRoute };
@@ -61,19 +69,27 @@ export function useStations() {
   return { loading, stations, error };
 }
 export function useAddStation() {
+  const { notification } = App.useApp();
   const { mutate: addStation, isPending: isAdding } = useMutation({
     mutationFn: addStationAction,
     onError: (error) => {
-      message.error(Common.formatError(error));
+      notification.error({
+        message: "Delete Schedule",
+        description: Common.formatError(error),
+      });
     },
   });
   return { isAdding, addStation };
 }
 export function useDeleteStation() {
+  const { notification } = App.useApp();
   const { mutate: deleteStation, isPending: isdeleting } = useMutation({
     mutationFn: deleteStationAction,
     onError: (error) => {
-      message.error(Common.formatError(error));
+      notification.error({
+        message: "Delete Schedule",
+        description: Common.formatError(error),
+      });
     },
   });
   return { isdeleting, deleteStation };
@@ -92,19 +108,27 @@ export function useSeats() {
   return { loading, seats, error };
 }
 export function useAddSeat() {
+  const { notification } = App.useApp();
   const { mutate: addSeat, isPending: isAdding } = useMutation({
     mutationFn: addSeatAction,
     onError: (error) => {
-      message.error(Common.formatError(error));
+      notification.error({
+        message: "Delete Schedule",
+        description: Common.formatError(error),
+      });
     },
   });
   return { isAdding, addSeat };
 }
 export function useDeleteSeat() {
+  const { notification } = App.useApp();
   const { mutate: deleteSeat, isPending: isdeleting } = useMutation({
     mutationFn: deleteSeatAction,
     onError: (error) => {
-      message.error(Common.formatError(error));
+      notification.error({
+        message: "Delete Schedule",
+        description: Common.formatError(error),
+      });
     },
   });
   return { isdeleting, deleteSeat };
@@ -122,19 +146,27 @@ export function useTrains() {
   return { loading, trains, error };
 }
 export function useAddTrain() {
+  const { notification } = App.useApp();
   const { mutate: addTrain, isPending: isAdding } = useMutation({
     mutationFn: addTrainAction,
     onError: (error) => {
-      message.error(Common.formatError(error));
+      notification.error({
+        message: "Delete Schedule",
+        description: Common.formatError(error),
+      });
     },
   });
   return { isAdding, addTrain };
 }
 export function useDeleteTrain() {
+  const { notification } = App.useApp();
   const { mutate: deleteTrain, isPending: isdeleting } = useMutation({
     mutationFn: deleteTrainAction,
     onError: (error) => {
-      message.error(Common.formatError(error));
+      notification.error({
+        message: "Delete Schedule",
+        description: Common.formatError(error),
+      });
     },
   });
   return { isdeleting, deleteTrain };
@@ -152,19 +184,27 @@ export function useSchedules() {
   return { loading, schedules, error };
 }
 export function useAddSchedule() {
+  const { notification } = App.useApp();
   const { mutate: addSchedule, isPending: isAdding } = useMutation({
     mutationFn: addScheduleAction,
     onError: (error) => {
-      message.error(Common.formatError(error));
+      notification.error({
+        message: "Delete Schedule",
+        description: Common.formatError(error),
+      });
     },
   });
   return { isAdding, addSchedule };
 }
 export function useDeleteSchedule() {
+  const { notification } = App.useApp();
   const { mutate: deleteSchedule, isPending: isdeleting } = useMutation({
     mutationFn: deleteScheduleAction,
     onError: (error) => {
-      message.error(Common.formatError(error));
+      notification.error({
+        message: "Delete Schedule",
+        description: Common.formatError(error),
+      });
     },
   });
   return { isdeleting, deleteSchedule };

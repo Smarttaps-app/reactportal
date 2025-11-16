@@ -21,7 +21,7 @@ import { useDeleteBus } from "./useBus";
 import { useQueryClient } from "@tanstack/react-query";
 
 export default function BusesScreen() {
-  const { message } = App.useApp();
+  const { notification } = App.useApp();
   const client = useQueryClient();
   const [searchTerm, setSearchTerm] = useState("");
   const [add, setAdd] = useState(false);
@@ -64,7 +64,7 @@ export default function BusesScreen() {
         key: "base_price",
         width: "10%",
         render: (base_price: string) =>
-          Common.formatAsCurrency(Number(base_price)),
+          Common.formatAsCurrency(Number(base_price) * 100),
       },
       {
         title: "TV",
@@ -113,8 +113,15 @@ export default function BusesScreen() {
               onClick={() =>
                 deleteBus(bus.identifier, {
                   onSuccess: (response) =>
-                    message.success(response.statusDescription),
-                  onError: (error) => message.error(Common.formatError(error)),
+                    notification.success({
+                      message: "Delete Bus",
+                      description: response.statusDescription,
+                    }),
+                  onError: (error) =>
+                    notification.error({
+                      message: "Delete Bus",
+                      description: Common.formatError(error),
+                    }),
                   onSettled: () =>
                     client.invalidateQueries({ queryKey: ["busstations"] }),
                 })

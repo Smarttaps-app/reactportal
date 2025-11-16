@@ -1,14 +1,4 @@
-import {
-  Button,
-  Card,
-  Col,
-  Form,
-  Input,
-  message,
-  Modal,
-  Row,
-  Select,
-} from "antd";
+import { App, Button, Card, Col, Form, Input, Modal, Row, Select } from "antd";
 import { Grid } from "antd";
 import { IAddProps, IStation, IUser } from "../../../../utils/type";
 import { useQueryClient } from "@tanstack/react-query";
@@ -29,15 +19,22 @@ const AddStation: React.FC<IAddProps<IStation>> = ({
   const { isPending, data: providers } = useAdmins("trainprovider");
   const client = useQueryClient();
   const screens = useBreakpoint();
+  const { notification } = App.useApp();
   const { addStation, isAdding } = useAddStation();
   const onFinish = async (values: IStation) => {
     addStation(values, {
       onSuccess: (data) => {
-        message.success(data.statusDescription);
+        notification.success({
+          description: data.statusDescription,
+          message: "Add Station",
+        });
         onCancel();
       },
       onError: (error) => {
-        message.error(Common.formatError(error));
+        notification.error({
+          message: "Add Station",
+          description: Common.formatError(error),
+        });
         onCancel();
       },
       onSettled: () =>

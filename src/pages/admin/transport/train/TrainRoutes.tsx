@@ -8,7 +8,7 @@ import { Common } from "../../../../utils/Common";
 import AddRoute from "./AddRoute";
 
 export default function TrainRoutesScreen() {
-  const { message } = App.useApp();
+  const { notification } = App.useApp();
   const client = useQueryClient();
   const [add, setAdd] = useState(false);
   const [item, setItem] = useState<ITrainRoute>();
@@ -100,8 +100,15 @@ export default function TrainRoutesScreen() {
               onClick={() =>
                 deleteRoute(route.identifier, {
                   onSuccess: (response) =>
-                    message.success(response.statusDescription),
-                  onError: (error) => message.error(Common.formatError(error)),
+                    notification.success({
+                      message: "Delete Route",
+                      description: response.statusDescription,
+                    }),
+                  onError: (error) =>
+                    notification.error({
+                      message: "Delete Route",
+                      description: Common.formatError(error),
+                    }),
                   onSettled: () =>
                     client.invalidateQueries({ queryKey: ["routes"] }),
                 })

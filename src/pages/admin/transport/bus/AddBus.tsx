@@ -12,6 +12,7 @@ import {
   TimePicker,
 } from "antd";
 import { Grid } from "antd";
+import dayjs from "dayjs";
 import { IAddProps, IBus, ITrainRoute, IStation } from "../../../../utils/type";
 import { useQueryClient } from "@tanstack/react-query";
 //import { useAddBus, useTRoutes } from "../../../../hooks/useTransport";
@@ -19,7 +20,6 @@ import { Common } from "../../../../utils/Common";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import { useUser } from "../../../../context/useUser";
 import { useAddBus, useStations } from "./useBus";
-import { useEffect } from "react";
 const { useBreakpoint } = Grid;
 
 const AddBus: React.FC<IAddProps<IBus>> = ({
@@ -28,70 +28,41 @@ const AddBus: React.FC<IAddProps<IBus>> = ({
   onCancel,
 }) => {
   const { user } = useUser();
-  const { message } = App.useApp();
+  const { notification } = App.useApp();
   const client = useQueryClient();
   const screens = useBreakpoint();
   const { loading: pending, stations } = useStations();
   const { addBus, isAdding } = useAddBus();
   const onFinish = async (values: IBus) => {
-    addBus(values, {
+    const formattedSchedules = values.schedules?.map((schedule) => ({
+      ...schedule,
+      departureTime: dayjs(schedule.departureTime).format("HH:mm A"),
+      arrivalTime: dayjs(schedule.arrivalTime).format("HH:mm A"),
+    }));
+    const payload = {
+      ...values,
+      schedules: formattedSchedules,
+    };
+    addBus(payload, {
       onSuccess: (data) => {
-        message.success(data.statusDescription);
+        notification.success({
+          description: data.statusDescription,
+          message: "Add Bus",
+        });
         onCancel();
       },
       onError: (error) => {
         console.log(error);
-        message.error(Common.formatError(error));
+        notification.error({
+          message: "Add Bus",
+          description: Common.formatError(error),
+        });
       },
       onSettled: () => client.invalidateQueries({ queryKey: ["buses"] }),
     });
   };
   const [form] = Form.useForm();
-  useEffect(() => {
-    if (isOpen) {
-      handleOpenModal(payload);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isOpen, payload]);
-  //const [form] = Form.useForm();
-  //const isEditMode = Boolean(payload);
-  //const title = isEditMode ? "Edit Bus" : "Add Bus";
-  //const actionText = isEditMode ? "Update" : "Submit";
-  const handleOpenModal = (busData?: IBus) => {
-    if (busData) {
-      // Editing existing bus
-      form.setFieldsValue({
-        ...busData,
-        routes: busData.routes?.length
-          ? busData.routes
-          : [{ departure: undefined, arrival: undefined, price: "" }],
-        schedules: busData.schedules?.length
-          ? busData.schedules
-          : [
-              {
-                timeOfOperation: "",
-                departureTime: "",
-                arrivalTime: "",
-                price: "",
-              },
-            ],
-      });
-    } else {
-      // Adding new bus
-      form.resetFields();
-      form.setFieldsValue({
-        routes: [{ departure: undefined, arrival: undefined, price: "" }],
-        schedules: [
-          {
-            timeOfOperation: "",
-            departureTime: undefined,
-            arrivalTime: undefined,
-            price: "",
-          },
-        ],
-      });
-    }
-  };
+
   return (
     <Modal
       style={{ top: 20 }}
@@ -103,46 +74,49 @@ const AddBus: React.FC<IAddProps<IBus>> = ({
       footer={null}
       width={screens.xs ? "100%" : 850}
     >
-      <Card title="Add Bus">
+      <Card title={payload ? "Edit Bus" : "Add Bus"}>
         <Form
           layout="vertical"
           form={form}
           initialValues={{
+            id: payload?.id,
             identifier: payload?.identifier,
             admin_id: user?.identifier,
-            airCondition: false,
-            tv: false,
-            camera: false,
+            airCondition: payload?.airCondition || false,
+            tv: payload?.tv || false,
+            camera: payload?.camera || false,
             name: payload?.name,
             bus_number: payload?.bus_number,
             base_price: payload?.base_price,
             description: payload?.description,
-            routes: [{ departure: undefined, arrival: undefined, price: "" }],
-            schedules: [
-              {
-                timeOfOperation: "",
-                departureTime: undefined,
-                arrivalTime: undefined,
-                price: "",
-              },
-            ],
+            routes: payload?.routes?.map((r) => ({
+              ...r,
+              departure: r.sourceStation.identifier,
+              arrival: r.destinationStation.identifier,
+              price: r.baseprice,
+            })),
+            schedules: payload?.schedules?.map((s) => ({
+              ...s,
+              timeOfOperation: s.timeOfOperation,
+              departureTime: dayjs(s.departureTime, "HH:mm"),
+              arrivalTime: dayjs(s.arrivalTime, "HH:mm"),
+              price: s.price,
+            })),
           }}
           onFinish={onFinish}
           style={{ minWidth: 320 }}
         >
           <Row gutter={[8, 8]}>
-            <Form.Item<IBus>
-              name="identifier"
-              hidden
-              initialValue={payload?.identifier}
-            >
+            <Form.Item<IBus> name="id" hidden>
+              <Input hidden />
+            </Form.Item>
+            <Form.Item<IBus> name="identifier" hidden>
               <Input hidden />
             </Form.Item>
             <Col xs={24} sm={24} md={12}>
               <Form.Item<IBus>
                 name="name"
                 label="Bus Name"
-                initialValue={payload?.name}
                 rules={[{ required: true, message: "Please enter bus name!" }]}
               >
                 <Input placeholder="Enter bus name" className="!rounded-md " />
@@ -152,7 +126,6 @@ const AddBus: React.FC<IAddProps<IBus>> = ({
               <Form.Item<IBus>
                 name="bus_number"
                 label="bus number"
-                initialValue={payload?.bus_number}
                 rules={[
                   { required: true, message: "Please enter bus Number!" },
                 ]}
@@ -167,23 +140,18 @@ const AddBus: React.FC<IAddProps<IBus>> = ({
               <Form.Item<IBus>
                 name="base_price"
                 label="Addon price"
-                initialValue={payload?.base_price}
                 rules={[
-                  { required: true, message: "Please enter base price!" },
+                  { required: true, message: "Please enter Addon price!" },
                 ]}
               >
                 <Input
-                  placeholder="Enter base price"
+                  placeholder="Enter Addon price"
                   className="!rounded-md "
                 />
               </Form.Item>
             </Col>
             <Col xs={24} sm={24} md={12}>
-              <Form.Item<IBus>
-                name="description"
-                label="Bus Description"
-                initialValue={payload?.description}
-              >
+              <Form.Item<IBus> name="description" label="Bus Description">
                 <Input.TextArea
                   placeholder="Enter description"
                   className="!rounded-md "
@@ -309,19 +277,19 @@ const AddBus: React.FC<IAddProps<IBus>> = ({
                     {fields.map(({ key, name, ...restField }) => (
                       <div
                         key={key}
-                        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 items-center mb-2"
+                        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-9 gap-3 items-justify mb-2"
                       >
                         <Form.Item
                           {...restField}
                           name={[name, "timeOfOperation"]}
                           label="Select Period"
-                          //initialValue={payload?.seatCount}
                           rules={[
                             {
                               required: true,
                               message: "Please choose a period",
                             },
                           ]}
+                          className="col-span-2"
                         >
                           <Select
                             showSearch
@@ -346,12 +314,9 @@ const AddBus: React.FC<IAddProps<IBus>> = ({
                               message: "Please enter departure time!",
                             },
                           ]}
+                          className="col-span-2"
                         >
-                          <TimePicker
-                            className="w-full"
-                            use12Hours
-                            format="h:mm a"
-                          />
+                          <TimePicker className="w-full" format="HH:mm" />
                         </Form.Item>
                         <Form.Item
                           {...restField}
@@ -363,12 +328,9 @@ const AddBus: React.FC<IAddProps<IBus>> = ({
                               message: "Please enter arrival time!",
                             },
                           ]}
+                          className="col-span-2"
                         >
-                          <TimePicker
-                            className="w-full"
-                            use12Hours
-                            format="h:mm a"
-                          />
+                          <TimePicker className="w-full" format="HH:mm" />
                         </Form.Item>
                         <Form.Item
                           {...restField}
@@ -380,15 +342,17 @@ const AddBus: React.FC<IAddProps<IBus>> = ({
                               message: "Price is missing",
                             },
                           ]}
+                          className="col-span-2"
                         >
-                          <Input
-                            placeholder="Please input Price"
-                            suffix={
-                              <MinusCircleOutlined
-                                onClick={() => remove(name)}
-                              />
-                            }
-                          />
+                          <Input placeholder="Please input Price" />
+                        </Form.Item>
+                        <Form.Item>
+                          <Button
+                            icon={<MinusCircleOutlined />}
+                            type="primary"
+                            className="!mt-6"
+                            onClick={() => remove(name)}
+                          ></Button>
                         </Form.Item>
                       </div>
                     ))}
@@ -407,11 +371,7 @@ const AddBus: React.FC<IAddProps<IBus>> = ({
               </Form.List>
             </Col>
             <Col xs={24} sm={24} md={24}>
-              <Form.Item<ITrainRoute>
-                name="admin_id"
-                initialValue={user?.identifier}
-                hidden
-              >
+              <Form.Item<ITrainRoute> name="admin_id" hidden>
                 <Input />
               </Form.Item>
             </Col>

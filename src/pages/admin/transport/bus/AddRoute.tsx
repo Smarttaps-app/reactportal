@@ -15,7 +15,7 @@ const AddRoute: React.FC<IAddProps<IBusRoute>> = ({
   isOpen = false,
   onCancel,
 }) => {
-  const { message } = App.useApp();
+  const { notification } = App.useApp();
   const { user } = useUser();
   const { isPending, data: providers } = useAdmins("busprovider");
   const client = useQueryClient();
@@ -43,11 +43,17 @@ const AddRoute: React.FC<IAddProps<IBusRoute>> = ({
     console.log("Success:", values);
     addRoute(values, {
       onSuccess: (data) => {
-        message.success(data.statusDescription);
+        notification.success({
+          description: data.statusDescription,
+          message: "Add Route",
+        });
         onCancel();
       },
       onError: (error) => {
-        message.error(Common.formatError(error));
+        notification.error({
+          message: "Add Route",
+          description: Common.formatError(error),
+        });
         onCancel();
       },
       onSettled: () => client.invalidateQueries({ queryKey: ["busroutes"] }),

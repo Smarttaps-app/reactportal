@@ -21,7 +21,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { Search } from "lucide-react";
 
 export default function TrainsScreen() {
-  const { message } = App.useApp();
+  const { notification } = App.useApp();
   const client = useQueryClient();
   const [searchTerm, setSearchTerm] = useState("");
   const [add, setAdd] = useState(false);
@@ -96,10 +96,17 @@ export default function TrainsScreen() {
               disabled={isdeleting}
               loading={isdeleting}
               onClick={() =>
-                deleteTrain(train.identifier, {
+                deleteTrain(train.trainNumber, {
                   onSuccess: (response) =>
-                    message.success(response.statusDescription),
-                  onError: (error) => message.error(Common.formatError(error)),
+                    notification.success({
+                      description: response.statusDescription,
+                      message: "Delete Train",
+                    }),
+                  onError: (error) =>
+                    notification.error({
+                      message: "Delete Train",
+                      description: Common.formatError(error),
+                    }),
                   onSettled: () =>
                     client.invalidateQueries({ queryKey: ["trains"] }),
                 })

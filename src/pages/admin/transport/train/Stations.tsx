@@ -9,7 +9,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useDeleteStation, useStations } from "./useTrain";
 
 export default function StationsScreen() {
-  const { message } = App.useApp();
+  const { notification } = App.useApp();
   const client = useQueryClient();
   const [searchTerm, setSearchTerm] = useState("");
   const [add, setAdd] = useState(false);
@@ -73,10 +73,17 @@ export default function StationsScreen() {
               disabled={isdeleting}
               loading={isdeleting}
               onClick={() =>
-                deleteStation(station.id, {
+                deleteStation(station.identifier, {
                   onSuccess: (response) =>
-                    message.success(response.statusDescription),
-                  onError: (error) => message.error(Common.formatError(error)),
+                    notification.success({
+                      message: "Delete Station",
+                      description: response.statusDescription,
+                    }),
+                  onError: (error) =>
+                    notification.error({
+                      message: "Add Station",
+                      description: Common.formatError(error),
+                    }),
                   onSettled: () =>
                     client.invalidateQueries({ queryKey: ["trainstations"] }),
                 })

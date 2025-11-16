@@ -4,7 +4,7 @@ import {
   Col,
   Form,
   Input,
-  message,
+  App,
   Modal,
   Row,
   Select,
@@ -29,6 +29,7 @@ const AddSchedule: React.FC<IAddProps<ISchedule>> = ({
   const { isPending, data: providers } = useAdmins("trainprovider");
   const client = useQueryClient();
   const screens = useBreakpoint();
+  const { notification } = App.useApp();
   const { addSchedule, isAdding } = useAddSchedule();
   const onFinish = async (values: ISchedule) => {
     values.arrivalTime = values.arrivalTime?.format("HH:mm a").toUpperCase();
@@ -38,11 +39,17 @@ const AddSchedule: React.FC<IAddProps<ISchedule>> = ({
     console.log(values);
     addSchedule(values, {
       onSuccess: (data) => {
-        message.success(data.statusDescription);
+        notification.success({
+          description: data.statusDescription,
+          message: "Add Schedule",
+        });
         onCancel();
       },
       onError: (error) => {
-        message.error(Common.formatError(error));
+        notification.error({
+          message: "Add Schedule",
+          description: Common.formatError(error),
+        });
         onCancel();
       },
       onSettled: () => client.invalidateQueries({ queryKey: ["schedules"] }),
