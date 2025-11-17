@@ -1,20 +1,9 @@
-import { BankOutlined, LockOutlined } from "@ant-design/icons";
-import {
-  Avatar,
-  Button,
-  Card,
-  Descriptions,
-  DescriptionsProps,
-  Flex,
-  Tag,
-} from "antd";
+import { Avatar, Card, Descriptions, DescriptionsProps, Tag } from "antd";
 import { useUser } from "../../../context/useUser";
 import { Common } from "../../../utils/Common";
-import { Outlet, useNavigate } from "react-router-dom";
 const { Meta } = Card;
 
 export default function Profile() {
-  const navigate = useNavigate();
   const { user } = useUser();
   const items: DescriptionsProps["items"] = [
     {
@@ -56,48 +45,23 @@ export default function Profile() {
     },
   ];
   return (
-    <Flex>
-      <Card
-        style={{ width: "100%" }}
-        title="User Details"
-        actions={[
-          <Button
-            type="primary"
-            icon={<LockOutlined />}
-            onClick={() => navigate("change-password")}
-          >
-            Change Password
-          </Button>,
-          <Button
-            variant="solid"
-            color="cyan"
-            icon={<BankOutlined />}
-            onClick={() => navigate("cash-out-account")}
-          >
-            More
-          </Button>,
-        ]}
-      >
-        <Meta
-          avatar={
-            <Avatar
-              src={user?.avatar || "https://via.placeholder.com/150"}
-              size={72}
-            />
-          }
-          title={
-            user?.firstname && user?.lastname
-              ? `${user.firstname} ${user.lastname}`
-              : "No name provided"
-          }
-          description={user?.email || "No email provided"}
-          style={{ marginBottom: 16 }}
-        />
-        <Descriptions size="small" bordered items={items} />
-      </Card>
-      <Card style={{ width: "100%" }}>
-        <Outlet />
-      </Card>
-    </Flex>
+    <Card style={{ width: "100%" }} title="User Details">
+      <Meta
+        avatar={
+          <Avatar
+            src={user?.avatar || "https://via.placeholder.com/150"}
+            size={72}
+          />
+        }
+        title={
+          user?.firstname && user?.lastname
+            ? `${user.firstname} ${user.lastname}`
+            : "No name provided"
+        }
+        description={user?.email || "No email provided"}
+        style={{ marginBottom: 16 }}
+      />
+      <Descriptions size="small" bordered items={items} />
+    </Card>
   );
 }

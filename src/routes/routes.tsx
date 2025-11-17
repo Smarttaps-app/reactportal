@@ -33,7 +33,7 @@ import AccountingScreen from "../pages/admin/gl_account/Index";
 import GlAccountScreen from "../pages/admin/gl_account/ledger/glaccounting";
 import CommissionsScreen from "../pages/admin/gl_account/commission/commissions";
 import DiscountsScreen from "../pages/admin/gl_account/discount/discounts";
-import { TrainIcon, UserCog2 } from "lucide-react";
+import { TrainIcon } from "lucide-react";
 import TrainsScreen from "../pages/admin/transport/train/Trains";
 import BusRoutesScreen from "../pages/admin/transport/bus/BusRoutes";
 import BusStationsScreen from "../pages/admin/transport/bus/parks";
@@ -47,6 +47,7 @@ import AddCashoutAccunt from "../pages/admin/profile/AddCashoutAccount";
 import BusinessDashboard from "../pages/admin/dashboard/BusinessDashboard";
 import SupportTicketScreen from "../pages/admin/support";
 import { IAppRoute } from "../utils/type";
+import ProfileIndex from "../pages/admin/profile";
 
 export const protectedRoutes: IAppRoute[] = [
   {
@@ -166,7 +167,13 @@ export const protectedRoutes: IAppRoute[] = [
     title: "Profile",
     icon: <ProfileOutlined />,
     children: [
+      { path: "", Component: Profile, showInMenu: false },
       { path: "change-password", Component: Changepassword, showInMenu: false },
+      {
+        path: "cash-out-account",
+        Component: AddCashoutAccunt,
+        showInMenu: false,
+      },
     ],
   },
 ];
@@ -215,10 +222,11 @@ export const busproviderRoutes: IAppRoute[] = [
   },
   {
     path: "profile",
-    Component: Profile,
+    Component: ProfileIndex,
     title: "Profile",
-    icon: <UserCog2 />,
+    icon: <ProfileOutlined />,
     children: [
+      { path: "", Component: Profile, showInMenu: false },
       { path: "change-password", Component: Changepassword, showInMenu: false },
       {
         path: "cash-out-account",
@@ -278,11 +286,17 @@ export const trainproviderRoutes: IAppRoute[] = [
   },
   {
     path: "profile",
-    Component: Profile,
+    Component: ProfileIndex,
     title: "Profile",
     icon: <ProfileOutlined />,
     children: [
+      { path: "", Component: Profile, showInMenu: false },
       { path: "change-password", Component: Changepassword, showInMenu: false },
+      {
+        path: "cash-out-account",
+        Component: AddCashoutAccunt,
+        showInMenu: false,
+      },
     ],
   },
 ];
@@ -331,11 +345,17 @@ export const businessRoutes: IAppRoute[] = [
   },
   {
     path: "profile",
-    Component: Profile,
+    Component: ProfileIndex,
     title: "Profile",
     icon: <ProfileOutlined />,
     children: [
+      { path: "", Component: Profile, showInMenu: false },
       { path: "change-password", Component: Changepassword, showInMenu: false },
+      {
+        path: "cash-out-account",
+        Component: AddCashoutAccunt,
+        showInMenu: false,
+      },
     ],
   },
 ];
@@ -381,7 +401,13 @@ export const accountantRoutes: IAppRoute[] = [
     title: "Profile",
     icon: <ProfileOutlined />,
     children: [
+      { path: "", Component: Profile, showInMenu: false },
       { path: "change-password", Component: Changepassword, showInMenu: false },
+      {
+        path: "cash-out-account",
+        Component: AddCashoutAccunt,
+        showInMenu: false,
+      },
     ],
   },
 ];
@@ -422,6 +448,7 @@ export const supportRoutes: IAppRoute[] = [
     title: "Profile",
     icon: <ProfileOutlined />,
     children: [
+      { path: "", Component: Profile, showInMenu: false },
       { path: "change-password", Component: Changepassword, showInMenu: false },
     ],
   },
@@ -462,6 +489,7 @@ export const auditRoutes: IAppRoute[] = [
     title: "Profile",
     icon: <ProfileOutlined />,
     children: [
+      { path: "", Component: Profile, showInMenu: false },
       { path: "change-password", Component: Changepassword, showInMenu: false },
     ],
   },
