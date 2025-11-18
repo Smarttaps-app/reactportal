@@ -1,29 +1,13 @@
-import { Flex, Form, Input, Button, Card, Select, App, Typography } from "antd";
+import { Flex, Form, Input, Button, Card, Select } from "antd";
 import { AddCashoutBank, IBank } from "../../../utils/type";
 import { useBanks, useCashoutBank } from "./useProfile";
-import { Common } from "../../../utils/Common";
-import { useState } from "react";
 
-export default function AddCashoutAccunt() {
-  const { notification } = App.useApp();
-  const [accountname, setAccountName] = useState("");
+export default function CashoutWithdraw() {
   const { addBank, loading } = useCashoutBank();
   const { banks, loading: banking } = useBanks();
   const [form] = Form.useForm();
 
-  const onFinish = async (data: AddCashoutBank) =>
-    addBank(data, {
-      onSuccess: (data) => {
-        setAccountName(data.data.account_name);
-      },
-      onError: (error) => {
-        console.log(error);
-        notification.error({
-          message: "Bank",
-          description: Common.formatError(error),
-        });
-      },
-    });
+  const onFinish = async (data: AddCashoutBank) => addBank(data);
   return (
     <Card style={{ width: "100%" }} title="Cashout Account">
       <Flex justify="center">
@@ -48,15 +32,13 @@ export default function AddCashoutAccunt() {
                 message: "Bank Account Number needs a minimum of 10 characters",
               },
             ]}
+            className="lg"
           >
             <Input
               placeholder="Enter your bank account number"
               className="!rounded-md !py-2"
             />
           </Form.Item>
-          {accountname && (
-            <Typography.Text type="secondary">{accountname}</Typography.Text>
-          )}
           <Form.Item<AddCashoutBank>
             label="Bank"
             name="bankCode"
@@ -80,21 +62,24 @@ export default function AddCashoutAccunt() {
             ></Select>
           </Form.Item>
           <Form.Item<AddCashoutBank>
-            name="password"
-            label="Enter Password"
+            name="pin"
+            label="Enter PIN"
             rules={[
               {
                 required: true,
-                message: "Please input your Password!",
+                message: "Please input your PIN!",
+              },
+              {
+                len: 4,
+                message: "PIN must be 4 characters",
               },
             ]}
           >
             <Input.Password
-              placeholder="Enter Password"
+              placeholder="Enter PIN"
               className="!rounded-md !py-2"
             />
           </Form.Item>
-
           <Form.Item>
             <Button
               block
@@ -104,7 +89,7 @@ export default function AddCashoutAccunt() {
               htmlType="submit"
               className="!rounded-md !shadow-sm !py-5"
             >
-              {accountname ? "Add Cashout Account" : "Verify Account"}
+              Submit
             </Button>
           </Form.Item>
         </Form>

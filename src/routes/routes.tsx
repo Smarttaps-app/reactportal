@@ -48,6 +48,8 @@ import BusinessDashboard from "../pages/admin/dashboard/BusinessDashboard";
 import SupportTicketScreen from "../pages/admin/support";
 import { IAppRoute } from "../utils/type";
 import ProfileIndex from "../pages/admin/profile";
+import CashoutWithdraw from "../pages/admin/profile/CashoutWithdraw";
+import CashoutLimitIncrease from "../pages/admin/profile/CashoutLimitIncrease";
 
 export const protectedRoutes: IAppRoute[] = [
   {
@@ -233,6 +235,16 @@ export const busproviderRoutes: IAppRoute[] = [
         Component: AddCashoutAccunt,
         showInMenu: false,
       },
+      {
+        path: "cash-out-limit",
+        Component: CashoutLimitIncrease,
+        showInMenu: false,
+      },
+      {
+        path: "cash-out-withdraw",
+        Component: CashoutWithdraw,
+        showInMenu: false,
+      },
     ],
   },
 ];
@@ -295,6 +307,16 @@ export const trainproviderRoutes: IAppRoute[] = [
       {
         path: "cash-out-account",
         Component: AddCashoutAccunt,
+        showInMenu: false,
+      },
+      {
+        path: "cash-out-limit",
+        Component: CashoutLimitIncrease,
+        showInMenu: false,
+      },
+      {
+        path: "cash-out-withdraw",
+        Component: CashoutWithdraw,
         showInMenu: false,
       },
     ],

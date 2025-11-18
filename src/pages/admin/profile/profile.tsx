@@ -43,6 +43,35 @@ export default function Profile() {
       span: "filled",
       children: Common.formatDate(user?.created_at),
     },
+    {
+      label: "Available Balance",
+      span: "filled",
+      children: Common.formatAsCurrency(
+        Number(user?.wallet?.availableBalance ?? 0)
+      ),
+    },
+    {
+      label: "Cashout Enabled",
+      span: "filled",
+      children: user?.cashout_enabled ? "Yes" : "No",
+    },
+    {
+      label: "Cashout Account",
+      span: "filled",
+      children: user?.cashout_account || "Not set",
+    },
+    {
+      label: "Cashout Bank",
+      span: "filled",
+      children: user?.cashout_bank || "Not set",
+    },
+    {
+      label: "Cashout Limit",
+      span: "filled",
+      children: user?.cashout_limit
+        ? Common.formatAsCurrency(Number(user.cashout_limit))
+        : "Not set",
+    },
   ];
   return (
     <Card style={{ width: "100%" }} title="User Details">

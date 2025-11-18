@@ -109,6 +109,10 @@ export interface IUser {
   lastname: string;
   firstname: string;
   phonenumber: string;
+  cashout_enabled: boolean;
+  cashout_account: string;
+  cashout_bank: string;
+  cashout_limit: string;
   tag: string;
   email: string;
   billerId: string;
@@ -380,7 +384,20 @@ export interface IDiscount {
 export interface AddCashoutBank {
   bankCode: string;
   accountNumber: string;
-  pin: string;
+  password: string;
+}
+export interface ICashoutLimit {
+  amount: string;
+  password: string;
+}
+export interface ICashoutWithdraw {
+  amount: string;
+  desc: string;
+  password: string;
+}
+export interface ICashoutOTP {
+  otp: string;
+  requestType: string;
 }
 export interface IBank {
   code: string;
