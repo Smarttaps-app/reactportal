@@ -1,10 +1,14 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import {
-  addCashoutAction,
+  addCashoutBankAction,
   approveCashoutAction,
+  cashoutLimitIncreaseAction,
+  cashoutRequestConfirmationAction,
+  cashoutWithdrawalAction,
   getCashoutsAction,
   rejectCashoutAction,
+  verifyCashoutBankAction,
 } from "../../../serviceAction/PaymentActions";
 import { App } from "antd";
 import { Common } from "../../../utils/Common";
@@ -26,16 +30,56 @@ export function useCashouts(selectedDates: [dayjs.Dayjs, dayjs.Dayjs]) {
   });
   return { loading, cashouts, isError, error, refetch };
 }
-
-export function useAddCashout() {
+export function useCashoutBankVerification() {
   const { message } = App.useApp();
-  const { mutate: addCashout, isPending: isAdding } = useMutation({
-    mutationFn: addCashoutAction,
+  const { mutate: verifyCashoutAccount, isPending: verifying } = useMutation({
+    mutationFn: verifyCashoutBankAction,
     onError: (error) => {
       message.error(Common.formatError(error));
     },
   });
-  return { isAdding, addCashout };
+  return { verifying, verifyCashoutAccount };
+}
+export function useAddCashoutAccount() {
+  const { message } = App.useApp();
+  const { mutate: addCashoutAccount, isPending: isAdding } = useMutation({
+    mutationFn: addCashoutBankAction,
+    onError: (error) => {
+      message.error(Common.formatError(error));
+    },
+  });
+  return { isAdding, addCashoutAccount };
+}
+export function useCashoutLimitIncrease() {
+  const { message } = App.useApp();
+  const { mutate: cashoutLimitIncrease, isPending: limiting } = useMutation({
+    mutationFn: cashoutLimitIncreaseAction,
+    onError: (error) => {
+      message.error(Common.formatError(error));
+    },
+  });
+  return { limiting, cashoutLimitIncrease };
+}
+export function useCashoutWithdrawal() {
+  const { message } = App.useApp();
+  const { mutate: cashoutWithdrawal, isPending: withdrawing } = useMutation({
+    mutationFn: cashoutWithdrawalAction,
+    onError: (error) => {
+      message.error(Common.formatError(error));
+    },
+  });
+  return { withdrawing, cashoutWithdrawal };
+}
+export function useCashoutConfirmation() {
+  const { message } = App.useApp();
+  const { mutate: cashoutRequestConfirmation, isPending: confirming } =
+    useMutation({
+      mutationFn: cashoutRequestConfirmationAction,
+      onError: (error) => {
+        message.error(Common.formatError(error));
+      },
+    });
+  return { confirming, cashoutRequestConfirmation };
 }
 export function useCashoutApproval() {
   const { message } = App.useApp();

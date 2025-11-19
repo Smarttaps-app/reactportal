@@ -1,5 +1,11 @@
 import { api } from "../utils/AxiosInstance";
-import { AddCashoutBank, ICashout } from "../utils/type";
+import {
+  AddCashoutBank,
+  ICashout,
+  ICashoutLimit,
+  ICashoutOTP,
+  ICashoutWithdraw,
+} from "../utils/type";
 
 // get banks
 export const getBanks = () => api.get(`admin/banks`);
@@ -23,6 +29,7 @@ export function getLastTenDaysPayments() {
 
 export const getPayment = async (id: string) =>
   await api.get(`admin/payment/${id}`);
+
 // service for cashout
 export function getCashouts(
   startDate?: string | null,
@@ -37,11 +44,20 @@ export function getCashouts(
     params,
   });
 }
-export const addCashout = async (payload: ICashout) =>
-  await api.post(`admin/cashout/add`, payload);
+export const verifyCashoutBank = async (payload: AddCashoutBank) =>
+  await api.post(`admin/cashout/bank-verification`, payload);
 export const addCashoutBank = async (payload: AddCashoutBank) =>
-  await api.post(`admin/cashout/recipient`, payload);
+  await api.post(`admin/cashout/add-bank-account`, payload);
+export const cashoutLimitIncrease = async (payload: ICashoutLimit) =>
+  await api.post(`admin/cashout/limit`, payload);
+export const cashoutWithdrawal = async (payload: ICashoutWithdraw) =>
+  await api.post(`admin/cashout/withdraw`, payload);
+export const cashoutRequestConfirmation = async (payload: ICashoutOTP) =>
+  await api.post(`admin/cashout/confirmation-check`, payload);
 export const approveCashout = async (id: string) =>
   await api.get(`admin/cashout/${id}/approval`);
 export const rejectCashout = async (id: string) =>
   await api.get(`admin/cashout/${id}/reject`);
+
+export const addCashout = async (payload: ICashout) =>
+  await api.post(`admin/cashout/add`, payload);

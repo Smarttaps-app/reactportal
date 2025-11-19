@@ -1,95 +1,124 @@
-import { Flex, Form, Input, Button, Card, Select } from "antd";
-import { AddCashoutBank, IBank } from "../../../utils/type";
-import { useBanks, useCashoutBank } from "./useProfile";
+import { Flex, Form, Input, Button, Card, App } from "antd";
+import { ICashoutLimit } from "../../../utils/type";
+import {
+  useCashoutConfirmation,
+  useCashoutLimitIncrease,
+} from "../cashout/useCashout";
+import { useState } from "react";
+import { Common } from "../../../utils/Common";
 
 export default function CashoutLimitIncrease() {
-  const { addBank, loading } = useCashoutBank();
-  const { banks, loading: banking } = useBanks();
+  const { notification } = App.useApp();
+  const { limiting, cashoutLimitIncrease } = useCashoutLimitIncrease();
+  const { confirming, cashoutRequestConfirmation } = useCashoutConfirmation();
+  const [otp, setOtp] = useState(false);
   const [form] = Form.useForm();
-
-  const onFinish = async (data: AddCashoutBank) => addBank(data);
+  const onVerified = async (data: ICashoutLimit) =>
+    cashoutLimitIncrease(data, {
+      onSuccess: (data) => {
+        setOtp(data.data.otpRequired);
+      },
+      onError: (error) => {
+        console.log(error);
+        notification.error({
+          message: "Cashout Limit Change",
+          description: Common.formatError(error),
+        });
+      },
+    });
+  const onFinish = async (data: ICashoutLimit) =>
+    cashoutRequestConfirmation(data, {
+      onSuccess: (data) => {
+        notification.success({
+          message: "Cashout Limit Change",
+          description: data.statusDescription,
+        });
+      },
+      onError: (error) => {
+        notification.error({
+          message: "Cashout Limit Change",
+          description: Common.formatError(error),
+        });
+      },
+    });
   return (
-    <Card style={{ width: "100%" }} title="Cashout Account">
+    <Card style={{ width: "100%" }} title="Cashout Limit Change">
       <Flex justify="center">
         <Form
-          title="Cashout Account"
+          title="Cashout Limit Change"
           form={form}
           layout="vertical"
-          onFinish={onFinish}
-          initialValues={{ remember: true }}
+          onFinish={otp ? onFinish : onVerified}
+          initialValues={{
+            requestType: "LIMIT_CHANGE",
+            amount: "",
+            password: "",
+            otp: "",
+          }}
           style={{ minWidth: 320 }}
         >
-          <Form.Item<AddCashoutBank>
-            name="accountNumber"
-            label="BanK Account Number"
+          <Form.Item<ICashoutLimit> name="requestType" hidden>
+            <Input readOnly hidden />
+          </Form.Item>
+          <Form.Item<ICashoutLimit>
+            name="amount"
+            label="Enter Amount"
             rules={[
               {
                 required: true,
-                message: "Please input your Bank Account Number!",
-              },
-              {
-                min: 10,
-                message: "Bank Account Number needs a minimum of 10 characters",
+                message: "Please input amount!",
               },
             ]}
             className="lg"
           >
-            <Input
-              placeholder="Enter your bank account number"
-              className="!rounded-md !py-2"
-            />
+            <Input placeholder="Enter amount" className="!rounded-md !py-2" />
           </Form.Item>
-          <Form.Item<AddCashoutBank>
-            label="Bank"
-            name="bankCode"
-            rules={[{ required: true, message: "Please select a bank" }]}
-          >
-            <Select
-              showSearch
-              loading={banking}
-              optionLabelProp="label"
-              className="!rounded-md"
-              options={banks.map((item: IBank) => ({
-                label: `${item.name}`,
-                value: item.code,
-              }))}
-              filterOption={(input, option) =>
-                (option?.label ?? "")
-                  .toString()
-                  .toLowerCase()
-                  .includes(input.toLowerCase())
-              }
-            ></Select>
-          </Form.Item>
-          <Form.Item<AddCashoutBank>
-            name="pin"
-            label="Enter PIN"
+          <Form.Item<ICashoutLimit>
+            name="password"
+            label="Enter Password"
             rules={[
               {
                 required: true,
-                message: "Please input your PIN!",
-              },
-              {
-                len: 4,
-                message: "PIN must be 4 characters",
+                message: "Please input your password!",
               },
             ]}
           >
             <Input.Password
-              placeholder="Enter PIN"
+              placeholder="Enter password"
               className="!rounded-md !py-2"
             />
           </Form.Item>
+          {otp && (
+            <Form.Item<ICashoutLimit>
+              name="otp"
+              label="Enter OTP"
+              rules={[
+                {
+                  required: true,
+                  message: "Please input your OTP!",
+                },
+                {
+                  len: 6,
+                  message: "OTP must be 6 characters",
+                },
+              ]}
+            >
+              <Input.Password
+                placeholder="Enter OTP"
+                className="!rounded-md !py-2"
+              />
+            </Form.Item>
+          )}
           <Form.Item>
             <Button
               block
               type="primary"
-              loading={loading}
-              disabled={loading}
+              loading={limiting && confirming}
+              disabled={limiting && confirming}
               htmlType="submit"
               className="!rounded-md !shadow-sm !py-5"
             >
-              Submit
+              {otp ? "Increase Limit" : "Send Verification"}
             </Button>
           </Form.Item>
         </Form>

@@ -385,15 +385,20 @@ export interface AddCashoutBank {
   bankCode: string;
   accountNumber: string;
   password: string;
+  accountName: string;
 }
 export interface ICashoutLimit {
   amount: string;
   password: string;
+  otp: string;
+  requestType: string;
 }
 export interface ICashoutWithdraw {
   amount: string;
   desc: string;
   password: string;
+  otp: string;
+  requestType: string;
 }
 export interface ICashoutOTP {
   otp: string;

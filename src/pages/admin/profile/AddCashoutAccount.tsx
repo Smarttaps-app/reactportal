@@ -1,25 +1,47 @@
 import { Flex, Form, Input, Button, Card, Select, App, Typography } from "antd";
 import { AddCashoutBank, IBank } from "../../../utils/type";
-import { useBanks, useCashoutBank } from "./useProfile";
+import { useBanks } from "./useProfile";
 import { Common } from "../../../utils/Common";
 import { useState } from "react";
+import {
+  useAddCashoutAccount,
+  useCashoutBankVerification,
+} from "../cashout/useCashout";
 
 export default function AddCashoutAccunt() {
   const { notification } = App.useApp();
   const [accountname, setAccountName] = useState("");
-  const { addBank, loading } = useCashoutBank();
+  const { verifyCashoutAccount, verifying } = useCashoutBankVerification();
+  const { addCashoutAccount, isAdding } = useAddCashoutAccount();
   const { banks, loading: banking } = useBanks();
   const [form] = Form.useForm();
 
-  const onFinish = async (data: AddCashoutBank) =>
-    addBank(data, {
+  const onVerified = async (data: AddCashoutBank) =>
+    verifyCashoutAccount(data, {
       onSuccess: (data) => {
+        form.setFieldValue("accountName", data.data.account_name);
         setAccountName(data.data.account_name);
       },
       onError: (error) => {
         console.log(error);
         notification.error({
-          message: "Bank",
+          message: "Cashout Account",
+          description: Common.formatError(error),
+        });
+      },
+    });
+  const onFinish = async (data: AddCashoutBank) =>
+    addCashoutAccount(data, {
+      onSuccess: (data) => {
+        notification.success({
+          message: "Cashout Account",
+          description: data.statusDescription,
+        });
+      },
+      onError: (error) => {
+        console.log(error);
+        notification.error({
+          message: "Cashout Account",
           description: Common.formatError(error),
         });
       },
@@ -31,8 +53,13 @@ export default function AddCashoutAccunt() {
           title="Cashout Account"
           form={form}
           layout="vertical"
-          onFinish={onFinish}
-          initialValues={{ remember: true }}
+          onFinish={accountname ? onFinish : onVerified}
+          initialValues={{
+            accountNumber: "",
+            bankCode: "",
+            password: "",
+            accountName: "",
+          }}
           style={{ minWidth: 320 }}
         >
           <Form.Item<AddCashoutBank>
@@ -94,13 +121,25 @@ export default function AddCashoutAccunt() {
               className="!rounded-md !py-2"
             />
           </Form.Item>
-
+          {accountname && (
+            <Form.Item<AddCashoutBank>
+              name="accountName"
+              label="Confirm Account Name"
+            >
+              <Input
+                readOnly
+                value={accountname}
+                placeholder="Enter Account Name"
+                className="!rounded-md !py-2"
+              />
+            </Form.Item>
+          )}
           <Form.Item>
             <Button
               block
               type="primary"
-              loading={loading}
-              disabled={loading}
+              loading={verifying && isAdding}
+              disabled={verifying && isAdding}
               htmlType="submit"
               className="!rounded-md !shadow-sm !py-5"
             >

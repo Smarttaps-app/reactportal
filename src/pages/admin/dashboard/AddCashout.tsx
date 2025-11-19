@@ -1,11 +1,11 @@
 import { App, Button, Card, Form, Grid, Input, Modal } from "antd";
-import { ICashout } from "../../../utils/type";
+import { ICashoutWithdraw } from "../../../utils/type";
 import { useQueryClient } from "@tanstack/react-query";
 import { Common } from "../../../utils/Common";
-import { useAddCashout } from "../cashout/useCashout";
+import { useCashoutWithdrawal } from "../cashout/useCashout";
 const { useBreakpoint } = Grid;
 export interface IAddProps {
-  product?: ICashout;
+  product?: ICashoutWithdraw;
   isOpen?: boolean;
   onCancel: () => void;
   onOK?: () => void;
@@ -18,9 +18,9 @@ const AddCashout: React.FC<IAddProps> = ({
   const { message } = App.useApp();
   const screens = useBreakpoint();
   const client = useQueryClient();
-  const { addCashout, isAdding } = useAddCashout();
-  const onFinish = async (values: ICashout) => {
-    addCashout(values, {
+  const { cashoutWithdrawal, withdrawing } = useCashoutWithdrawal();
+  const onFinish = async (values: ICashoutWithdraw) => {
+    cashoutWithdrawal(values, {
       onSuccess: (data) => {
         message.success(data.statusDescription);
         onCancel();
@@ -49,24 +49,16 @@ const AddCashout: React.FC<IAddProps> = ({
           layout="vertical"
           onFinish={onFinish}
           initialValues={{
-            id: product?.id,
             billerName: product?.amount,
-            billerId: product?.recipient,
-            customerField: product?.walletCashout,
-            hasAddons: product?.reference,
-            hasLookup: product?.source,
-            hasPackages: product?.reason,
-            maxAmountLimit: product?.withdrawalStatus,
+            password: product?.password,
+            desc: product?.desc,
           }}
           style={{ minWidth: 320 }}
         >
-          <Form.Item<ICashout> name="id" hidden>
+          <Form.Item<ICashoutWithdraw> name="amount" hidden>
             <Input />
           </Form.Item>
-          <Form.Item<ICashout> name="amount" hidden>
-            <Input />
-          </Form.Item>
-          <Form.Item<ICashout>
+          <Form.Item<ICashoutWithdraw>
             name="amount"
             label="Cashout Amount"
             rules={[
@@ -78,24 +70,20 @@ const AddCashout: React.FC<IAddProps> = ({
           >
             <Input placeholder="Enter Cashout Amount" />
           </Form.Item>
-          <Form.Item<ICashout>
-            name="pin"
-            label="Enter PIN"
+          <Form.Item<ICashoutWithdraw>
+            name="password"
+            label="Enter Password"
             rules={[
               {
                 required: true,
-                message: "Please input your 4 digit PIN!",
-              },
-              {
-                len: 4,
-                message: "Enter your 4 digit PIN",
+                message: "Please input your Password!",
               },
             ]}
           >
-            <Input placeholder="Enter your 4 digit PIN" />
+            <Input placeholder="Enter your password" />
           </Form.Item>
-          <Form.Item<ICashout>
-            name="reason"
+          <Form.Item<ICashoutWithdraw>
+            name="desc"
             label="Enter Reason"
             rules={[
               {
@@ -110,8 +98,8 @@ const AddCashout: React.FC<IAddProps> = ({
             <Button
               block
               type="primary"
-              loading={isAdding}
-              disabled={isAdding}
+              loading={withdrawing}
+              disabled={withdrawing}
               htmlType="submit"
             >
               Submit

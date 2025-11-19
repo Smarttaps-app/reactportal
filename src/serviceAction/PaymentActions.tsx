@@ -2,14 +2,24 @@ import {
   addCashout,
   addCashoutBank,
   approveCashout,
+  cashoutLimitIncrease,
+  cashoutRequestConfirmation,
+  cashoutWithdrawal,
   getBanks,
   getCashouts,
   getLastTenDaysPayments,
   getPayment,
   getPayments,
   rejectCashout,
+  verifyCashoutBank,
 } from "../services/PaymentService";
-import { AddCashoutBank, ICashout } from "../utils/type";
+import {
+  AddCashoutBank,
+  ICashout,
+  ICashoutLimit,
+  ICashoutOTP,
+  ICashoutWithdraw,
+} from "../utils/type";
 
 // action for admin
 export async function getBanksAction() {
@@ -64,9 +74,40 @@ export async function addCashoutAction(payload: ICashout) {
   }
   throw new Error(response.data);
 }
-
+export async function verifyCashoutBankAction(payload: AddCashoutBank) {
+  const response = await verifyCashoutBank(payload);
+  if (response.status == 200) {
+    console.log(response.data);
+    return response.data;
+  }
+  throw new Error(response.data);
+}
 export async function addCashoutBankAction(payload: AddCashoutBank) {
   const response = await addCashoutBank(payload);
+  if (response.status == 200) {
+    console.log(response.data);
+    return response.data;
+  }
+  throw new Error(response.data);
+}
+export async function cashoutLimitIncreaseAction(payload: ICashoutLimit) {
+  const response = await cashoutLimitIncrease(payload);
+  if (response.status == 200) {
+    console.log(response.data);
+    return response.data;
+  }
+  throw new Error(response.data);
+}
+export async function cashoutWithdrawalAction(payload: ICashoutWithdraw) {
+  const response = await cashoutWithdrawal(payload);
+  if (response.status == 200) {
+    console.log(response.data);
+    return response.data;
+  }
+  throw new Error(response.data);
+}
+export async function cashoutRequestConfirmationAction(payload: ICashoutOTP) {
+  const response = await cashoutRequestConfirmation(payload);
   if (response.status == 200) {
     console.log(response.data);
     return response.data;

@@ -29,6 +29,12 @@ export const useCashoutBank = () => {
   });
   return { addBank, loading };
 };
+export const useCashoutBankVerification = () => {
+  const { mutate: addBank, isPending: loading } = useMutation({
+    mutationFn: addCashoutBankAction,
+  });
+  return { addBank, loading };
+};
 export const useCashoutLimitIncrease = () => {
   const { mutate: addBank, isPending: loading } = useMutation({
     mutationFn: addCashoutBankAction,
@@ -41,7 +47,6 @@ export const useCashoutWithdrawal = () => {
   });
   return { addBank, loading };
 };
-
 export const useOTP = () => {
   const { mutate: addBank, isPending: loading } = useMutation({
     mutationFn: addCashoutBankAction,
