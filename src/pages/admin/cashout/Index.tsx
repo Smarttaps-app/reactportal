@@ -3,9 +3,7 @@ import {
   Card,
   DatePicker,
   Empty,
-  Flex,
   Input,
-  message,
   Row,
   Space,
   Table,
@@ -17,19 +15,12 @@ import { Common } from "../../../utils/Common";
 import { SearchOutlined } from "@ant-design/icons";
 import { ICashout } from "../../../utils/type";
 import CashoutCard from "./CashoutCard";
-import {
-  useCashoutApproval,
-  useCashoutReject,
-  useCashouts,
-} from "./useCashout";
-import ViewScreen from "./View";
 import { Search } from "lucide-react";
+import { useCashouts } from "./useCashout";
 const { RangePicker } = DatePicker;
 
 export default function CashoutsScreen() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [show, setShow] = useState(false);
-  const [cashout, setCashout] = useState<ICashout>();
   const [selectedDates, setSelectedDates] = useState<
     [dayjs.Dayjs, dayjs.Dayjs]
   >([dayjs().subtract(30, "day"), dayjs()]);
@@ -39,16 +30,11 @@ export default function CashoutsScreen() {
     error,
     refetch: refetchPayments,
   } = useCashouts(selectedDates);
-  const handleDateChange = (
-    dates: [Dayjs | null, Dayjs | null] | null
-    // dateStrings: [string, string]
-  ) => {
+  const handleDateChange = (dates: [Dayjs | null, Dayjs | null] | null) => {
     if (dates && dates[0] && dates[1]) {
       setSelectedDates([dates[0], dates[1]]);
     }
   };
-  const { isApproving, approved } = useCashoutApproval();
-  const { rejecting, rejected } = useCashoutReject();
 
   const columns = useMemo(
     () => [
@@ -58,7 +44,7 @@ export default function CashoutsScreen() {
         key: "id",
       },
       {
-        title: "Wallet",
+        title: "Account",
         dataIndex: "recipient",
         key: "recipient",
       },
@@ -73,12 +59,8 @@ export default function CashoutsScreen() {
         dataIndex: "withdrawalStatus",
         key: "withdrawalStatus",
         render: (withdrawalStatus: string) => (
-          <Tag
-            color={`${
-              withdrawalStatus.toLowerCase() === "completed" ? "green" : "red"
-            }`}
-          >
-            {withdrawalStatus}
+          <Tag color={Common.cashOutStatusColor(withdrawalStatus)}>
+            {Common.cashOutStatus(withdrawalStatus)}
           </Tag>
         ),
       },
@@ -94,70 +76,6 @@ export default function CashoutsScreen() {
         render: (updated: string) => Common.formatDate(updated),
         ellipsis: true,
       },
-      {
-        title: "Actions",
-        dataIndex: "",
-        render: (cashout: ICashout) =>
-          cashout.withdrawalStatus == "waiting" ? (
-            <Flex gap="small" align="center" wrap>
-              <Button
-                type="primary"
-                variant="solid"
-                size="small"
-                onClick={() => {
-                  setCashout(cashout);
-                  setShow(true);
-                }}
-              >
-                View
-              </Button>
-              <Button
-                color="cyan"
-                variant="solid"
-                size="small"
-                disabled={rejecting || isApproving}
-                loading={isApproving}
-                onClick={() =>
-                  approved(cashout.id.toString(), {
-                    onSuccess: (response) =>
-                      message.success(response.statusDescription),
-                    onError: (error) =>
-                      message.success(Common.formatError(error)),
-                  })
-                }
-              >
-                Approved
-              </Button>
-              <Button
-                type="primary"
-                danger
-                disabled={rejecting || isApproving}
-                loading={rejecting}
-                onClick={() =>
-                  rejected(cashout.id.toString(), {
-                    onSuccess: (response) =>
-                      message.success(response.statusDescription),
-                    onError: (error) =>
-                      message.success(Common.formatError(error)),
-                  })
-                }
-              >
-                Reject
-              </Button>
-            </Flex>
-          ) : (
-            <Button
-              type="primary"
-              variant="solid"
-              onClick={() => {
-                setCashout(cashout);
-                setShow(true);
-              }}
-            >
-              View
-            </Button>
-          ),
-      },
     ],
     []
   );
@@ -171,8 +89,10 @@ export default function CashoutsScreen() {
   const data =
     cashouts.filter(
       (cashout: ICashout) =>
-        cashout.recipient?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        cashout.reason?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        cashout.withdrawalStatus
+          ?.toLowerCase()
+          .includes(searchTerm.toLowerCase()) ||
+        cashout.reference?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         cashout.message?.toLowerCase().includes(searchTerm.toLowerCase())
     ) || [];
 
@@ -249,11 +169,6 @@ export default function CashoutsScreen() {
           scroll={{ x: "max-content" }}
         />
       </Card>
-      <ViewScreen
-        payment={cashout}
-        isOpen={show}
-        onCancel={() => setShow(false)}
-      />
     </>
   );
 }

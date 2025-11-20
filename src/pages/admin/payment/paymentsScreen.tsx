@@ -3,7 +3,6 @@ import {
   Card,
   DatePicker,
   Empty,
-  Flex,
   Input,
   Row,
   Space,
@@ -14,7 +13,7 @@ import { usePayments } from "../../../hooks/usePayments";
 import dayjs, { Dayjs } from "dayjs";
 import { useMemo, useState } from "react";
 import { Common } from "../../../utils/Common";
-import { EyeOutlined, RedoOutlined, SearchOutlined } from "@ant-design/icons";
+import { SearchOutlined } from "@ant-design/icons";
 import { IPayment } from "../../../utils/type";
 import PaymentCard from "./PaymentCard";
 import ShowPayment from "./ShowPayment";
@@ -34,10 +33,7 @@ export default function PaymentsScreen() {
     error,
     refetch: refetchPayments,
   } = usePayments(selectedDates);
-  const handleDateChange = (
-    dates: [Dayjs | null, Dayjs | null] | null
-    // dateStrings: [string, string]
-  ) => {
+  const handleDateChange = (dates: [Dayjs | null, Dayjs | null] | null) => {
     if (dates && dates[0] && dates[1]) {
       setSelectedDates([dates[0], dates[1]]);
     }
@@ -54,6 +50,16 @@ export default function PaymentsScreen() {
         title: "Wallet",
         dataIndex: "recipient",
         key: "recipient",
+      },
+      {
+        title: "Product",
+        dataIndex: "product",
+        key: "product",
+      },
+      {
+        title: "Service",
+        dataIndex: "service",
+        key: "service",
       },
       {
         title: "Amount",
@@ -81,11 +87,12 @@ export default function PaymentsScreen() {
         key: "channel",
       },
       {
-        title: "Date",
-        dataIndex: "created_at",
-        key: "created_at",
-        render: (created: string) => Common.formatDate(created),
-        ellipsis: true,
+        title: "Status",
+        dataIndex: "status",
+        key: "status",
+        render: (status: string) => (
+          <Tag color={Common.paymentStatusColor(status)}>{status}</Tag>
+        ),
       },
       {
         title: "Updated",
@@ -98,22 +105,18 @@ export default function PaymentsScreen() {
         title: "Actions",
         dataIndex: "",
         render: (key: string, payment: IPayment) => (
-          <Flex gap="small" align="center" wrap>
-            <Button
-              type="primary"
-              icon={<EyeOutlined />}
-              onClick={() => {
-                setPayment(payment);
-                setShow(true);
-              }}
-            />
-            <Button
-              type="primary"
-              icon={<RedoOutlined />}
-              // loading={loadings[2]}
-              //onClick={() => enterLoading(2)}
-            />
-          </Flex>
+          <Button
+            type="primary"
+            color="green"
+            size="small"
+            variant="filled"
+            onClick={() => {
+              setPayment(payment);
+              setShow(true);
+            }}
+          >
+            view
+          </Button>
         ),
       },
     ],
@@ -130,7 +133,10 @@ export default function PaymentsScreen() {
     payments.filter(
       (payment: IPayment) =>
         payment.recipient.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        payment.payment_type.toLowerCase().includes(searchTerm.toLowerCase())
+        payment.payment_type.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        payment.product.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        payment.service.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        payment.channel.toLowerCase().includes(searchTerm.toLowerCase())
     ) || [];
 
   return (

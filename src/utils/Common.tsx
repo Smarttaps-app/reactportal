@@ -115,6 +115,29 @@ export class Common {
     if (position.toLocaleLowerCase() === "medium") return "yellow";
     return "cyan";
   }
+  static cashOutStatus(status: string) {
+    if (status.toLocaleLowerCase() === "approved") return "Approved";
+    if (status.toLocaleLowerCase() === "waiting") return "Awaiting Approval";
+    if (status.toLocaleLowerCase() === "blocked") return "Blocked";
+    if (status.toLocaleLowerCase() === "rejected") return "Rejected";
+    if (status.toLocaleLowerCase() === "failed") return "Failed";
+    return "Completed";
+  }
+  static cashOutStatusColor(status: string) {
+    if (status.toLocaleLowerCase() === "approved") return "cyan";
+    if (status.toLocaleLowerCase() === "waiting") return "yellow";
+    if (status.toLocaleLowerCase() === "blocked") return "red";
+    if (status.toLocaleLowerCase() === "rejected") return "red";
+    if (status.toLocaleLowerCase() === "failed") return "red";
+    return "green";
+  }
+  static paymentStatusColor(status: string) {
+    if (status.toLocaleLowerCase() === "processing") return "yellow";
+    if (status.toLocaleLowerCase() === "started") return "blue";
+    if (status.toLocaleLowerCase() === "success") return "green";
+    if (status.toLocaleLowerCase() === "failed") return "red";
+    return "green";
+  }
   static formatError(error) {
     console.log(error);
     if (error.response) {

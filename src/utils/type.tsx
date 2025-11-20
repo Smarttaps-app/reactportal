@@ -31,7 +31,9 @@ export interface IPayment {
   channel: string;
   payment_type: string;
   status: string;
-  name: string;
+  product: string;
+  service: string;
+  reference: string;
   updated_at: string;
   statusMessage: string;
   created_at: string;

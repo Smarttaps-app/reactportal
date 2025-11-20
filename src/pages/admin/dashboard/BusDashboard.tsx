@@ -83,6 +83,16 @@ export default function BusDashboard() {
         key: "recipient",
       },
       {
+        title: "Product",
+        dataIndex: "product",
+        key: "product",
+      },
+      {
+        title: "Service",
+        dataIndex: "service",
+        key: "service",
+      },
+      {
         title: "Amount",
         dataIndex: "amount",
         key: "amount",
@@ -103,27 +113,20 @@ export default function BusDashboard() {
         ),
       },
       {
-        title: "Product",
-        dataIndex: "name",
-        key: "name",
-      },
-      {
         title: "Channel",
         dataIndex: "channel",
         key: "channel",
       },
       {
-        title: "Trxn Id",
-        dataIndex: "reference",
-        key: "reference",
-      },
-      {
         title: "Status",
         dataIndex: "status",
         key: "status",
+        render: (status: string) => (
+          <Tag color={Common.paymentStatusColor(status)}>{status}</Tag>
+        ),
       },
       {
-        title: "Trxn Date",
+        title: "Updated",
         dataIndex: "updated_at",
         key: "updated_at",
         render: (updated: string) => Common.formatDate(updated),
@@ -325,16 +328,6 @@ export default function BusDashboard() {
               Number(user?.wallet?.availableBalance ?? 0)
             )}
             color="bg-white border-yellow-600"
-            children={
-              <Button
-                onClick={() => setShow(!show)}
-                className="my-2"
-                color="primary"
-                variant="solid"
-              >
-                Cashout
-              </Button>
-            }
           />
           <SummaryCard
             title="Total Buses"

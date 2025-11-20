@@ -3,52 +3,41 @@ import {
   Card,
   DatePicker,
   Empty,
-  Flex,
   Input,
-  message,
   Row,
   Space,
   Table,
   Tag,
 } from "antd";
+import { usePayments } from "../../../hooks/usePayments";
 import dayjs, { Dayjs } from "dayjs";
 import { useMemo, useState } from "react";
 import { Common } from "../../../utils/Common";
 import { SearchOutlined } from "@ant-design/icons";
-import { ICashout } from "../../../utils/type";
-import CashoutCard from "./CashoutCard";
-import {
-  useCashoutApproval,
-  useCashoutReject,
-  useCashouts,
-} from "./useCashout";
-import ViewScreen from "./View";
+import { IPayment } from "../../../utils/type";
+import PaymentCard from "./PaymentCard";
+import ShowPayment from "./ShowPayment";
 import { Search } from "lucide-react";
 const { RangePicker } = DatePicker;
 
-export default function AdminCashoutsScreen() {
+export default function AdminPaymentsScreen() {
   const [searchTerm, setSearchTerm] = useState("");
   const [show, setShow] = useState(false);
-  const [cashout, setCashout] = useState<ICashout>();
+  const [payment, setPayment] = useState<IPayment>();
   const [selectedDates, setSelectedDates] = useState<
     [dayjs.Dayjs, dayjs.Dayjs]
   >([dayjs().subtract(30, "day"), dayjs()]);
   const {
     loading,
-    cashouts,
+    payments,
     error,
     refetch: refetchPayments,
-  } = useCashouts(selectedDates);
-  const handleDateChange = (
-    dates: [Dayjs | null, Dayjs | null] | null
-    // dateStrings: [string, string]
-  ) => {
+  } = usePayments(selectedDates);
+  const handleDateChange = (dates: [Dayjs | null, Dayjs | null] | null) => {
     if (dates && dates[0] && dates[1]) {
       setSelectedDates([dates[0], dates[1]]);
     }
   };
-  const { isApproving, approved } = useCashoutApproval();
-  const { rejecting, rejected } = useCashoutReject();
 
   const columns = useMemo(
     () => [
@@ -69,19 +58,30 @@ export default function AdminCashoutsScreen() {
         render: (amount: string) => Common.formatAsCurrency(Number(amount)),
       },
       {
-        title: "Status",
-        dataIndex: "withdrawalStatus",
-        key: "withdrawalStatus",
-        render: (withdrawalStatus: string) => (
-          <Tag color={Common.cashOutStatusColor(withdrawalStatus)}>
-            {Common.cashOutStatus(withdrawalStatus)}
+        title: "Payment",
+        dataIndex: "payment_type",
+        key: "payment_type",
+        render: (payment_type: string) => (
+          <Tag
+            color={`${
+              payment_type.toLowerCase() === "credit" ? "green" : "red"
+            }`}
+          >
+            {payment_type}
           </Tag>
         ),
       },
       {
-        title: "Reference",
-        dataIndex: "reference",
-        key: "reference",
+        title: "Channel",
+        dataIndex: "channel",
+        key: "channel",
+      },
+      {
+        title: "Date",
+        dataIndex: "created_at",
+        key: "created_at",
+        render: (created: string) => Common.formatDate(created),
+        ellipsis: true,
       },
       {
         title: "Updated",
@@ -93,59 +93,20 @@ export default function AdminCashoutsScreen() {
       {
         title: "Actions",
         dataIndex: "",
-        render: (cashout: ICashout) =>
-          cashout.withdrawalStatus == "waiting" ? (
-            <Flex gap="small" align="center" wrap>
-              <Button
-                color="cyan"
-                variant="filled"
-                size="small"
-                disabled={rejecting || isApproving}
-                loading={isApproving}
-                onClick={() =>
-                  approved(cashout.id.toString(), {
-                    onSuccess: (response) =>
-                      message.success(response.statusDescription),
-                    onError: (error) =>
-                      message.success(Common.formatError(error)),
-                  })
-                }
-              >
-                {Common.cashOutStatus(cashout.withdrawalStatus)}
-              </Button>
-              <Button
-                type="primary"
-                color="red"
-                size="small"
-                variant="filled"
-                disabled={rejecting || isApproving}
-                loading={rejecting}
-                onClick={() =>
-                  rejected(cashout.id.toString(), {
-                    onSuccess: (response) =>
-                      message.success(response.statusDescription),
-                    onError: (error) =>
-                      message.success(Common.formatError(error)),
-                  })
-                }
-              >
-                Reject
-              </Button>
-            </Flex>
-          ) : (
-            <Button
-              color="cyan"
-              type="primary"
-              variant="filled"
-              size="small"
-              onClick={() => {
-                setCashout(cashout);
-                setShow(true);
-              }}
-            >
-              View
-            </Button>
-          ),
+        render: (key: string, payment: IPayment) => (
+          <Button
+            type="primary"
+            color="green"
+            size="small"
+            variant="filled"
+            onClick={() => {
+              setPayment(payment);
+              setShow(true);
+            }}
+          >
+            view
+          </Button>
+        ),
       },
     ],
     []
@@ -158,51 +119,50 @@ export default function AdminCashoutsScreen() {
     );
 
   const data =
-    cashouts.filter(
-      (cashout: ICashout) =>
-        cashout.recipient?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        cashout.reason?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        cashout.message?.toLowerCase().includes(searchTerm.toLowerCase())
+    payments.filter(
+      (payment: IPayment) =>
+        payment.recipient.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        payment.payment_type.toLowerCase().includes(searchTerm.toLowerCase())
     ) || [];
 
   return (
     <>
       <Row className="pb-8" gutter={[{ xs: 8, sm: 16, md: 24, lg: 32 }, 8]}>
-        <CashoutCard
-          title="Success"
-          sessionKey="completed"
+        <PaymentCard
+          title="Total Credits"
+          sessionKey="credit"
           loading={loading}
           data={data}
           error={error ? true : false}
           color="green"
         />
-        <CashoutCard
-          title="Pending"
-          sessionKey="waiting"
-          loading={loading}
-          data={data}
-          error={error ? true : false}
-          color="yellow"
-        />
-        <CashoutCard
-          title="Failed"
-          sessionKey="failed"
-          loading={loading}
-          data={data}
-          error={error ? true : false}
-          color="gray"
-        />
-        <CashoutCard
-          title="Rejected"
-          sessionKey="rejected"
+        <PaymentCard
+          title="Total Debit"
+          sessionKey="debit"
           loading={loading}
           data={data}
           error={error ? true : false}
           color="red"
         />
+        <PaymentCard
+          title="Total Failed"
+          sessionKey="failed"
+          loading={loading}
+          data={data}
+          error={error ? true : false}
+          color="purple"
+        />
+        <PaymentCard
+          title="Total Pending"
+          sessionKey="pending"
+          loading={loading}
+          data={data}
+          error={error ? true : false}
+          color="yellow"
+        />
       </Row>
       <Card
-        title="Cashout Histories"
+        title="Payments"
         className="!shadow-sm !rounded-lg"
         loading={loading}
         extra={
@@ -238,8 +198,8 @@ export default function AdminCashoutsScreen() {
           scroll={{ x: "max-content" }}
         />
       </Card>
-      <ViewScreen
-        payment={cashout}
+      <ShowPayment
+        payment={payment}
         isOpen={show}
         onCancel={() => setShow(false)}
       />

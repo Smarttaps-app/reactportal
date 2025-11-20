@@ -1,13 +1,5 @@
-import {
-  Button,
-  Descriptions,
-  DescriptionsProps,
-  Flex,
-  Modal,
-  Space,
-} from "antd";
+import { Descriptions, DescriptionsProps, Modal, Tag } from "antd";
 import { IShowPaymentProps } from "../../../utils/type";
-import { CloseOutlined, PrinterOutlined } from "@ant-design/icons";
 import { Common } from "../../../utils/Common";
 
 const ShowPayment: React.FC<IShowPaymentProps> = ({
@@ -29,7 +21,26 @@ const ShowPayment: React.FC<IShowPaymentProps> = ({
     },
     {
       label: "Transaction Type",
-      children: payment?.payment_type || "No remarks provided",
+      children: payment?.payment_type || "Not provided",
+    },
+    {
+      label: "Transaction Status",
+      span: "filled",
+      children: (
+        <Tag color={Common.paymentStatusColor(payment?.status ?? "")}>
+          {payment?.status}
+        </Tag>
+      ),
+    },
+    {
+      label: "Product",
+      span: "filled",
+      children: payment?.product || "Not provided",
+    },
+    {
+      label: "Service",
+      span: "filled",
+      children: payment?.service || "Not provided",
     },
     {
       label: "Transaction Date",
@@ -37,14 +48,9 @@ const ShowPayment: React.FC<IShowPaymentProps> = ({
       children: Common.formatDate(payment?.created_at),
     },
     {
-      label: "Transaction Status",
-      span: "filled",
-      children: payment?.status || "No remarks provided",
-    },
-    {
       label: "Remark",
       span: "filled",
-      children: payment?.statusMessage || "No remarks provided",
+      children: payment?.statusMessage || "Not provided",
     },
   ];
   return (
@@ -52,28 +58,12 @@ const ShowPayment: React.FC<IShowPaymentProps> = ({
       style={{ top: 20 }}
       open={isOpen}
       maskClosable={false}
-      // confirmLoading={updating}
       onCancel={onCancel}
       destroyOnHidden
       footer={null}
       width={750}
     >
-      <Space direction="vertical" className="w-full">
-        <Descriptions bordered title="Payment Details" items={items} />
-        <Flex className="mt-8" justify="center" gap={16}>
-          <Button type="primary" icon={<PrinterOutlined />}>
-            Print
-          </Button>
-          <Button
-            color="cyan"
-            variant="filled"
-            icon={<CloseOutlined />}
-            onClick={onCancel}
-          >
-            Cancel
-          </Button>
-        </Flex>
-      </Space>
+      <Descriptions bordered title="Payment Details" items={items} />
     </Modal>
   );
 };
