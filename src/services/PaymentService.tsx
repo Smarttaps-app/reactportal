@@ -55,9 +55,11 @@ export const cashoutWithdrawal = async (payload: ICashoutWithdraw) =>
 export const cashoutRequestConfirmation = async (payload: ICashoutOTP) =>
   await api.post(`admin/cashout/confirmation-check`, payload);
 export const approveCashout = async (id: string) =>
-  await api.get(`admin/cashout/${id}/approval`);
+  await api.get(`admin/cashout/${id}/approve`);
 export const rejectCashout = async (id: string) =>
   await api.get(`admin/cashout/${id}/reject`);
+export const cashout = async (id: number) =>
+  await api.get(`admin/cashout/${id}`);
 
 export const addCashout = async (payload: ICashout) =>
   await api.post(`admin/cashout/add`, payload);

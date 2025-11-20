@@ -3,6 +3,7 @@ import dayjs from "dayjs";
 import {
   addCashoutBankAction,
   approveCashoutAction,
+  cashoutAction,
   cashoutLimitIncreaseAction,
   cashoutRequestConfirmationAction,
   cashoutWithdrawalAction,
@@ -100,4 +101,16 @@ export function useCashoutReject() {
     },
   });
   return { rejecting, rejected };
+}
+export function useCashout(id: number) {
+  const {
+    isPending: loading,
+    data: cashout,
+    error,
+  } = useQuery({
+    queryKey: ["cashout", id],
+    queryFn: () => cashoutAction(id),
+    refetchOnWindowFocus: false,
+  });
+  return { loading, cashout, error };
 }

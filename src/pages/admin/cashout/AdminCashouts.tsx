@@ -24,9 +24,11 @@ import {
 } from "./useCashout";
 import ViewScreen from "./View";
 import { Search } from "lucide-react";
+import { useQueryClient } from "@tanstack/react-query";
 const { RangePicker } = DatePicker;
 
 export default function AdminCashoutsScreen() {
+  const client = useQueryClient();
   const [searchTerm, setSearchTerm] = useState("");
   const [show, setShow] = useState(false);
   const [cashout, setCashout] = useState<ICashout>();
@@ -104,14 +106,17 @@ export default function AdminCashoutsScreen() {
                 loading={isApproving}
                 onClick={() =>
                   approved(cashout.id.toString(), {
-                    onSuccess: (response) =>
-                      message.success(response.statusDescription),
+                    onSuccess: (response) => {
+                      message.success(response.statusDescription);
+                    },
                     onError: (error) =>
                       message.success(Common.formatError(error)),
+                    onSettled: () =>
+                      client.invalidateQueries({ queryKey: ["cashouts"] }),
                   })
                 }
               >
-                {Common.cashOutStatus(cashout.withdrawalStatus)}
+                Approve
               </Button>
               <Button
                 type="primary"
@@ -126,6 +131,8 @@ export default function AdminCashoutsScreen() {
                       message.success(response.statusDescription),
                     onError: (error) =>
                       message.success(Common.formatError(error)),
+                    onSettled: () =>
+                      client.invalidateQueries({ queryKey: ["cashouts"] }),
                   })
                 }
               >

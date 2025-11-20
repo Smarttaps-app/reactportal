@@ -9,6 +9,7 @@ import {
 import { ICashout } from "../../../utils/type";
 import { CloseOutlined, PrinterOutlined } from "@ant-design/icons";
 import { Common } from "../../../utils/Common";
+import { useCashout } from "./useCashout";
 
 export interface ICashoutProps {
   payment?: ICashout;
@@ -21,6 +22,8 @@ const ViewScreen: React.FC<ICashoutProps> = ({
   isOpen = false,
   onCancel,
 }) => {
+  const { loading, cashout, error } = useCashout(payment?.id ?? 0);
+  console.log(cashout);
   const items: DescriptionsProps["items"] = [
     {
       label: "Receipt",
@@ -58,14 +61,28 @@ const ViewScreen: React.FC<ICashoutProps> = ({
       style={{ top: 20 }}
       open={isOpen}
       maskClosable={false}
-      // confirmLoading={updating}
+      loading={loading}
       onCancel={onCancel}
       destroyOnHidden
       footer={null}
       width={750}
     >
       <Space direction="vertical" className="w-full">
-        <Descriptions bordered title="Payment Details" items={items} />
+        <Descriptions
+          bordered
+          title="Payment Details"
+          items={items}
+          extra={
+            <Button
+              color="cyan"
+              variant="filled"
+              icon={<CloseOutlined />}
+              onClick={onCancel}
+            >
+              Cancel
+            </Button>
+          }
+        />
         <Flex className="mt-8" justify="center" gap={16}>
           <Button type="primary" icon={<PrinterOutlined />}>
             Print

@@ -15,7 +15,6 @@ import {
   SettingOutlined,
   SubnodeOutlined,
   TagsOutlined,
-  TeamOutlined,
 } from "@ant-design/icons";
 import PaymentsScreen from "../pages/admin/payment/paymentsScreen";
 import TicketsScreen from "../pages/admin/ticket/Index";
@@ -50,6 +49,8 @@ import { IAppRoute } from "../utils/type";
 import ProfileIndex from "../pages/admin/profile";
 import CashoutWithdraw from "../pages/admin/profile/CashoutWithdraw";
 import CashoutLimitIncrease from "../pages/admin/profile/CashoutLimitIncrease";
+import AdminPaymentsScreen from "../pages/admin/payment/AdminpaymentsScreen";
+import AdminCashoutsScreen from "../pages/admin/cashout/AdminCashouts";
 
 export const protectedRoutes: IAppRoute[] = [
   {
@@ -60,13 +61,13 @@ export const protectedRoutes: IAppRoute[] = [
   },
   {
     path: "payments",
-    Component: PaymentsScreen,
+    Component: AdminPaymentsScreen,
     title: "Payments",
-    icon: <TeamOutlined />,
+    icon: <DollarOutlined />,
   },
   {
     path: "cashouts",
-    Component: CashoutsScreen,
+    Component: AdminCashoutsScreen,
     title: "cashouts",
     icon: <DeploymentUnitOutlined />,
   },
@@ -212,7 +213,6 @@ export const busproviderRoutes: IAppRoute[] = [
     icon: <CarOutlined />,
     children: [
       { path: "buses", Component: BusesScreen, showInMenu: true },
-      //{ path: "bus-routes", Component: BusRoutesScreen, showInMenu: true },
       { path: "bus-parks", Component: BusStationsScreen, showInMenu: true },
     ],
   },
@@ -259,7 +259,7 @@ export const trainproviderRoutes: IAppRoute[] = [
     path: "payments",
     Component: PaymentsScreen,
     title: "Payments",
-    icon: <TeamOutlined />,
+    icon: <DollarOutlined />,
   },
   {
     path: "cashouts",
@@ -282,12 +282,6 @@ export const trainproviderRoutes: IAppRoute[] = [
       { path: "trains", Component: TrainsScreen, showInMenu: true },
       { path: "train-routes", Component: TrainRoutesScreen, showInMenu: true },
       { path: "train-stations", Component: StationsScreen, showInMenu: true },
-      //{ path: "train-class", Component: SeatsScreen, showInMenu: true },
-      /*{
-        path: "train-schedules",
-        Component: TrainSchedulesScreen,
-        showInMenu: true,
-      },*/
     ],
   },
   {
@@ -334,7 +328,7 @@ export const businessRoutes: IAppRoute[] = [
     path: "payments",
     Component: PaymentsScreen,
     title: "Payments",
-    icon: <TeamOutlined />,
+    icon: <DollarOutlined />,
   },
   {
     path: "cashouts",
@@ -392,7 +386,7 @@ export const accountantRoutes: IAppRoute[] = [
     path: "payments",
     Component: PaymentsScreen,
     title: "Payments",
-    icon: <TeamOutlined />,
+    icon: <DollarOutlined />,
   },
   {
     path: "cashouts",
@@ -486,7 +480,7 @@ export const auditRoutes: IAppRoute[] = [
     path: "payments",
     Component: PaymentsScreen,
     title: "Payments",
-    icon: <TeamOutlined />,
+    icon: <DollarOutlined />,
   },
   {
     path: "ticketing",

@@ -16,8 +16,8 @@ import { Common } from "../../../utils/Common";
 import { SearchOutlined } from "@ant-design/icons";
 import { IPayment } from "../../../utils/type";
 import PaymentCard from "./PaymentCard";
-import ShowPayment from "./ShowPayment";
 import { Search } from "lucide-react";
+import ViewPayment from "./ViewPayment";
 const { RangePicker } = DatePicker;
 
 export default function AdminPaymentsScreen() {
@@ -52,6 +52,16 @@ export default function AdminPaymentsScreen() {
         key: "recipient",
       },
       {
+        title: "Product",
+        dataIndex: "product",
+        key: "product",
+      },
+      {
+        title: "Service",
+        dataIndex: "service",
+        key: "service",
+      },
+      {
         title: "Amount",
         dataIndex: "amount",
         key: "amount",
@@ -77,11 +87,12 @@ export default function AdminPaymentsScreen() {
         key: "channel",
       },
       {
-        title: "Date",
-        dataIndex: "created_at",
-        key: "created_at",
-        render: (created: string) => Common.formatDate(created),
-        ellipsis: true,
+        title: "Status",
+        dataIndex: "status",
+        key: "status",
+        render: (status: string) => (
+          <Tag color={Common.paymentStatusColor(status)}>{status}</Tag>
+        ),
       },
       {
         title: "Updated",
@@ -122,7 +133,10 @@ export default function AdminPaymentsScreen() {
     payments.filter(
       (payment: IPayment) =>
         payment.recipient.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        payment.payment_type.toLowerCase().includes(searchTerm.toLowerCase())
+        payment.payment_type.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        payment.product.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        payment.service.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        payment.channel.toLowerCase().includes(searchTerm.toLowerCase())
     ) || [];
 
   return (
@@ -198,7 +212,7 @@ export default function AdminPaymentsScreen() {
           scroll={{ x: "max-content" }}
         />
       </Card>
-      <ShowPayment
+      <ViewPayment
         payment={payment}
         isOpen={show}
         onCancel={() => setShow(false)}
