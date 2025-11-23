@@ -10,11 +10,11 @@ export async function getTicketsAction(startDate = "", endDate = "") {
   }
   throw new Error(response.data);
 }
-export async function getTicketAction(id: string) {
+export async function getTicketAction(id: string | number) {
   const response = await getTicket(id);
   if (response.status == 200) {
     console.log(response.data);
-    return response.data;
+    return response.data.data;
   }
   throw new Error(response.data);
 }

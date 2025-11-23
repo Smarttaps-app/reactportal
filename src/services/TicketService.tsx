@@ -12,5 +12,5 @@ export function getTickets(startDate?: string | null, endDate?: string | null) {
   });
 }
 
-export const getTicket = async (id: string) =>
+export const getTicket = async (id: string | number) =>
   await api.get(`admin/ticket/${id}`);

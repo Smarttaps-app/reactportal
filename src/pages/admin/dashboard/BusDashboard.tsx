@@ -31,11 +31,11 @@ import { usePayments } from "../../../hooks/usePayments";
 import { useUser } from "../../../context/useUser";
 import { useBuses, useStations, useTRoutes } from "../transport/bus/useBus";
 import { DownOutlined } from "@ant-design/icons";
-import { useTicket } from "../../../hooks/useTicket";
 import { ITicket } from "../../../utils/type";
 import TicketsPie from "./TicketPieChart";
 import { useCashouts } from "../cashout/useCashout";
 import AddCashout from "./AddCashout";
+import { useTickets } from "../ticket/useTicket";
 
 ChartJS.register(
   ArcElement,
@@ -63,7 +63,7 @@ export default function BusDashboard() {
     loading: ticketing,
     error: ticketError,
     tickets,
-  } = useTicket(selectedDates);
+  } = useTickets(selectedDates);
   const { loading, error, payments } = usePayments(selectedDates);
   const {
     loading: cashing,

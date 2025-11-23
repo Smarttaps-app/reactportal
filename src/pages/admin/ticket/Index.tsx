@@ -3,7 +3,6 @@ import {
   Card,
   DatePicker,
   Empty,
-  Flex,
   Input,
   Row,
   Space,
@@ -13,10 +12,10 @@ import {
 import dayjs, { Dayjs } from "dayjs";
 import { useMemo, useState } from "react";
 import { Common } from "../../../utils/Common";
-import { EyeOutlined, RedoOutlined, SearchOutlined } from "@ant-design/icons";
+import { SearchOutlined } from "@ant-design/icons";
 import { ITicket } from "../../../utils/type";
 import TicketCard from "./TicketCard";
-import { useTicket } from "../../../hooks/useTicket";
+import { useTickets } from "./useTicket";
 import ShowTicket from "./ShowTicket";
 import { Search } from "lucide-react";
 const { RangePicker } = DatePicker;
@@ -33,11 +32,8 @@ export default function TicketsScreen() {
     tickets,
     error,
     refetch: refetched,
-  } = useTicket(selectedDates);
-  const handleDateChange = (
-    dates: [Dayjs | null, Dayjs | null] | null
-    // dateStrings: [string, string]
-  ) => {
+  } = useTickets(selectedDates);
+  const handleDateChange = (dates: [Dayjs | null, Dayjs | null] | null) => {
     if (dates && dates[0] && dates[1]) {
       setSelectedDates([dates[0], dates[1]]);
     }
@@ -97,22 +93,16 @@ export default function TicketsScreen() {
         title: "Actions",
         dataIndex: "",
         render: (key: string, ticket: ITicket) => (
-          <Flex gap="small" align="center" wrap>
-            <Button
-              type="primary"
-              icon={<EyeOutlined />}
-              onClick={() => {
-                setTicket(ticket);
-                setShow(true);
-              }}
-            />
-            <Button
-              type="primary"
-              icon={<RedoOutlined />}
-              // loading={loadings[2]}
-              //onClick={() => enterLoading(2)}
-            />
-          </Flex>
+          <Button
+            type="primary"
+            color="cyan"
+            onClick={() => {
+              setTicket(ticket);
+              setShow(true);
+            }}
+          >
+            view{" "}
+          </Button>
         ),
       },
     ],
@@ -219,7 +209,7 @@ export default function TicketsScreen() {
         />
       </Card>
       <ShowTicket
-        ticket={ticket}
+        payload={ticket}
         isOpen={show}
         onCancel={() => setShow(false)}
       />

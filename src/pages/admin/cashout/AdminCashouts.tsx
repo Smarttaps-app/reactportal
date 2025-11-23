@@ -5,7 +5,7 @@ import {
   Empty,
   Flex,
   Input,
-  message,
+  App,
   Row,
   Space,
   Table,
@@ -51,6 +51,7 @@ export default function AdminCashoutsScreen() {
   };
   const { isApproving, approved } = useCashoutApproval();
   const { rejecting, rejected } = useCashoutReject();
+  const { message } = App.useApp();
 
   const columns = useMemo(
     () => [
@@ -246,7 +247,7 @@ export default function AdminCashoutsScreen() {
         />
       </Card>
       <ViewScreen
-        payment={cashout}
+        payload={cashout}
         isOpen={show}
         onCancel={() => setShow(false)}
       />

@@ -32,10 +32,10 @@ import { DownOutlined } from "@ant-design/icons";
 import { useBuses, useStations, useTRoutes } from "../transport/bus/useBus";
 import { usePayments } from "../../../hooks/usePayments";
 import { useCashouts } from "../cashout/useCashout";
-import { useTicket } from "../../../hooks/useTicket";
+import { useTickets } from "../ticket/useTicket";
 import CountCard from "../../../widgets/CountCard";
 import { INotification, ITicket } from "../../../utils/type";
-import { useCustomers } from "../../../hooks/useCustomers";
+import { useCustomers } from "../customer/useCustomers";
 import { useAdmins } from "../../../hooks/useAdmin";
 import { useProducts } from "../product/useService";
 import { useTrains } from "../transport/train/useTrain";
@@ -66,7 +66,7 @@ export default function Dashboard() {
     loading: ticketing,
     error: ticketError,
     tickets,
-  } = useTicket(selectedDates);
+  } = useTickets(selectedDates);
   const {
     loading: loads,
     error: productError,

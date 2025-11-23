@@ -1,25 +1,39 @@
 import {
+  App,
   Button,
   Descriptions,
   DescriptionsProps,
+  Empty,
   Flex,
   Modal,
+  Row,
   Space,
 } from "antd";
 import { ITicket } from "../../../utils/type";
 import { CloseOutlined, PrinterOutlined } from "@ant-design/icons";
 import { Common } from "../../../utils/Common";
+import { useQueryClient } from "@tanstack/react-query";
+import { useTicket } from "./useTicket";
 interface ITicketProps {
-  ticket?: ITicket;
+  payload?: ITicket;
   isOpen?: boolean;
   onCancel: () => void;
   onOK?: () => void;
 }
 const ShowTicket: React.FC<ITicketProps> = ({
-  ticket,
+  payload,
   isOpen = false,
   onCancel,
 }) => {
+  const { message } = App.useApp();
+  const client = useQueryClient();
+  const { loading, ticket, error } = useTicket(payload?.id ?? "");
+  if (error)
+    return (
+      <Row justify="center" className="my-3">
+        <Empty description={Common.formatError(error)} />
+      </Row>
+    );
   const items: DescriptionsProps["items"] = [
     {
       label: "Ticket Number",
@@ -49,17 +63,17 @@ const ShowTicket: React.FC<ITicketProps> = ({
   ];
   return (
     <Modal
-      style={{ top: 20 }}
+      style={{ top: 10 }}
       open={isOpen}
       maskClosable={false}
-      // confirmLoading={updating}
+      loading={loading}
       onCancel={onCancel}
       destroyOnHidden
       footer={null}
-      width={750}
+      width={800}
     >
       <Space direction="vertical" className="w-full">
-        <Descriptions bordered title="Payment Details" items={items} />
+        <Descriptions bordered title="Ticket Details" items={items} />
         <Flex className="mt-8" justify="center" gap={16}>
           <Button type="primary" icon={<PrinterOutlined />}>
             Print

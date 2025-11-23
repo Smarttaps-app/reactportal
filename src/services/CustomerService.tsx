@@ -16,7 +16,7 @@ export function getCustomers(
   });
 }
 
-export const getCustomer = async (id: string) =>
+export const getCustomer = async (id: string | number) =>
   await api.get(`admin/customer/${id}`);
 
 export function changePassword(payload: IChangePassword) {
@@ -44,3 +44,7 @@ export const replySupportTicket = async (payload: ISupportTicket) =>
   await api.post(`admin/support-ticket/reply`, payload);
 export const supportTicket = async (id: number, action: string) =>
   await api.delete(`admin/support-ticket/${id}/${action}`);
+export const resetCustomerPassword = async (id: string | number) =>
+  await api.get(`admin/customer/${id}/resetpassword`);
+export const disableCustomerAccount = async (id: string | number) =>
+  await api.get(`admin/customer/${id}/disable-account`);

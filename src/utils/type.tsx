@@ -64,6 +64,7 @@ export interface IShowPaymentProps {
 }
 
 export interface ICustomer {
+  id: number;
   identifier: string;
   phonenumber: string;
   firstname: string;

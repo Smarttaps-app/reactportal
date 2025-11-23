@@ -36,7 +36,7 @@ import {
   useTrains,
   useTRoutes,
 } from "../transport/train/useTrain";
-import { useTicket } from "../../../hooks/useTicket";
+import { useTickets } from "../ticket/useTicket";
 import TicketsPie from "./TicketPieChart";
 import { ITicket } from "../../../utils/type";
 import { DownOutlined } from "@ant-design/icons";
@@ -68,7 +68,7 @@ export default function TrainDashboard() {
     loading: ticketing,
     error: ticketError,
     tickets,
-  } = useTicket(selectedDates);
+  } = useTickets(selectedDates);
   const { loading, error, payments } = usePayments(selectedDates);
   const {
     loading: cashing,
