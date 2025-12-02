@@ -22,22 +22,6 @@ export async function getCustomersAction(startDate = "", endDate = "") {
   }
   throw new Error(response.data);
 }
-export async function getCustomerAction(id: string | number) {
-  const response = await getCustomer(id);
-  if (response.status == 200) {
-    console.log(response.data);
-    return response.data.data;
-  }
-  throw new Error(response.data);
-}
-export async function changePasswordAction(payload: IChangePassword) {
-  const response = await changePassword(payload);
-  if (response.status == 200) {
-    console.log(response.data.data);
-    return response.data;
-  }
-  throw new Error(response.data);
-}
 // action for admin
 
 export async function getSupportTicketsAction(startDate = "", endDate = "") {
@@ -85,6 +69,22 @@ export async function supportTicketAction(payload: {
   throw new Error(response.data);
 }
 
+export async function getCustomerAction(id: string | number) {
+  const response = await getCustomer(id);
+  if (response.status == 200) {
+    console.log(response.data);
+    return response.data.data;
+  }
+  throw new Error(response.data);
+}
+export async function changePasswordAction(payload: IChangePassword) {
+  const response = await changePassword(payload);
+  if (response.status == 200) {
+    console.log(response.data.data);
+    return response.data;
+  }
+  throw new Error(response.data);
+}
 export async function resetCustomerPasswordAction(id: string | number) {
   const response = await resetCustomerPassword(id);
   if (response.status == 200) {

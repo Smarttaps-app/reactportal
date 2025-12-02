@@ -1,13 +1,29 @@
-import { Flex, Form, Input, Button, Card } from "antd";
+import { Flex, Form, Input, Button, Card, App } from "antd";
 import { LockOutlined } from "@ant-design/icons";
 import { IChangePassword } from "../../../utils/type";
 import { useChangePassword } from "./useProfile";
+import { Common } from "../../../utils/Common";
 
 export default function Changepassword() {
+  const { notification } = App.useApp();
   const { changePassword, loading } = useChangePassword();
   const [form] = Form.useForm();
 
-  const onFinish = async (data: IChangePassword) => changePassword(data);
+  const onFinish = async (data: IChangePassword) =>
+    changePassword(data, {
+      onSuccess: (data) => {
+        notification.success({
+          message: "Change Password",
+          description: data.statusDescription,
+        });
+      },
+      onError: (error) => {
+        notification.error({
+          message: "Change Password",
+          description: Common.formatError(error),
+        });
+      },
+    });
   return (
     <Card style={{ width: "100%" }} title="Change Password">
       <Flex justify="center">

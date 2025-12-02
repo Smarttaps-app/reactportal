@@ -1,4 +1,11 @@
-import { Avatar, Card, Descriptions, DescriptionsProps, Tag } from "antd";
+import {
+  Avatar,
+  Badge,
+  Card,
+  Descriptions,
+  DescriptionsProps,
+  Tag,
+} from "antd";
 import { useUser } from "../../../context/useUser";
 import { Common } from "../../../utils/Common";
 const { Meta } = Card;
@@ -77,10 +84,12 @@ export default function Profile() {
     <Card style={{ width: "100%" }} title="User Details">
       <Meta
         avatar={
-          <Avatar
-            src={user?.avatar || "https://via.placeholder.com/150"}
-            size={72}
-          />
+          <Badge dot>
+            <Avatar
+              src={user?.avatar || "https://via.placeholder.com/150"}
+              size={72}
+            />
+          </Badge>
         }
         title={
           user?.firstname && user?.lastname
