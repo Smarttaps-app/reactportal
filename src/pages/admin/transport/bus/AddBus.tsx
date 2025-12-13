@@ -81,6 +81,8 @@ const AddBus: React.FC<IAddProps<IBus>> = ({
           initialValues={{
             id: payload?.id,
             identifier: payload?.identifier,
+            bus_capacity: payload?.bus_capacity,
+            availabilityStatus: payload?.availabilityStatus,
             admin_id: user?.identifier,
             airCondition: payload?.airCondition || false,
             tv: payload?.tv || false,
@@ -113,7 +115,7 @@ const AddBus: React.FC<IAddProps<IBus>> = ({
             <Form.Item<IBus> name="identifier" hidden>
               <Input hidden />
             </Form.Item>
-            <Col xs={24} sm={24} md={12}>
+            <Col xs={24} sm={24} md={8}>
               <Form.Item<IBus>
                 name="name"
                 label="Bus Name"
@@ -122,7 +124,7 @@ const AddBus: React.FC<IAddProps<IBus>> = ({
                 <Input placeholder="Enter bus name" className="!rounded-md " />
               </Form.Item>
             </Col>
-            <Col xs={24} sm={24} md={12}>
+            <Col xs={24} sm={24} md={8}>
               <Form.Item<IBus>
                 name="bus_number"
                 label="bus number"
@@ -136,7 +138,42 @@ const AddBus: React.FC<IAddProps<IBus>> = ({
                 />
               </Form.Item>
             </Col>
-            <Col xs={24} sm={24} md={12}>
+            <Col xs={24} sm={24} md={8}>
+              <Form.Item<IBus>
+                name="bus_capacity"
+                label="Available Seat"
+                rules={[
+                  { required: true, message: "Please enter total seat!" },
+                ]}
+              >
+                <Input
+                  placeholder="Enter seat counts"
+                  className="!rounded-md "
+                />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={24} md={8}>
+              <Form.Item<IBus>
+                name="availabilityStatus"
+                label="Bus Availablity"
+                rules={[
+                  { required: true, message: "Please select bus availablity!" },
+                ]}
+              >
+                <Select
+                  showSearch
+                  loading={pending}
+                  options={[
+                    { value: "ACTIVE", label: "Active" },
+                    { value: "BOARDING", label: "Boarding" },
+                    { value: "TRANSIT", label: "In-transit" },
+                    { value: "OPEN", label: "Open" },
+                    { value: "CLOSED", label: "Closed" },
+                  ]}
+                />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={24} md={8}>
               <Form.Item<IBus>
                 name="base_price"
                 label="Addon price"
@@ -150,7 +187,7 @@ const AddBus: React.FC<IAddProps<IBus>> = ({
                 />
               </Form.Item>
             </Col>
-            <Col xs={24} sm={24} md={12}>
+            <Col xs={24} sm={24} md={8}>
               <Form.Item<IBus> name="description" label="Bus Description">
                 <Input.TextArea
                   placeholder="Enter description"

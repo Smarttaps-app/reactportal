@@ -18,6 +18,7 @@ import {
   getDiscountsAction,
   getJournalsAction,
   getLedgersAction,
+  toggleDiscountAction,
 } from "../../../serviceAction/AccountingActions";
 export function useProductServices() {
   const {
@@ -77,7 +78,17 @@ export function useDeleteLedger() {
   });
   return { isdeleting, deleteLedger };
 }
-
+export function useToggleLedger() {
+  const { message } = App.useApp();
+  const { mutate: toggleStatus, isPending: changing } = useMutation({
+    mutationFn: toggleDiscountAction,
+    onError: (error) => {
+      console.log(error);
+      message.error(Common.formatError(error));
+    },
+  });
+  return { changing, toggleStatus };
+}
 export function useJournals() {
   const {
     isPending: loading,

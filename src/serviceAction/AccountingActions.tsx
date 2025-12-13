@@ -13,6 +13,7 @@ import {
   addCommission,
   addJournal,
   deleteJournal,
+  toggleDiscount,
 } from "../services/AccountingService";
 import { IDiscount, ILedger, IJournal, ICommission } from "../utils/type";
 // action for Ledger
@@ -34,6 +35,14 @@ export async function addLedgerAction(payload: ILedger) {
 }
 export async function deleteLedgerAction(id: number) {
   const response = await deleteLedger(id);
+  if (response.status == 200) {
+    console.log(response.data);
+    return response.data;
+  }
+  throw new Error(response.data);
+}
+export async function toggleDiscountAction(id: number) {
+  const response = await toggleDiscount(id);
   if (response.status == 200) {
     console.log(response.data);
     return response.data;

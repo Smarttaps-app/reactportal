@@ -32,3 +32,5 @@ export const addDiscount = async (payload: IDiscount) =>
   await api.post(`admin/discount/add`, payload);
 export const deleteDiscount = async (id: number) =>
   await api.delete(`admin/discount/${id}/delete`);
+export const toggleDiscount = async (id: number) =>
+  await api.patch(`admin/discount/${id}/toggle`);

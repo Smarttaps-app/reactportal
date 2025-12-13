@@ -12,10 +12,14 @@ import {
 } from "antd";
 import { useMemo, useState } from "react";
 import { Common } from "../../../../utils/Common";
-import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
+import { PlusOutlined } from "@ant-design/icons";
 import { IBiller, IDiscount, IUser } from "../../../../utils/type";
 import AddDiscount from "./AddDiscount";
-import { useDeleteDiscount, useDiscounts } from "../useAccounting";
+import {
+  useDeleteDiscount,
+  useDiscounts,
+  useToggleLedger,
+} from "../useAccounting";
 import { Search } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -27,6 +31,7 @@ export default function DiscountsScreen() {
   const [item, setItem] = useState<IDiscount>();
   const { loading, discounts, error } = useDiscounts();
   const { deleteDiscount, isdeleting } = useDeleteDiscount();
+  const { toggleStatus, changing } = useToggleLedger();
 
   const columns = useMemo(
     () => [
@@ -91,16 +96,39 @@ export default function DiscountsScreen() {
         render: (key: string, ledger: IDiscount) => (
           <Flex gap="small" align="center" wrap>
             <Button
-              type="primary"
-              icon={<EditOutlined />}
+              color="cyan"
+              variant="solid"
+              size="small"
               onClick={() => {
                 setItem(ledger);
                 setAdd(true);
               }}
-            />
+            >
+              View
+            </Button>
             <Button
               type="primary"
-              icon={<DeleteOutlined />}
+              size="small"
+              disabled={changing}
+              loading={changing}
+              onClick={() =>
+                toggleStatus(ledger.id, {
+                  onSuccess: (response) =>
+                    message.success(response.statusDescription),
+                  onError: (error) => message.error(Common.formatError(error)),
+                  onSettled: () =>
+                    client.invalidateQueries({ queryKey: ["discounts"] }),
+                })
+              }
+            >
+              {ledger?.active ? "Deactivate" : "Activate"}
+            </Button>
+            <Button
+              type="primary"
+              danger
+              size="small"
+              disabled={isdeleting}
+              loading={isdeleting}
               onClick={() =>
                 deleteDiscount(ledger.id, {
                   onSuccess: (response) =>
@@ -110,9 +138,9 @@ export default function DiscountsScreen() {
                     client.invalidateQueries({ queryKey: ["discounts"] }),
                 })
               }
-              danger
-              loading={isdeleting}
-            />
+            >
+              Delete
+            </Button>
           </Flex>
         ),
       },
@@ -172,7 +200,7 @@ export default function DiscountsScreen() {
         <Table
           rowKey="id"
           size="small"
-          loading={loading}
+          loading={loading || changing || isdeleting}
           columns={columns}
           dataSource={data}
           scroll={{ x: "max-content" }}

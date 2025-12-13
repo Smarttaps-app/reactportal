@@ -230,6 +230,8 @@ export interface IBus {
   camera: boolean;
   airCondition: boolean;
   base_price: string;
+  bus_capacity: number;
+  availabilityStatus: string;
   seatCount: string;
   types: string | null;
   bus_number: string | null;
