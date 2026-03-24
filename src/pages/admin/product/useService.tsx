@@ -6,9 +6,11 @@ import {
   deleteBillerAction,
   deletePackageAction,
   deleteProductAction,
+  fetchPackageAction,
   getBillersAction,
   getPackagesAction,
   getProductsAction,
+  switchBillerAction,
 } from "../../../serviceAction/ProductActions";
 import { App } from "antd";
 import { Common } from "../../../utils/Common";
@@ -77,6 +79,16 @@ export function useDeleteBiller() {
   });
   return { isdeleting, deleteBiller };
 }
+export function useSwitchBiller() {
+  const { message } = App.useApp();
+  const { mutate: switchProvider, isPending: isAdding } = useMutation({
+    mutationFn: switchBillerAction,
+    onError: (error) => {
+      message.error(Common.formatError(error));
+    },
+  });
+  return { isAdding, switchProvider };
+}
 export function usePackages() {
   const {
     isPending: loading,
@@ -108,4 +120,14 @@ export function useDeletePackage() {
     },
   });
   return { isdeleting, deletePackage };
+}
+export function useFetchPackage() {
+  const { message } = App.useApp();
+  const { mutate: fetchPackage, isPending: isAdding } = useMutation({
+    mutationFn: fetchPackageAction,
+    onError: (error) => {
+      message.error(Common.formatError(error));
+    },
+  });
+  return { isAdding, fetchPackage };
 }

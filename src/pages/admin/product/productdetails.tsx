@@ -1,13 +1,18 @@
 import { App, Button, Card, Flex, Input, Space, Table, Tag } from "antd";
 import { useMemo, useState } from "react";
 import { Common } from "../../../utils/Common";
-import { ArrowLeftOutlined, PlusOutlined } from "@ant-design/icons";
+import {
+  ArrowLeftOutlined,
+  PlusOutlined,
+  SwitcherOutlined,
+} from "@ant-design/icons";
 import { IBiller } from "../../../utils/type";
 import { useLocation, useNavigate } from "react-router-dom";
-import AddBiller from "./AddBiller";
 import { useDeleteBiller } from "./useService";
 import { useQueryClient } from "@tanstack/react-query";
 import { Search } from "lucide-react";
+import SwitchProvider from "./SwitchProvider";
+import AddBiller from "./AddBiller";
 
 export default function ProductDetailScreen() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -19,6 +24,7 @@ export default function ProductDetailScreen() {
   const { sproduct } = location.state || {};
   const navigate = useNavigate();
   const [show, setShow] = useState(false);
+  const [open, setOpen] = useState(false);
   const columns = useMemo(
     () => [
       {
@@ -31,7 +37,6 @@ export default function ProductDetailScreen() {
         title: "Biller",
         dataIndex: "billerName",
         key: "billerName",
-        width: "15%",
       },
       {
         title: "BillerID",
@@ -39,16 +44,32 @@ export default function ProductDetailScreen() {
         key: "billerId",
       },
       {
+        title: "Provider",
+        dataIndex: "",
+        render: (record: IBiller) => (
+          <span className="text-xs text-gray-500">
+            {record?.provider?.companyName || "No Provider"}
+            <SwitcherOutlined
+              className="px-1"
+              color="primary"
+              onClick={() => {
+                setItem(undefined);
+                setItem(record);
+                setOpen(true);
+              }}
+            />
+          </span>
+        ),
+      },
+      {
         title: "Customer Field",
         dataIndex: "customerField",
         key: "customerField",
-        width: "15%",
       },
       {
         title: "Lookup",
         dataIndex: "hasLookup",
         key: "hasLookup",
-        width: "10%",
         render: (hasLookup: boolean) => (
           <Tag color={`${hasLookup ? "green" : "red"}`}>
             {hasLookup ? "Yes" : "No"}
@@ -59,7 +80,6 @@ export default function ProductDetailScreen() {
         title: "Addon",
         dataIndex: "hasAddons",
         key: "hasAddons",
-        width: "5%",
         render: (hasAddons: boolean) => (
           <Tag color={`${hasAddons ? "green" : "red"}`}>
             {hasAddons ? "Yes" : "No"}
@@ -70,7 +90,6 @@ export default function ProductDetailScreen() {
         title: "Package",
         dataIndex: "hasPackages",
         key: "hasPackages",
-        width: "5%",
         render: (hasPackages: boolean) => (
           <Tag color={`${hasPackages ? "green" : "red"}`}>
             {hasPackages ? "Yes" : "No"}
@@ -81,7 +100,6 @@ export default function ProductDetailScreen() {
         title: "Status",
         dataIndex: "status",
         key: "status",
-        width: "8%",
         render: (status: boolean) => (
           <Tag color={`${status ? "green" : "red"}`}>
             {status ? "Active" : "Inactive"}
@@ -98,25 +116,26 @@ export default function ProductDetailScreen() {
       {
         title: "Actions",
         dataIndex: "",
-        width: "20%",
         render: (record: IBiller) => (
           <Flex gap="small" align="center" wrap>
-            <Button
-              color="cyan"
-              variant="solid"
-              size="small"
-              onClick={() =>
-                record.hasPackages
-                  ? navigate(`/admin/biller/${record.billerId}`, {
-                      state: {
-                        payload: record,
-                      },
-                    })
-                  : message.info("Biller has not package")
-              }
-            >
-              View
-            </Button>
+            {record.hasPackages && (
+              <Button
+                color="cyan"
+                variant="solid"
+                size="small"
+                onClick={() =>
+                  record.hasPackages
+                    ? navigate(`/admin/biller/${record.billerId}`, {
+                        state: {
+                          payload: record,
+                        },
+                      })
+                    : message.info("Biller has not package")
+                }
+              >
+                View
+              </Button>
+            )}
             <Button
               color="default"
               size="small"
@@ -150,14 +169,14 @@ export default function ProductDetailScreen() {
         ),
       },
     ],
-    []
+    [],
   );
   const data =
     sproduct.billers.filter(
       (biller: IBiller) =>
         biller.billerName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         biller.customerField.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        biller.billerType?.toLowerCase().includes(searchTerm.toLowerCase())
+        biller.billerType?.toLowerCase().includes(searchTerm.toLowerCase()),
     ) || [];
 
   return (
@@ -191,6 +210,7 @@ export default function ProductDetailScreen() {
               title="New Product"
               type="primary"
               onClick={() => {
+                setItem(undefined);
                 setItem({ product_id: sproduct.id } as IBiller);
                 setShow(true);
               }}
@@ -209,6 +229,11 @@ export default function ProductDetailScreen() {
           scroll={{ x: "max-content" }}
         />
       </Card>
+      <SwitchProvider
+        biller={item}
+        isOpen={open}
+        onCancel={() => setOpen(false)}
+      />
       <AddBiller product={item} isOpen={show} onCancel={() => setShow(false)} />
     </>
   );

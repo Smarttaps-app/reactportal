@@ -129,7 +129,7 @@ const AddDiscount: React.FC<IAddProps<IDiscount>> = ({
                   loading={loading}
                   optionLabelProp="label"
                   options={services.map((item: IBiller) => ({
-                    label: `${item.billerName}`,
+                    label: `${item.billerName} - ${item.billerType}`,
                     value: item.id,
                   }))}
                   filterOption={(input, option) =>

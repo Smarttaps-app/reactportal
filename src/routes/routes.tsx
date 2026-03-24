@@ -11,6 +11,7 @@ import {
   InfoCircleOutlined,
   NotificationOutlined,
   ProfileOutlined,
+  ProjectFilled,
   RocketOutlined,
   SettingOutlined,
   SubnodeOutlined,
@@ -51,6 +52,7 @@ import CashoutWithdraw from "../pages/admin/profile/CashoutWithdraw";
 import CashoutLimitIncrease from "../pages/admin/profile/CashoutLimitIncrease";
 import AdminPaymentsScreen from "../pages/admin/payment/AdminpaymentsScreen";
 import AdminCashoutsScreen from "../pages/admin/cashout/AdminCashouts";
+import ProviderIndex from "../pages/admin/provider";
 
 export const protectedRoutes: IAppRoute[] = [
   {
@@ -76,6 +78,12 @@ export const protectedRoutes: IAppRoute[] = [
     Component: CustomersScreen,
     title: "Customers",
     icon: <TagsOutlined />,
+  },
+  {
+    path: "service-provider",
+    Component: ProviderIndex,
+    title: "Service Provider",
+    icon: <ProjectFilled />,
   },
   {
     path: "products",

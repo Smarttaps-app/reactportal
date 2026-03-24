@@ -7,7 +7,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 import AddPackage from "./AddPackage";
 import { useQueryClient } from "@tanstack/react-query";
-import { useDeletePackage } from "./useService";
+import { useDeletePackage, useFetchPackage } from "./useService";
 import { Search } from "lucide-react";
 
 export default function BillerDetailScreen() {
@@ -20,6 +20,8 @@ export default function BillerDetailScreen() {
   const { payload } = location.state || {};
   const navigate = useNavigate();
   const [show, setShow] = useState(false);
+  const { fetchPackage, isAdding } = useFetchPackage();
+
   const columns = useMemo(
     () => [
       {
@@ -32,37 +34,23 @@ export default function BillerDetailScreen() {
         title: "Description",
         dataIndex: "description",
         key: "description",
-        width: "20%",
-      },
-      {
-        title: "Code",
-        dataIndex: "packageCode",
-        key: "packageCode",
-        width: "5%",
       },
       {
         title: "Amount",
         dataIndex: "amount",
         key: "amount",
-        width: "10%",
-        render: (amount: string) => Common.formatAsCurrency(Number(amount)),
+        render: (amount: string) =>
+          Common.formatAsCurrency(Number(amount) * 100),
       },
       {
         title: "Validity",
         dataIndex: "hasValidity",
         key: "hasValidity",
-        width: "5%",
         render: (hasValidity: boolean) => (
           <Tag color={`${hasValidity ? "green" : "red"}`}>
             {hasValidity ? "Yes" : "No"}
           </Tag>
         ),
-      },
-      {
-        title: "Period",
-        dataIndex: "validity",
-        key: "validity",
-        width: "5%",
       },
       {
         title: "Status",
@@ -85,7 +73,6 @@ export default function BillerDetailScreen() {
       {
         title: "Actions",
         dataIndex: "",
-        width: "15%",
         render: (record: IPackage) => (
           <Flex gap="small" align="center" wrap>
             <Button
@@ -121,14 +108,14 @@ export default function BillerDetailScreen() {
         ),
       },
     ],
-    []
+    [],
   );
   const data =
     payload.packages.filter(
       (pack: IPackage) =>
         pack.packageCode?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         pack.amount.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        pack.description?.toLowerCase().includes(searchTerm.toLowerCase())
+        pack.description?.toLowerCase().includes(searchTerm.toLowerCase()),
     ) || [];
   return (
     <>
@@ -158,14 +145,27 @@ export default function BillerDetailScreen() {
             </div>
             <Button
               icon={<PlusOutlined />}
-              title="New Package"
+              title="Fetch Package"
+              disabled={isAdding}
+              loading={isAdding}
               type="primary"
-              onClick={() => {
-                setItem({ product_type_id: payload.id } as IPackage);
-                setShow(true);
-              }}
+              onClick={() =>
+                fetchPackage(
+                  { product_type_id: payload.id },
+                  {
+                    onSuccess: (data) => {
+                      message.success(data.statusDescription);
+                    },
+                    onError: (error) => {
+                      message.error(Common.formatError(error));
+                    },
+                    onSettled: () =>
+                      client.invalidateQueries({ queryKey: ["billers"] }),
+                  },
+                )
+              }
             >
-              New Package
+              Fetch Package
             </Button>
           </Space>
         }

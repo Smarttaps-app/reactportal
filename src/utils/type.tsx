@@ -108,6 +108,7 @@ export interface IAddRequest {
   password: string;
 }
 export interface IUser {
+  id: number;
   identifier: string;
   lastname: string;
   firstname: string;
@@ -116,6 +117,7 @@ export interface IUser {
   cashout_account: string;
   cashout_bank: string;
   cashout_limit: string;
+  companyName: string;
   tag: string;
   email: string;
   billerId: string;
@@ -159,6 +161,8 @@ export interface IBiller {
   billerType: string;
   created_at: string;
   customerField: string;
+  provider_id: number;
+  provider: IUser;
   hasAddons: boolean;
   hasLookup: boolean;
   hasPackages: boolean;

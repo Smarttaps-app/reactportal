@@ -13,6 +13,8 @@ import {
   getPackage,
   getPackages,
   getProviders,
+  fetchPackage,
+  switchBiller,
 } from "../services/ProductService";
 import { IBiller, IPackage, IProduct } from "../utils/type";
 
@@ -74,6 +76,14 @@ export async function addBillerAction(payload: IBiller) {
   }
   throw new Error(response.data);
 }
+export async function switchBillerAction(payload: IBiller) {
+  const response = await switchBiller(payload);
+  if (response.status == 200) {
+    console.log(response.data);
+    return response.data;
+  }
+  throw new Error(response.data);
+}
 export async function deleteBillerAction(id: number) {
   const response = await deleteBiller(id);
   if (response.status == 200) {
@@ -101,6 +111,18 @@ export async function getPackageAction(id: string) {
 }
 export async function addPackageAction(payload: IPackage) {
   const response = await addPackage(payload);
+  if (response.status == 200) {
+    console.log(response.data);
+    return response.data;
+  }
+  throw new Error(response.data);
+}
+export async function fetchPackageAction({
+  product_type_id,
+}: {
+  product_type_id: string;
+}) {
+  const response = await fetchPackage({ product_type_id });
   if (response.status == 200) {
     console.log(response.data);
     return response.data;

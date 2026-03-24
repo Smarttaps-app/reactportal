@@ -16,6 +16,8 @@ export const getBiller = async (id: string) =>
   await api.get(`admin/biller/${id}`);
 export const addBiller = async (payload: IBiller) =>
   await api.post(`admin/biller/add`, payload);
+export const switchBiller = async (payload: IBiller) =>
+  await api.post(`admin/biller/switch-provider`, payload);
 export const deleteBiller = async (id: number) =>
   await api.delete(`admin/biller/${id}/delete`);
 
@@ -25,6 +27,15 @@ export const getPackage = async (id: string) =>
   await api.get(`admin/package/${id}`);
 export const addPackage = async (payload: IPackage) =>
   await api.post(`admin/package/add`, payload);
+export const fetchPackage = async ({
+  product_type_id,
+}: {
+  product_type_id: string;
+}) =>
+  await api.post(`admin/package/add`, {
+    product_type_id: product_type_id,
+  });
+
 export const deletePackage = async (id: number) =>
   await api.delete(`admin/package/${id}/delete`);
 
