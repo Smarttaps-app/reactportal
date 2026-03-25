@@ -106,7 +106,7 @@ const Add: React.FC<IAddProps<IUser>> = ({
               loading={isShowing}
             >
               {roles?.map((item: IRole) => (
-                <Option key={item.id} value={item.id}>
+                <Option key={item.tag} value={item.tag}>
                   {item.name}
                 </Option>
               ))}

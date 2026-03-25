@@ -1,6 +1,5 @@
 import {
   Button,
-  Card,
   Col,
   Form,
   InputNumber,
@@ -65,176 +64,175 @@ const AddDiscount: React.FC<IAddProps<IDiscount>> = ({
       destroyOnHidden
       footer={null}
       width={screens.xs ? "100%" : 450}
+      title="Add Provider Discount"
     >
-      <Card title="Add Provider Discount">
-        <Form
-          layout="vertical"
-          preserve={false}
-          initialValues={{
-            id: payload?.id,
-            product_type_id: payload?.product_type_id,
-            provider_discount_rate: payload?.provider_discount_rate,
-            provider_discount_type: payload?.provider_discount_type,
-            admin_id: payload?.admin_id,
-            active: payload?.active,
-          }}
-          onFinish={onFinish}
-          style={{ minWidth: 320 }}
-        >
-          <Row gutter={[16, 16]}>
-            <Form.Item<IBiller> name="id" hidden>
-              <Input />
+      <Form
+        layout="vertical"
+        preserve={false}
+        initialValues={{
+          id: payload?.id,
+          product_type_id: payload?.product_type_id,
+          provider_discount_rate: payload?.provider_discount_rate,
+          provider_discount_type: payload?.provider_discount_type,
+          admin_id: payload?.admin_id,
+          active: payload?.active,
+        }}
+        onFinish={onFinish}
+        style={{ minWidth: 320 }}
+      >
+        <Row gutter={[16, 16]}>
+          <Form.Item<IBiller> name="id" hidden>
+            <Input />
+          </Form.Item>
+          <Col xs={24} sm={24} md={24}>
+            <Form.Item<IDiscount>
+              label="Provider"
+              name="admin_id"
+              rules={[
+                {
+                  required: true,
+                  message: "Please select a provider!",
+                },
+              ]}
+            >
+              <Select
+                showSearch
+                loading={isPending}
+                optionLabelProp="label"
+                options={providers.map((item: IUser) => ({
+                  label: `${item.firstname} → ${item.lastname}`,
+                  value: item.id,
+                }))}
+                filterOption={(input, option) =>
+                  (option?.label ?? "")
+                    .toString()
+                    .toLowerCase()
+                    .includes(input.toLowerCase())
+                }
+              />
             </Form.Item>
-            <Col xs={24} sm={24} md={24}>
-              <Form.Item<IDiscount>
-                label="Provider"
-                name="admin_id"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please select a provider!",
-                  },
+          </Col>
+          <Col xs={24} sm={24} md={24}>
+            <Form.Item<IDiscount>
+              label="Biller"
+              name="product_type_id"
+              rules={[
+                {
+                  required: true,
+                  message: "Please select a biller!",
+                },
+              ]}
+            >
+              <Select
+                showSearch
+                loading={loading}
+                optionLabelProp="label"
+                options={services.map((item: IBiller) => ({
+                  label: `${item.billerName} - ${item.billerType}`,
+                  value: item.id,
+                }))}
+                filterOption={(input, option) =>
+                  (option?.label ?? "")
+                    .toString()
+                    .toLowerCase()
+                    .includes(input.toLowerCase())
+                }
+              />
+            </Form.Item>
+          </Col>
+          <Col xs={24} sm={24} md={24}>
+            <Form.Item<IDiscount>
+              label="Provider Discount Rate"
+              name="provider_discount_rate"
+              rules={[
+                {
+                  required: true,
+                  message: "Please provider discount rate is required!",
+                },
+              ]}
+            >
+              <InputNumber
+                suffix="Rate"
+                style={{ width: "100%" }}
+                min={1}
+                stringMode
+              />
+            </Form.Item>
+          </Col>
+          <Col xs={24} sm={24} md={24}>
+            <Form.Item<IDiscount>
+              label="Discount Type"
+              name="provider_discount_type"
+              rules={[
+                { required: true, message: "Please select discount type!" },
+              ]}
+            >
+              <Select
+                size="large"
+                options={[
+                  { value: "percentage", label: "Percentage" },
+                  { value: "calculated", label: "Calculated" },
                 ]}
+              />
+            </Form.Item>
+          </Col>
+          <Col xs={24} sm={24} md={24}>
+            <Form.Item<IDiscount>
+              label="Account GL"
+              name="gl_to_provider"
+              rules={[
+                {
+                  required: true,
+                  message: "Please select a GL Account!",
+                },
+              ]}
+            >
+              <Select
+                showSearch
+                loading={waiting}
+                optionLabelProp="label"
+                options={ledgers.map((item: ILedger) => ({
+                  label: `${item.name}`,
+                  value: item.code,
+                }))}
+                filterOption={(input, option) =>
+                  (option?.label ?? "")
+                    .toString()
+                    .toLowerCase()
+                    .includes(input.toLowerCase())
+                }
+              />
+            </Form.Item>
+          </Col>
+          <Col xs={24} sm={24} md={24}>
+            <Form.Item<IDiscount>
+              name="active"
+              label="Discount Status"
+              valuePropName="checked"
+            >
+              <Switch
+                style={{ width: "100%" }}
+                unCheckedChildren="Not Active"
+                checkedChildren="Active"
+              />
+            </Form.Item>
+          </Col>
+          <Col span={24}>
+            <Form.Item>
+              <Button
+                block
+                type="primary"
+                htmlType="submit"
+                disabled={isAdding}
+                loading={isAdding}
+                className="!rounded-md !shadow-md !py-5"
               >
-                <Select
-                  showSearch
-                  loading={isPending}
-                  optionLabelProp="label"
-                  options={providers.map((item: IUser) => ({
-                    label: `${item.firstname} → ${item.lastname}`,
-                    value: item.id,
-                  }))}
-                  filterOption={(input, option) =>
-                    (option?.label ?? "")
-                      .toString()
-                      .toLowerCase()
-                      .includes(input.toLowerCase())
-                  }
-                />
-              </Form.Item>
-            </Col>
-            <Col xs={24} sm={24} md={24}>
-              <Form.Item<IDiscount>
-                label="Biller"
-                name="product_type_id"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please select a biller!",
-                  },
-                ]}
-              >
-                <Select
-                  showSearch
-                  loading={loading}
-                  optionLabelProp="label"
-                  options={services.map((item: IBiller) => ({
-                    label: `${item.billerName} - ${item.billerType}`,
-                    value: item.id,
-                  }))}
-                  filterOption={(input, option) =>
-                    (option?.label ?? "")
-                      .toString()
-                      .toLowerCase()
-                      .includes(input.toLowerCase())
-                  }
-                />
-              </Form.Item>
-            </Col>
-            <Col xs={24} sm={24} md={24}>
-              <Form.Item<IDiscount>
-                label="Provider Discount Rate"
-                name="provider_discount_rate"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please provider discount rate is required!",
-                  },
-                ]}
-              >
-                <InputNumber
-                  suffix="Rate"
-                  style={{ width: "100%" }}
-                  min={1}
-                  stringMode
-                />
-              </Form.Item>
-            </Col>
-            <Col xs={24} sm={24} md={24}>
-              <Form.Item<IDiscount>
-                label="Discount Type"
-                name="provider_discount_type"
-                rules={[
-                  { required: true, message: "Please select discount type!" },
-                ]}
-              >
-                <Select
-                  size="large"
-                  options={[
-                    { value: "percentage", label: "Percentage" },
-                    { value: "calculated", label: "Calculated" },
-                  ]}
-                />
-              </Form.Item>
-            </Col>
-            <Col xs={24} sm={24} md={24}>
-              <Form.Item<IDiscount>
-                label="Account GL"
-                name="gl_to_provider"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please select a GL Account!",
-                  },
-                ]}
-              >
-                <Select
-                  showSearch
-                  loading={waiting}
-                  optionLabelProp="label"
-                  options={ledgers.map((item: ILedger) => ({
-                    label: `${item.name}`,
-                    value: item.code,
-                  }))}
-                  filterOption={(input, option) =>
-                    (option?.label ?? "")
-                      .toString()
-                      .toLowerCase()
-                      .includes(input.toLowerCase())
-                  }
-                />
-              </Form.Item>
-            </Col>
-            <Col xs={24} sm={24} md={24}>
-              <Form.Item<IDiscount>
-                name="active"
-                label="Discount Status"
-                valuePropName="checked"
-              >
-                <Switch
-                  style={{ width: "100%" }}
-                  unCheckedChildren="Not Active"
-                  checkedChildren="Active"
-                />
-              </Form.Item>
-            </Col>
-            <Col span={24}>
-              <Form.Item>
-                <Button
-                  block
-                  type="primary"
-                  htmlType="submit"
-                  disabled={isAdding}
-                  loading={isAdding}
-                  className="!rounded-md !shadow-md !py-5"
-                >
-                  Submit
-                </Button>
-              </Form.Item>
-            </Col>
-          </Row>
-        </Form>
-      </Card>
+                Submit
+              </Button>
+            </Form.Item>
+          </Col>
+        </Row>
+      </Form>
     </Modal>
   );
 };

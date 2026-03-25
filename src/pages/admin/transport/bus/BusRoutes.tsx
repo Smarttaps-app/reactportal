@@ -58,8 +58,8 @@ export default function BusRoutesScreen() {
         render: (routeName: string, record: IBusRoute) => (
           <span className="text-xs text-gray-500">
             {routeName}
-            {record.buses.length > 0
-              ? ` ${record.buses.length} Buses`
+            {record?.buses?.length > 0
+              ? ` ${record?.buses?.length} Buses`
               : `No Bus`}
           </span>
         ),
@@ -109,7 +109,7 @@ export default function BusRoutesScreen() {
         ),
       },
     ],
-    []
+    [],
   );
   if (error)
     return (
@@ -121,13 +121,13 @@ export default function BusRoutesScreen() {
   const data =
     routes.filter(
       (route: IBusRoute) =>
-        route.routeName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        route.routeName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         route.sourceStation.location
           .toLowerCase()
           .includes(searchTerm.toLowerCase()) ||
         route.destinationStation.location
           .toLowerCase()
-          .includes(searchTerm.toLowerCase())
+          .includes(searchTerm.toLowerCase()),
     ) || [];
 
   return (

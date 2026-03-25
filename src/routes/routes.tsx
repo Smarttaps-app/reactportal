@@ -11,7 +11,6 @@ import {
   InfoCircleOutlined,
   NotificationOutlined,
   ProfileOutlined,
-  ProjectFilled,
   RocketOutlined,
   SettingOutlined,
   SubnodeOutlined,
@@ -26,14 +25,13 @@ import NotificationScreen from "../pages/admin/notification/notification";
 import Changepassword from "../pages/admin/profile/changepassword";
 import ProductDetailScreen from "../pages/admin/product/productdetails";
 import Index from "../pages/admin/admin";
-import RoleIndex from "../pages/admin/role";
 import StationsScreen from "../pages/admin/transport/train/Stations";
 import BusesScreen from "../pages/admin/transport/bus/Buses";
 import AccountingScreen from "../pages/admin/gl_account/Index";
 import GlAccountScreen from "../pages/admin/gl_account/ledger/glaccounting";
 import CommissionsScreen from "../pages/admin/gl_account/commission/commissions";
 import DiscountsScreen from "../pages/admin/gl_account/discount/discounts";
-import { TrainIcon } from "lucide-react";
+import { PersonStanding, ServerIcon, TrainIcon } from "lucide-react";
 import TrainsScreen from "../pages/admin/transport/train/Trains";
 import BusRoutesScreen from "../pages/admin/transport/bus/BusRoutes";
 import BusStationsScreen from "../pages/admin/transport/bus/parks";
@@ -53,6 +51,7 @@ import CashoutLimitIncrease from "../pages/admin/profile/CashoutLimitIncrease";
 import AdminPaymentsScreen from "../pages/admin/payment/AdminpaymentsScreen";
 import AdminCashoutsScreen from "../pages/admin/cashout/AdminCashouts";
 import ProviderIndex from "../pages/admin/provider";
+import RoleIndex from "../pages/admin/role";
 
 export const protectedRoutes: IAppRoute[] = [
   {
@@ -83,7 +82,13 @@ export const protectedRoutes: IAppRoute[] = [
     path: "service-provider",
     Component: ProviderIndex,
     title: "Service Provider",
-    icon: <ProjectFilled />,
+    icon: <ServerIcon />,
+  },
+  {
+    path: "admins",
+    Component: Index,
+    title: "Admins",
+    icon: <PersonStanding />,
   },
   {
     path: "products",
@@ -166,7 +171,6 @@ export const protectedRoutes: IAppRoute[] = [
     title: "Settings",
     icon: <SettingOutlined />,
     children: [
-      { path: "manage-user", Component: Index, showInMenu: true },
       { path: "manage-role", Component: RoleIndex, showInMenu: true },
       { path: "mail-setting", Component: Profile, showInMenu: true },
       { path: "api-setting", Component: Profile, showInMenu: true },

@@ -21,7 +21,7 @@ import {
 } from "@ant-design/icons";
 import AddProvider from "./add";
 export default function ProviderIndex() {
-  const { isPending, data, error } = useAdmins("provider");
+  const { isPending, data, error } = useAdmins("external");
   const { deleteAdmin, isdeleting } = useDeleteAdmin();
   const [user, setUser] = useState<IUser>();
   const columns = useMemo(

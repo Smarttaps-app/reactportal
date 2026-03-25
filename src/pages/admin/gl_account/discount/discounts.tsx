@@ -39,24 +39,19 @@ export default function DiscountsScreen() {
         title: "GL",
         dataIndex: "gl_to_provider",
         key: "gl_to_provider",
-        width: "5%",
       },
       {
         title: "Provider",
         dataIndex: "admin",
         key: "admin",
-        width: "20%",
         render: (admin: IUser) => (
-          <span className="text-xs text-gray-500">
-            {admin?.firstname} {admin?.lastname}
-          </span>
+          <span className="text-xs text-gray-500">{admin?.companyName}</span>
         ),
       },
       {
         title: "Product",
         dataIndex: "product_type",
         key: "product_type",
-        width: "10%",
         render: (biller: IBiller) => (
           <span className="text-xs text-gray-500">{biller?.billerName}</span>
         ),
@@ -65,7 +60,6 @@ export default function DiscountsScreen() {
         title: "rate",
         dataIndex: "provider_discount_rate",
         key: "provider_discount_rate",
-        width: "10%",
       },
       {
         title: "Mode",
@@ -76,7 +70,6 @@ export default function DiscountsScreen() {
         title: "Status",
         dataIndex: "active",
         key: "active",
-        width: "8%",
         render: (status: boolean) => (
           <Tag color={`${status ? "green" : "red"}`}>
             {status ? "Active" : "Inactive"}
@@ -145,7 +138,7 @@ export default function DiscountsScreen() {
         ),
       },
     ],
-    []
+    [],
   );
   if (error)
     return (
@@ -162,7 +155,7 @@ export default function DiscountsScreen() {
           .includes(searchTerm.toLowerCase()) ||
         discount.provider_discount_rate
           .toLowerCase()
-          .includes(searchTerm.toLowerCase())
+          .includes(searchTerm.toLowerCase()),
     ) || [];
 
   return (

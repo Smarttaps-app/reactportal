@@ -24,7 +24,7 @@ const AdminAddStation: React.FC<IAddProps<IStation>> = ({
   isOpen = false,
   onCancel,
 }) => {
-  const { isPending, data: providers } = useAdmins("");
+  const { isPending, data: providers } = useAdmins("external");
   const client = useQueryClient();
   const screens = useBreakpoint();
   const { addStation, isAdding } = useAddStation();

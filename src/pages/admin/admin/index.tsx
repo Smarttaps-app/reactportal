@@ -1,14 +1,4 @@
-import {
-  Avatar,
-  Button,
-  Card,
-  Empty,
-  Flex,
-  message,
-  Row,
-  Spin,
-  Table,
-} from "antd";
+import { Avatar, Button, Card, Empty, Flex, Row, Spin, Table } from "antd";
 import { useMemo, useState } from "react";
 import { Common } from "../../../utils/Common";
 import { useAdmins, useDeleteAdmin } from "../../../hooks/useAdmin";
@@ -21,7 +11,7 @@ import {
 } from "@ant-design/icons";
 import Add from "./add";
 export default function Index() {
-  const { isPending, data, error } = useAdmins("");
+  const { isPending, data, error } = useAdmins("internal");
   const { deleteAdmin, isdeleting } = useDeleteAdmin();
   const [user, setUser] = useState<IUser>();
   const columns = useMemo(
@@ -96,7 +86,7 @@ export default function Index() {
             <Button
               type="primary"
               icon={<DeleteOutlined />}
-              onClick={() => deleted(data.id)}
+              onClick={() => deleteAdmin(data.id)}
               danger
               loading={isdeleting}
             />
@@ -104,16 +94,9 @@ export default function Index() {
         ),
       },
     ],
-    []
+    [],
   );
-  const deleted = (id: number) => {
-    deleteAdmin(id, {
-      onSuccess: (response) => {
-        console.log(response);
-        message.success(response.statusDescription);
-      },
-    });
-  };
+
   const [add, setAdd] = useState(false);
   if (error)
     return (

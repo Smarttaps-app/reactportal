@@ -26,7 +26,7 @@ const AddSchedule: React.FC<IAddProps<ISchedule>> = ({
   onCancel,
 }) => {
   const { user } = useUser();
-  const { isPending, data: providers } = useAdmins("trainprovider");
+  const { isPending, data: providers } = useAdmins("external");
   const client = useQueryClient();
   const screens = useBreakpoint();
   const { notification } = App.useApp();

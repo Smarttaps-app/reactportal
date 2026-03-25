@@ -17,7 +17,7 @@ const AddRoute: React.FC<IAddProps<IBusRoute>> = ({
 }) => {
   const { notification } = App.useApp();
   const { user } = useUser();
-  const { isPending, data: providers } = useAdmins("busprovider");
+  const { isPending, data: providers } = useAdmins("external");
   const client = useQueryClient();
   const screens = useBreakpoint();
   const { addRoute, isAdding } = useAddTRoute();
@@ -31,12 +31,12 @@ const AddRoute: React.FC<IAddProps<IBusRoute>> = ({
   const filteredStopStations = useMemo(() => {
     if (!stations || !selectedStartId) return [];
     const selectedStart = stations.find(
-      (station: IStation) => station.identifier === selectedStartId
+      (station: IStation) => station.identifier === selectedStartId,
     );
     return stations.filter(
       (station: IStation) =>
         station.mode === selectedStart?.mode &&
-        station.identifier !== selectedStartId
+        station.identifier !== selectedStartId,
     );
   }, [stations, selectedStartId]);
   const onFinish = async (values: IBusRoute) => {
@@ -120,8 +120,8 @@ const AddRoute: React.FC<IAddProps<IBusRoute>> = ({
                           if (value && value === getFieldValue("stopId")) {
                             return Promise.reject(
                               new Error(
-                                "Starting park can't be the same as starting park!"
-                              )
+                                "Starting park can't be the same as starting park!",
+                              ),
                             );
                           }
                           return Promise.resolve();

@@ -118,6 +118,9 @@ export interface IUser {
   cashout_bank: string;
   cashout_limit: string;
   companyName: string;
+  provider_url: string;
+  provider_auth: string;
+  companyAddress: string;
   tag: string;
   email: string;
   billerId: string;
