@@ -40,14 +40,9 @@ export default function ProviderIndex() {
         ),
       },
       {
-        title: "Lastname",
-        dataIndex: "lastname",
-        key: "lastname",
-      },
-      {
-        title: "Firstname",
-        dataIndex: "firstname",
-        key: "firstname",
+        title: "Company name",
+        dataIndex: "companyName",
+        key: "companyName",
       },
       {
         title: "Phone",

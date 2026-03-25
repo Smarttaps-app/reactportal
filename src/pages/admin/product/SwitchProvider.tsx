@@ -20,7 +20,7 @@ const SwitchProvider: React.FC<IProductProps> = ({
   const { message } = App.useApp();
   const screens = useBreakpoint();
   const client = useQueryClient();
-  const { isPending, data, error } = useAdmins("provider");
+  const { isPending, data, error } = useAdmins("external");
   const { switchProvider, isAdding } = useSwitchBiller();
   const onFinish = async (values: IBiller) => {
     switchProvider(values, {
@@ -97,7 +97,7 @@ const SwitchProvider: React.FC<IProductProps> = ({
             loading={isPending}
             optionLabelProp="label"
             options={data.map((item: IUser) => ({
-              label: `${item.lastname} ${item.firstname}`,
+              label: `${item.companyName}`,
               value: item?.id,
             }))}
             notFoundContent={
