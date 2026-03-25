@@ -100,7 +100,7 @@ const AddDiscount: React.FC<IAddProps<IDiscount>> = ({
                 loading={isPending}
                 optionLabelProp="label"
                 options={providers.map((item: IUser) => ({
-                  label: `${item.firstname} → ${item.lastname}`,
+                  label: `${item.companyName}`,
                   value: item.id,
                 }))}
                 filterOption={(input, option) =>

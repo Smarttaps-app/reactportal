@@ -53,7 +53,9 @@ export default function DiscountsScreen() {
         dataIndex: "product_type",
         key: "product_type",
         render: (biller: IBiller) => (
-          <span className="text-xs text-gray-500">{biller?.billerName}</span>
+          <span className="text-xs text-gray-500">
+            {biller?.billerName} {biller.billerType}
+          </span>
         ),
       },
       {
