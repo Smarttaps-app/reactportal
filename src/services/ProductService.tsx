@@ -14,6 +14,8 @@ export const deleteProduct = async (id: number) =>
 export const getBillers = async () => await api.get(`admin/biller`);
 export const getBiller = async (id: string) =>
   await api.get(`admin/biller/${id}`);
+export const refreshProvider = async (payload: IBiller) =>
+  await api.post(`admin/provider/refresh`, payload);
 export const addBiller = async (payload: IBiller) =>
   await api.post(`admin/biller/add`, payload);
 export const switchBiller = async (payload: IBiller) =>

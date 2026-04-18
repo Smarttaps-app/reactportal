@@ -28,17 +28,7 @@ import { Common } from "../../utils/Common";
 const { Header, Sider, Content } = Layout;
 const { useBreakpoint } = Grid;
 // image
-const siderStyle: React.CSSProperties = {
-  overflow: "auto",
-  height: "100vh",
-  position: "fixed",
-  //background: "linear-gradient(#F29E0B,#c89720, #F29E0B)",
-  insetInlineStart: 0,
-  top: 0,
-  bottom: 0,
-  scrollbarWidth: "thin",
-  scrollbarColor: "unset",
-};
+
 const AdministratorLayout: React.FC = () => {
   const screens = useBreakpoint();
   const [collapsed, setCollapsed] = useState(false);
@@ -48,19 +38,26 @@ const AdministratorLayout: React.FC = () => {
   const sidebarWidth = collapsed ? 80 : screens.lg ? 240 : 160;
   const { user, loading: isPending, logout } = useUser();
   useEffect(() => {
-    if (!screens.md) setCollapsed(true);
-  }, [screens]);
+    // setCollapsed(!screens.md);
+  }, [screens.md]);
 
   if (isPending) return <Spin />;
   if (!user) return null;
   return (
-    <Layout hasSider>
+    <Layout hasSider style={{ height: "100vh" }}>
       <Sider
         width={sidebarWidth}
-        style={siderStyle}
-        trigger={null}
         collapsible
         collapsed={collapsed}
+        trigger={null}
+        style={{
+          height: "100vh",
+          position: "fixed",
+          left: 0,
+          top: 0,
+          bottom: 0,
+          overflow: "auto",
+        }}
       >
         <Link className="" to="/">
           <img className="h-16 mx-auto" src={logo} />
@@ -71,7 +68,18 @@ const AdministratorLayout: React.FC = () => {
         <SidebarMenu user={user} />
       </Sider>
       <Layout style={{ marginInlineStart: sidebarWidth }}>
-        <Header style={{ padding: 0, background: colorBgContainer }}>
+        <Header
+          style={{
+            position: "fixed",
+            top: 0,
+            right: 0,
+            left: sidebarWidth,
+            height: 64,
+            padding: 0,
+            zIndex: 100,
+            background: colorBgContainer,
+          }}
+        >
           <Flex justify="space-between">
             <Button
               type="text"
@@ -83,7 +91,7 @@ const AdministratorLayout: React.FC = () => {
             <Space size="large" className="mr-4">
               <Tag color="green">
                 {Common.formatAsCurrency(
-                  Number(user.wallet?.availableBalance ?? 0)
+                  Number(user.wallet?.availableBalance ?? 0),
                 )}
               </Tag>
               <CommentOutlined />
@@ -103,7 +111,7 @@ const AdministratorLayout: React.FC = () => {
         </Header>
         <Content
           style={{
-            margin: "12px 8px",
+            margin: "62px 8px",
             padding: 12,
             minHeight: window.screen.height - 100,
             //background: colorBgContainer,

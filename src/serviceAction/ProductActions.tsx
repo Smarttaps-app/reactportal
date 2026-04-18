@@ -15,6 +15,7 @@ import {
   getProviders,
   fetchPackage,
   switchBiller,
+  refreshProvider,
 } from "../services/ProductService";
 import { IBiller, IPackage, IProduct } from "../utils/type";
 
@@ -37,6 +38,14 @@ export async function getProductAction(id: string) {
 }
 export async function addProductAction(payload: IProduct) {
   const response = await addProduct(payload);
+  if (response.status == 200) {
+    console.log(response.data);
+    return response.data;
+  }
+  throw new Error(response.data);
+}
+export async function refreshProviderAction(payload: IBiller) {
+  const response = await refreshProvider(payload);
   if (response.status == 200) {
     console.log(response.data);
     return response.data;

@@ -10,6 +10,7 @@ import {
   getBillersAction,
   getPackagesAction,
   getProductsAction,
+  refreshProviderAction,
   switchBillerAction,
 } from "../../../serviceAction/ProductActions";
 import { App } from "antd";
@@ -36,6 +37,16 @@ export function useAddProduct() {
     },
   });
   return { isAdding, addProduct };
+}
+export function useRefreshProvider() {
+  const { message } = App.useApp();
+  const { mutate: refreshProvider, isPending: fetching } = useMutation({
+    mutationFn: refreshProviderAction,
+    onError: (error) => {
+      message.error(Common.formatError(error));
+    },
+  });
+  return { fetching, refreshProvider };
 }
 export function useDeleteProduct() {
   const { message } = App.useApp();

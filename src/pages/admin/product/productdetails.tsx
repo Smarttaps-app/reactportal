@@ -3,12 +3,16 @@ import { useMemo, useState } from "react";
 import { Common } from "../../../utils/Common";
 import {
   ArrowLeftOutlined,
+  DeleteOutlined,
+  EditOutlined,
+  EyeOutlined,
   PlusOutlined,
+  RedoOutlined,
   SwitcherOutlined,
 } from "@ant-design/icons";
 import { IBiller } from "../../../utils/type";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useDeleteBiller } from "./useService";
+import { useDeleteBiller, useRefreshProvider } from "./useService";
 import { useQueryClient } from "@tanstack/react-query";
 import { Search } from "lucide-react";
 import SwitchProvider from "./SwitchProvider";
@@ -20,6 +24,7 @@ export default function ProductDetailScreen() {
   const { message } = App.useApp();
   const client = useQueryClient();
   const { isdeleting, deleteBiller } = useDeleteBiller();
+  const { fetching, refreshProvider } = useRefreshProvider();
   const location = useLocation();
   const { sproduct } = location.state || {};
   const navigate = useNavigate();
@@ -31,7 +36,6 @@ export default function ProductDetailScreen() {
         title: "ID",
         dataIndex: "id",
         key: "id",
-        width: "3%",
       },
       {
         title: "Biller",
@@ -77,16 +81,6 @@ export default function ProductDetailScreen() {
         ),
       },
       {
-        title: "Addon",
-        dataIndex: "hasAddons",
-        key: "hasAddons",
-        render: (hasAddons: boolean) => (
-          <Tag color={`${hasAddons ? "green" : "red"}`}>
-            {hasAddons ? "Yes" : "No"}
-          </Tag>
-        ),
-      },
-      {
         title: "Package",
         dataIndex: "hasPackages",
         key: "hasPackages",
@@ -123,6 +117,7 @@ export default function ProductDetailScreen() {
                 color="cyan"
                 variant="solid"
                 size="small"
+                icon={<EyeOutlined />}
                 onClick={() =>
                   record.hasPackages
                     ? navigate(`/admin/biller/${record.billerId}`, {
@@ -132,25 +127,40 @@ export default function ProductDetailScreen() {
                       })
                     : message.info("Biller has not package")
                 }
-              >
-                View
-              </Button>
+              />
             )}
             <Button
               color="default"
               size="small"
               variant="solid"
+              icon={<EditOutlined />}
               onClick={() => {
                 setItem(record);
                 setShow(true);
               }}
-            >
-              Edit
-            </Button>
+            />
+            <Button
+              type="primary"
+              color="cyan"
+              icon={<RedoOutlined />}
+              size="small"
+              disabled={fetching}
+              loading={fetching}
+              onClick={() =>
+                refreshProvider(record, {
+                  onSuccess: (response) =>
+                    message.success(response.statusDescription),
+                  onError: (error) => message.error(Common.formatError(error)),
+                  onSettled: () =>
+                    client.invalidateQueries({ queryKey: ["packages"] }),
+                })
+              }
+            />
             <Button
               type="primary"
               danger
               size="small"
+              icon={<DeleteOutlined />}
               disabled={isdeleting}
               loading={isdeleting}
               onClick={() =>
@@ -162,9 +172,7 @@ export default function ProductDetailScreen() {
                     client.invalidateQueries({ queryKey: ["packages"] }),
                 })
               }
-            >
-              Delete
-            </Button>
+            />
           </Flex>
         ),
       },

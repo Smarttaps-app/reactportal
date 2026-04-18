@@ -38,7 +38,6 @@ export default function ProductsScreen() {
         title: "ID",
         dataIndex: "id",
         key: "id",
-        width: "5%",
       },
       {
         title: "Product Name",
@@ -46,16 +45,19 @@ export default function ProductsScreen() {
         key: "name",
       },
       {
+        title: "Product Description",
+        dataIndex: "description",
+        key: "description",
+      },
+      {
         title: "Vas Type",
         dataIndex: "vasType",
         key: "vasType",
-        width: "10%",
       },
       {
         title: "Status",
         dataIndex: "status",
         key: "status",
-        width: "8%",
         render: (status: boolean) => (
           <Tag color={`${status ? "green" : "red"}`}>
             {status ? "Active" : "Inactive"}
@@ -66,7 +68,6 @@ export default function ProductsScreen() {
         title: "Billers",
         dataIndex: "billers",
         key: "billers",
-        width: "8%",
         render: (billers: IBiller[]) => (
           <span className="text-xs text-gray-500">
             {billers?.length > 0
@@ -79,16 +80,14 @@ export default function ProductsScreen() {
         title: "Updated",
         dataIndex: "updated_at",
         key: "updated_at",
-        width: "9%",
         render: (updated: string) => Common.formatDate(updated),
         ellipsis: true,
       },
       {
         title: "Actions",
         dataIndex: "",
-        width: "20%",
         render: (product: IProduct) => (
-          <Flex gap="small" align="center" wrap>
+          <Flex gap="small" wrap>
             <Button
               color="cyan"
               variant="solid"
@@ -136,7 +135,7 @@ export default function ProductsScreen() {
         ),
       },
     ],
-    []
+    [],
   );
   if (error)
     return (
@@ -152,7 +151,7 @@ export default function ProductsScreen() {
         product.customerField
           .toLowerCase()
           .includes(searchTerm.toLowerCase()) ||
-        product.description?.toLowerCase().includes(searchTerm.toLowerCase())
+        product.description?.toLowerCase().includes(searchTerm.toLowerCase()),
     ) || [];
 
   return (
