@@ -39,8 +39,7 @@ export default function BillerDetailScreen() {
         title: "Amount",
         dataIndex: "amount",
         key: "amount",
-        render: (amount: string) =>
-          Common.formatAsCurrency(Number(amount) * 100),
+        render: (amount: string) => Common.formatAsCurrency(Number(amount)),
       },
       {
         title: "Validity",
