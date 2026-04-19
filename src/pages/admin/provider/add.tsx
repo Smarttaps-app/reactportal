@@ -29,7 +29,7 @@ const AddProvider: React.FC<IAddProps<IUser>> = ({
     addAdmin(values, {
       onSuccess: (data) => {
         notification.success({
-          message: "Add Provider",
+          message: payload ? "Edit Business Provider" : "Add Business Provider",
           description: data.statusDescription,
         });
         onCancel();
@@ -37,7 +37,7 @@ const AddProvider: React.FC<IAddProps<IUser>> = ({
       onError: (error) => {
         console.log(error);
         notification.error({
-          message: "Add Provider",
+          message: payload ? "Edit Business Provider" : "Add Business Provider",
           description: Common.formatError(error),
         });
         onCancel();
@@ -55,7 +55,7 @@ const AddProvider: React.FC<IAddProps<IUser>> = ({
       destroyOnHidden
       footer={null}
       width={650}
-      title="Add Business Provider"
+      title={payload ? "Edit Business Provider" : "Add Business Provider"}
     >
       <Form
         name="basic"
@@ -69,6 +69,7 @@ const AddProvider: React.FC<IAddProps<IUser>> = ({
           provider_auth: payload?.provider_auth,
           provider_url: payload?.provider_url,
           email: payload?.email,
+          identifier: payload?.identifier,
           phonenumber: payload?.phonenumber,
           status: payload?.status,
           tag: payload?.tag,
@@ -113,6 +114,19 @@ const AddProvider: React.FC<IAddProps<IUser>> = ({
                 checkedChildren="Active"
                 className="!w-full"
               />
+            </Form.Item>
+            <Form.Item<IUser>
+              label="Base URL"
+              name="provider_url"
+              initialValue={payload?.provider_url}
+              rules={[
+                {
+                  required: true,
+                  message: "Please input provider base url!",
+                },
+              ]}
+            >
+              <Input />
             </Form.Item>
           </Col>
           <Col xs={24} sm={24} md={12}>
@@ -163,21 +177,21 @@ const AddProvider: React.FC<IAddProps<IUser>> = ({
                 </Option>
               </Select>
             </Form.Item>
+            <Form.Item<IUser>
+              label="Provider Identifier"
+              name="identifier"
+              initialValue={payload?.identifier}
+              rules={[
+                {
+                  required: true,
+                  message: "Please input provider identifier",
+                },
+              ]}
+            >
+              <Input />
+            </Form.Item>
           </Col>
         </Row>
-        <Form.Item<IUser>
-          label="Base URL"
-          name="provider_url"
-          initialValue={payload?.provider_url}
-          rules={[
-            {
-              required: true,
-              message: "Please input provider base url!",
-            },
-          ]}
-        >
-          <Input />
-        </Form.Item>
         <Form.Item<IUser>
           label="Provider Token"
           name="provider_auth"
