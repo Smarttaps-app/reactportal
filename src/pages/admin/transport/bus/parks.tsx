@@ -1,16 +1,14 @@
-import { App, Button, Card, Empty, Flex, Input, Row, Space, Table } from "antd";
+import { Button, Card, Empty, Flex, Input, Row, Space, Table } from "antd";
 import { useMemo, useState } from "react";
-import { PlusOutlined } from "@ant-design/icons";
+import { DeleteOutlined, EyeOutlined, PlusOutlined } from "@ant-design/icons";
 import { Search } from "lucide-react";
 import { useDeleteStation, useStations } from "./useBus";
 import { IStation } from "../../../../utils/type";
 import AddStation from "./AddStation";
 import { Common } from "../../../../utils/Common";
-import { useQueryClient } from "@tanstack/react-query";
 
+const { VITE_API_IBASE_URL } = import.meta.env;
 export default function BusStationsScreen() {
-  const { message } = App.useApp();
-  const client = useQueryClient();
   const [searchTerm, setSearchTerm] = useState("");
   const [add, setAdd] = useState(false);
   const [item, setItem] = useState<IStation>();
@@ -20,16 +18,22 @@ export default function BusStationsScreen() {
   const columns = useMemo(
     () => [
       {
+        title: "",
+        dataIndex: "parkImage",
+        key: "parkImage",
+        render: (parkImage: string) => (
+          <img className="w-12" src={`${VITE_API_IBASE_URL}${parkImage}`} />
+        ),
+      },
+      {
         title: "ID",
         dataIndex: "identifier",
         key: "identifier",
-        width: "5%",
       },
       {
         title: "Park Name",
         dataIndex: "stationName",
         key: "stationName",
-        width: "30%",
       },
       {
         title: "Location",
@@ -40,7 +44,16 @@ export default function BusStationsScreen() {
         title: "Mode",
         dataIndex: "mode",
         key: "mode",
-        width: "10%",
+      },
+      {
+        title: "Contact",
+        dataIndex: "contact",
+        key: "contact",
+      },
+      {
+        title: "companyName",
+        dataIndex: "companyName",
+        key: "companyName",
       },
       {
         title: "Updated",
@@ -52,43 +65,32 @@ export default function BusStationsScreen() {
       {
         title: "Actions",
         dataIndex: "",
-        width: "15%",
         render: (station: IStation) => (
           <Flex gap="small" align="center" wrap>
             <Button
               color="cyan"
               variant="solid"
+              icon={<EyeOutlined />}
               size="small"
               onClick={() => {
                 setItem(station);
                 setAdd(true);
               }}
-            >
-              View
-            </Button>
+            />
             <Button
               type="primary"
               size="small"
+              icon={<DeleteOutlined />}
               danger
               disabled={isdeleting}
               loading={isdeleting}
-              onClick={() =>
-                deleteStation(station.identifier, {
-                  onSuccess: (response) =>
-                    message.success(response.statusDescription),
-                  onError: (error) => message.error(Common.formatError(error)),
-                  onSettled: () =>
-                    client.invalidateQueries({ queryKey: ["busstations"] }),
-                })
-              }
-            >
-              Delete
-            </Button>
+              onClick={() => deleteStation(station.identifier)}
+            />
           </Flex>
         ),
       },
     ],
-    []
+    [],
   );
   if (error)
     return (
@@ -102,7 +104,7 @@ export default function BusStationsScreen() {
       (payment: IStation) =>
         payment.stationName.toLowerCase().includes(searchTerm.toLowerCase()) ||
         payment.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        payment.mode.toLowerCase().includes(searchTerm.toLowerCase())
+        payment.mode.toLowerCase().includes(searchTerm.toLowerCase()),
     ) || [];
 
   return (

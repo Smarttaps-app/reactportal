@@ -1,28 +1,16 @@
-import {
-  App,
-  Avatar,
-  Button,
-  Card,
-  Empty,
-  Flex,
-  Input,
-  Row,
-  Space,
-  Table,
-} from "antd";
+import { Button, Card, Empty, Flex, Input, Row, Space, Table } from "antd";
 import { useMemo, useState } from "react";
 import { Common } from "../../../../utils/Common";
-import { BarsOutlined, PlusOutlined } from "@ant-design/icons";
+import { DeleteOutlined, EyeOutlined, PlusOutlined } from "@ant-design/icons";
 import { IBus } from "../../../../utils/type";
 import { useBuses } from "../../../../hooks/useTransport";
-import AddBus from "./AddBus";
 import { Search } from "lucide-react";
 import { useDeleteBus } from "./useBus";
-import { useQueryClient } from "@tanstack/react-query";
+import AddNewBus from "./AddNewBus";
+
+const { VITE_API_IBASE_URL } = import.meta.env;
 
 export default function BusesScreen() {
-  const { notification } = App.useApp();
-  const client = useQueryClient();
   const [searchTerm, setSearchTerm] = useState("");
   const [add, setAdd] = useState(false);
   const [item, setItem] = useState<IBus>();
@@ -35,34 +23,34 @@ export default function BusesScreen() {
         title: "",
         dataIndex: "busImage",
         key: "busImage",
-        width: "5%",
-        render: (avatar: string) => (
-          <Avatar src={avatar} size="small" icon={<BarsOutlined />} />
+        render: (busImage: string) => (
+          <img className="w-12" src={`${VITE_API_IBASE_URL}${busImage}`} />
         ),
+      },
+      {
+        title: "Owner",
+        dataIndex: "companyName",
+        key: "companyName",
       },
       {
         title: "Bus Name",
         dataIndex: "name",
         key: "name",
-        width: "25%",
       },
       {
         title: "Bus Number",
         dataIndex: "bus_number",
         key: "bus_number",
-        width: "10%",
       },
       {
         title: "Seat",
         dataIndex: "seatCount",
         key: "seatCount",
-        width: "5%",
       },
       {
         title: "Price",
         dataIndex: "base_price",
         key: "base_price",
-        width: "10%",
         render: (base_price: string) =>
           Common.formatAsCurrency(Number(base_price) * 100),
       },
@@ -70,14 +58,12 @@ export default function BusesScreen() {
         title: "TV",
         dataIndex: "tv",
         key: "tv",
-        width: "5%",
         render: (keyValue: boolean) => (keyValue ? "YES" : "NO"),
       },
       {
         title: "Camera",
         dataIndex: "camera",
         key: "camera",
-        width: "8%",
         render: (keyValue: boolean) => (keyValue ? "YES" : "NO"),
       },
       {
@@ -90,50 +76,32 @@ export default function BusesScreen() {
       {
         title: "Actions",
         dataIndex: "",
-        width: "18%",
         render: (bus: IBus) => (
           <Flex gap="small" align="center" wrap>
             <Button
               color="cyan"
+              icon={<EyeOutlined />}
               variant="solid"
               size="small"
               onClick={() => {
                 setItem(bus);
                 setAdd(true);
               }}
-            >
-              View
-            </Button>
+            />
             <Button
               type="primary"
               danger
               size="small"
+              icon={<DeleteOutlined />}
               disabled={isdeleting}
               loading={isdeleting}
-              onClick={() =>
-                deleteBus(bus.identifier, {
-                  onSuccess: (response) =>
-                    notification.success({
-                      message: "Delete Bus",
-                      description: response.statusDescription,
-                    }),
-                  onError: (error) =>
-                    notification.error({
-                      message: "Delete Bus",
-                      description: Common.formatError(error),
-                    }),
-                  onSettled: () =>
-                    client.invalidateQueries({ queryKey: ["busstations"] }),
-                })
-              }
-            >
-              Delete
-            </Button>
+              onClick={() => deleteBus(bus.identifier)}
+            />
           </Flex>
         ),
       },
     ],
-    []
+    [],
   );
   if (error)
     return (
@@ -147,7 +115,7 @@ export default function BusesScreen() {
       (bus: IBus) =>
         bus.bus_number?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         bus.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        bus.description?.toLowerCase().includes(searchTerm.toLowerCase())
+        bus.description?.toLowerCase().includes(searchTerm.toLowerCase()),
     ) || [];
 
   return (
@@ -206,7 +174,7 @@ export default function BusesScreen() {
           scroll={{ x: "max-content" }}
         />
       </Card>
-      <AddBus payload={item} isOpen={add} onCancel={() => setAdd(false)} />
+      <AddNewBus payload={item} isOpen={add} onCancel={() => setAdd(false)} />
     </>
   );
 }

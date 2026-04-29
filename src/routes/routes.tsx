@@ -7,6 +7,7 @@ import {
   DashboardOutlined,
   DeploymentUnitOutlined,
   DollarOutlined,
+  GitlabOutlined,
   ImportOutlined,
   InfoCircleOutlined,
   NotificationOutlined,
@@ -31,7 +32,7 @@ import AccountingScreen from "../pages/admin/gl_account/Index";
 import GlAccountScreen from "../pages/admin/gl_account/ledger/glaccounting";
 import CommissionsScreen from "../pages/admin/gl_account/commission/commissions";
 import DiscountsScreen from "../pages/admin/gl_account/discount/discounts";
-import { PersonStanding, ServerIcon, TrainIcon } from "lucide-react";
+import { PersonStanding, TrainIcon } from "lucide-react";
 import TrainsScreen from "../pages/admin/transport/train/Trains";
 import BusRoutesScreen from "../pages/admin/transport/bus/BusRoutes";
 import BusStationsScreen from "../pages/admin/transport/bus/parks";
@@ -52,6 +53,7 @@ import AdminPaymentsScreen from "../pages/admin/payment/AdminpaymentsScreen";
 import AdminCashoutsScreen from "../pages/admin/cashout/AdminCashouts";
 import ProviderIndex from "../pages/admin/provider";
 import RoleIndex from "../pages/admin/role";
+import BusTypesScreen from "../pages/admin/transport/bus/busTypes";
 
 export const protectedRoutes: IAppRoute[] = [
   {
@@ -82,7 +84,7 @@ export const protectedRoutes: IAppRoute[] = [
     path: "service-provider",
     Component: ProviderIndex,
     title: "Service Provider",
-    icon: <ServerIcon />,
+    icon: <GitlabOutlined />,
   },
   {
     path: "admins",
@@ -110,16 +112,17 @@ export const protectedRoutes: IAppRoute[] = [
     icon: <ImportOutlined />,
   },
   {
-    path: "bus-services",
+    path: "bus",
     Component: TransportScreen,
     title: "Bus",
     icon: <CarOutlined />,
     children: [
-      { path: "buses", Component: BusesScreen, showInMenu: true },
+      { path: "bus-types", Component: BusTypesScreen, showInMenu: true },
+      { path: "bus-list", Component: BusesScreen, showInMenu: true },
       { path: "bus-routes", Component: BusRoutesScreen, showInMenu: true },
       { path: "bus-parks", Component: BusStationsScreen, showInMenu: true },
       {
-        path: "bus-schedules",
+        path: "bus-trips",
         Component: BusSchedulesScreen,
         showInMenu: true,
       },

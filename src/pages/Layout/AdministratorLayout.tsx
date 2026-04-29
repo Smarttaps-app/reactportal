@@ -111,9 +111,9 @@ const AdministratorLayout: React.FC = () => {
         </Header>
         <Content
           style={{
-            margin: "62px 8px",
+            margin: "52px 12px",
             padding: 12,
-            minHeight: window.screen.height - 100,
+            // minHeight: window.screen.height - 100,
             //background: colorBgContainer,
             borderRadius: borderRadiusLG,
             overflow: "initial",

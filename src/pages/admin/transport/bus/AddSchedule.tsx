@@ -1,36 +1,44 @@
 import {
   Button,
-  Card,
   Col,
   Form,
+  Grid,
   Input,
-  App,
   Modal,
   Row,
   Select,
   TimePicker,
 } from "antd";
-import { Grid } from "antd";
-import { IAddProps, ISchedule, IUser } from "../../../../utils/type";
-import { useQueryClient } from "@tanstack/react-query";
-import { Common } from "../../../../utils/Common";
-import { useUser } from "../../../../context/useUser";
-import { useAdmins } from "../../../../hooks/useAdmin";
-import { useAddSchedule } from "./useBus";
-const { useBreakpoint } = Grid;
+import {
+  IAddProps,
+  IBus,
+  IBusRoute,
+  ISchedule,
+  IUser,
+} from "../../../../utils/type";
+import {
+  useAddSchedule,
+  useBusesViaAdmin,
+  useBusProviders,
+  useRoutesViaAdmin,
+} from "./useBus";
+import { useState } from "react";
 const { Option } = Select;
+const { useBreakpoint } = Grid;
 
 const AddSchedule: React.FC<IAddProps<ISchedule>> = ({
   payload,
   isOpen = false,
   onCancel,
 }) => {
-  const { user } = useUser();
-  const { isPending, data: providers } = useAdmins("external");
-  const client = useQueryClient();
   const screens = useBreakpoint();
-  const { notification } = App.useApp();
+  const [form] = Form.useForm();
+  const [providerId, setProviderId] = useState(null);
   const { addSchedule, isAdding } = useAddSchedule();
+  const { isPending, busProviders: providers } = useBusProviders();
+  const { loadingRoutes, routes } = useRoutesViaAdmin(providerId!);
+  const { loadingBuses, buses } = useBusesViaAdmin(providerId!);
+
   const onFinish = async (values: ISchedule) => {
     values.arrivalTime = values.arrivalTime?.format("HH:mm a").toUpperCase();
     values.departureTime = values.departureTime
@@ -38,21 +46,7 @@ const AddSchedule: React.FC<IAddProps<ISchedule>> = ({
       .toUpperCase();
     console.log(values);
     addSchedule(values, {
-      onSuccess: (data) => {
-        notification.success({
-          description: data.statusDescription,
-          message: "Add Schedule",
-        });
-        onCancel();
-      },
-      onError: (error) => {
-        notification.error({
-          message: "Add Schedule",
-          description: Common.formatError(error),
-        });
-        onCancel();
-      },
-      onSettled: () => client.invalidateQueries({ queryKey: ["schedules"] }),
+      onSuccess: () => onCancel(),
     });
   };
   return (
@@ -64,139 +58,189 @@ const AddSchedule: React.FC<IAddProps<ISchedule>> = ({
       onCancel={onCancel}
       destroyOnHidden
       footer={null}
-      width={screens.xs ? "100%" : 450}
+      title="Add Schedule"
+      width={screens.xs ? "100%" : 650}
     >
-      <Card title="Add Schedule">
-        <Form
-          layout="vertical"
-          initialValues={{
-            mode: "bus",
-            timeOfOperation: payload?.timeOfOperation,
-            arrivalTime: payload?.arrivalTime,
-            departureTime: payload?.departureTime,
-            identifier: payload?.identifier,
-            admin_id: payload?.admin_id,
-          }}
-          onFinish={onFinish}
-          style={{ minWidth: 320 }}
-        >
-          <Row gutter={[16, 16]}>
-            <Form.Item<ISchedule> name="mode" hidden>
-              <Input />
+      <Form
+        layout="vertical"
+        form={form}
+        initialValues={{
+          mode: "bus",
+          timeOfOperation: payload?.timeOfOperation,
+          arrivalTime: payload?.arrivalTime,
+          departureTime: payload?.departureTime,
+          identifier: payload?.identifier,
+          admin_id: payload?.admin_id,
+        }}
+        onFinish={onFinish}
+      >
+        <Row gutter={[16, 16]}>
+          <Form.Item<ISchedule> name="mode" hidden>
+            <Input />
+          </Form.Item>
+          <Col xs={24} sm={24} md={12}>
+            <Form.Item<ISchedule>
+              label="Select a provider"
+              name="admin_id"
+              rules={[{ required: true, message: "Please select a provider!" }]}
+            >
+              <Select
+                onChange={(value) => setProviderId(value)}
+                loading={isPending}
+              >
+                {providers?.map((item: IUser) => (
+                  <Option key={item.id} value={item.id}>
+                    {item.companyName}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
+            <Form.Item
+              name="bus_id"
+              label="Trip Bus"
+              rules={[
+                {
+                  required: true,
+                  message: "Please select a bus for the trip",
+                },
+              ]}
+            >
+              <Select
+                loading={loadingBuses}
+                disabled={!providerId}
+                placeholder="Select trip bus"
+                showSearch
+                optionFilterProp="children"
+              >
+                {buses?.map((bus: IBus) => (
+                  <Option key={bus.id} value={bus.id}>
+                    {bus.name} {bus.bus_number}
+                  </Option>
+                ))}
+              </Select>
             </Form.Item>
             <Form.Item<ISchedule>
-              name="admin_id"
-              initialValue={user?.identifier}
-              hidden
+              name="timeOfOperation"
+              label="Select Operation Period"
+              rules={[
+                {
+                  required: true,
+                  message: "Please choose Operation Period",
+                },
+              ]}
             >
-              <Input />
+              <Select
+                showSearch
+                loading={isAdding}
+                disabled={isAdding}
+                placeholder="Choose Operation Period"
+                options={[
+                  { value: "Morning", label: "Morning" },
+                  { value: "Afternoon", label: "Afternoon" },
+                  { value: "Evening", label: "Evening" },
+                  { value: "Night", label: "Night" },
+                ]}
+              />
             </Form.Item>
-            <Col xs={24} sm={24} md={24}>
-              <Form.Item<ISchedule>
-                name="timeOfOperation"
-                label="Select Operation Period"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please choose Operation Period",
-                  },
-                ]}
-              >
-                <Select
-                  showSearch
-                  loading={isAdding}
-                  disabled={isAdding}
-                  size="large"
-                  placeholder="Choose Operation Period"
-                  options={[
-                    { value: "Morning", label: "Morning" },
-                    { value: "Afternoon", label: "Afternoon" },
-                    { value: "Evening", label: "Evening" },
-                    { value: "Night", label: "Night" },
-                  ]}
-                />
-              </Form.Item>
-            </Col>
+          </Col>
 
-            <Col xs={24} sm={24} md={24}>
-              <Form.Item<ISchedule>
-                name="departureTime"
-                label="Departure time"
-                rules={[
-                  { required: true, message: "Please enter departure time!" },
-                ]}
+          <Col xs={24} sm={24} md={12}>
+            <Form.Item
+              name="bus_route_id"
+              label="Trip Route"
+              rules={[
+                {
+                  required: true,
+                  message: "Please select a route for the trip",
+                },
+              ]}
+            >
+              <Select
+                loading={loadingRoutes}
+                disabled={!providerId}
+                placeholder="Select trip route"
+                showSearch
+                optionFilterProp="children"
               >
-                <TimePicker
-                  style={{ width: "100%" }}
-                  size="large"
-                  use12Hours
-                  format="h:mm a"
-                />
-              </Form.Item>
-            </Col>
-            <Col xs={24} sm={24} md={24}>
-              <Form.Item<ISchedule>
-                name="arrivalTime"
-                label="Arrival time "
-                rules={[
-                  { required: true, message: "Please enter arrival time!" },
+                {routes?.map((route: IBusRoute) => (
+                  <Option key={route.id} value={route.id}>
+                    {route.routeName}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
+            <Form.Item<ISchedule>
+              name="status"
+              label="Select trip status"
+              rules={[
+                {
+                  required: true,
+                  message: "Please choose a trip status",
+                },
+              ]}
+            >
+              <Select
+                showSearch
+                loading={isAdding}
+                disabled={isAdding}
+                placeholder="Choose trip status"
+                options={[
+                  { value: "BOARDING", label: "BOARDING" },
+                  { value: "CANCELLED", label: "CANCELLED" },
+                  { value: "COMPLETED", label: "COMPLETED" },
+                  { value: "FULL", label: "FULL" },
+                  { value: "IN_PROGRESS", label: "IN PROGRESS" },
+                  { value: "SCHEDULED", label: "SCHEDULED" },
                 ]}
+              />
+            </Form.Item>
+            <Form.Item<ISchedule>
+              name="departureTime"
+              label="Departure time"
+              rules={[
+                { required: true, message: "Please enter departure time!" },
+              ]}
+            >
+              <TimePicker
+                style={{ width: "100%" }}
+                size="large"
+                use12Hours
+                format="h:mm a"
+              />
+            </Form.Item>
+          </Col>
+          <Col xs={24} sm={24} md={24}>
+            <Form.Item<ISchedule>
+              name="arrivalTime"
+              label="Arrival time "
+              rules={[
+                { required: true, message: "Please enter arrival time!" },
+              ]}
+            >
+              <TimePicker
+                style={{ width: "100%" }}
+                size="large"
+                use12Hours
+                format="h:mm a"
+              />
+            </Form.Item>
+          </Col>
+          <Col xs={24} sm={24} md={24}>
+            <Form.Item>
+              <Button
+                block
+                type="primary"
+                htmlType="submit"
+                disabled={isAdding}
+                loading={isAdding}
+                className="!rounded-md !shadow-md !py-5"
               >
-                <TimePicker
-                  style={{ width: "100%" }}
-                  size="large"
-                  use12Hours
-                  format="h:mm a"
-                />
-              </Form.Item>
-            </Col>
-            <Col xs={24} sm={24} md={24}>
-              {user?.tag == "busprovider" ? (
-                <Form.Item<ISchedule>
-                  name="admin_id"
-                  initialValue={user.identifier}
-                  hidden
-                >
-                  <Input />
-                </Form.Item>
-              ) : (
-                <Form.Item<ISchedule>
-                  label="Select a provider"
-                  name="admin_id"
-                  rules={[
-                    { required: true, message: "Please select a provider!" },
-                  ]}
-                >
-                  <Select
-                    //onChange={handleChange}
-                    loading={isPending}
-                  >
-                    {providers?.map((item: IUser) => (
-                      <Option key={item.identifier} value={item.identifier}>
-                        {item.lastname} {item.firstname}
-                      </Option>
-                    ))}
-                  </Select>
-                </Form.Item>
-              )}
-            </Col>
-            <Col xs={24} sm={24} md={24}>
-              <Form.Item>
-                <Button
-                  block
-                  type="primary"
-                  htmlType="submit"
-                  disabled={isAdding}
-                  loading={isAdding}
-                  className="!rounded-md !shadow-md !py-5"
-                >
-                  Submit
-                </Button>
-              </Form.Item>
-            </Col>
-          </Row>
-        </Form>
-      </Card>
+                Submit
+              </Button>
+            </Form.Item>
+          </Col>
+        </Row>
+      </Form>
     </Modal>
   );
 };

@@ -1,12 +1,10 @@
 import { api } from "../utils/AxiosInstance";
 import {
-  IBus,
   IBusRoute,
   IPark,
   ITrainRoute,
   ISchedule,
   ISeat,
-  IStation,
   ITrain,
 } from "../utils/type";
 // service for Routes
@@ -32,7 +30,7 @@ export const getTrainStations = async () =>
   await api.get(`admin/train/stations`);
 export const getStation = async (id: string) =>
   await api.get(`admin/station/${id}`);
-export const addStation = async (payload: IStation) =>
+export const addStation = async (payload: FormData) =>
   await api.post(`admin/station/add`, payload);
 export const deleteStation = async (id: string) =>
   await api.delete(`admin/station/${id}/delete`);
@@ -53,7 +51,7 @@ export const deleteBusRoute = async (id: string) =>
   await api.delete(`admin/bus/route/${id}/delete`);
 export const getBuses = async () => await api.get(`admin/buses`);
 export const getBus = async (id: string) => await api.get(`admin/bus/${id}`);
-export const addBus = async (payload: IBus) =>
+export const addBus = async (payload: FormData) =>
   await api.post(`admin/bus/add`, payload);
 export const deleteBus = async (id: string) =>
   await api.delete(`admin/bus/${id}/delete`);

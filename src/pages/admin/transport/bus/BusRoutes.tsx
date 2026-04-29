@@ -48,7 +48,7 @@ export default function BusRoutesScreen() {
         key: "baseprice",
         width: "10%",
         render: (baseprice: string) =>
-          Common.formatAsCurrency(Number(baseprice)),
+          Common.formatAsCurrency(Number(baseprice) * 100),
       },
       {
         title: "Mode",

@@ -209,7 +209,11 @@ export interface IStation {
   identifier: string;
   stationName: string;
   location: string;
+  contact: string;
+  address: string;
+  status: boolean;
   parkImage: string;
+  description: string;
   admin_id: number;
   mode: string;
   updated_at: string;
@@ -227,6 +231,15 @@ export interface ITrain {
   schedules: ISchedule[];
   created_at: string;
   updated_at: string;
+}
+export interface IBusType {
+  id: number;
+  admin_id: number;
+  name: string;
+  seats: IBusSeat[];
+  companyName: string;
+  total_seats: number;
+  created_at: string;
 }
 export interface IBus {
   id: number;
@@ -246,6 +259,20 @@ export interface IBus {
   schedules: ISchedule[];
   busImage: string | null;
   description: string | null;
+  created_at: string;
+  updated_at: string;
+}
+export interface IBusSeat {
+  id: number;
+  admin_id: number;
+  bus_type_id: number;
+  seat_number: string;
+  seat_label: string;
+  seatrow: number;
+  seatcolumn: number;
+  seattype: string;
+  is_bookable: boolean;
+  price: string;
   created_at: string;
   updated_at: string;
 }
@@ -286,6 +313,7 @@ export interface ITrainRoute {
   prices: ISeat[];
 }
 export interface IBusRoute {
+  id: number;
   identifier: string;
   admin_id: string;
   routeName: string;
