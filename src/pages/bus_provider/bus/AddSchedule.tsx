@@ -10,22 +10,15 @@ import {
   Select,
   TimePicker,
 } from "antd";
-import {
-  IAddProps,
-  IBus,
-  IBusRoute,
-  ISchedule,
-  IUser,
-} from "../../../../utils/type";
+import { IAddProps, IBus, IBusRoute, ISchedule } from "../../../utils/type";
 import {
   useAddBusSchedule,
   useBusesViaAdmin,
-  useBusProviders,
   useRoutesViaAdmin,
 } from "./useBus";
-import { useState } from "react";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
+import { useUser } from "../../../context/useUser";
 
 dayjs.extend(customParseFormat);
 
@@ -40,11 +33,10 @@ const AddSchedule: React.FC<IAddProps<ISchedule>> = ({
 }) => {
   const screens = useBreakpoint();
   const [form] = Form.useForm();
-  const [providerId, setProviderId] = useState(null);
   const { addSchedule, isAdding } = useAddBusSchedule();
-  const { isPending, busProviders: providers } = useBusProviders();
-  const { loadingRoutes, routes } = useRoutesViaAdmin(providerId!);
-  const { loadingBuses, buses } = useBusesViaAdmin(providerId!);
+  const { user } = useUser();
+  const { loadingRoutes, routes } = useRoutesViaAdmin(user?.id ?? 0);
+  const { loadingBuses, buses } = useBusesViaAdmin(user?.id ?? 0);
 
   const onFinish = async (values: ISchedule) => {
     values.arrivalTime = values.arrivalTime?.format("HH:mm a").toUpperCase();
@@ -76,7 +68,7 @@ const AddSchedule: React.FC<IAddProps<ISchedule>> = ({
           arrivalTime: payload?.arrivalTime,
           departureTime: payload?.departureTime,
           identifier: payload?.identifier,
-          admin_id: payload?.admin_id,
+          admin_id: user?.id,
         }}
         onFinish={onFinish}
       >
@@ -84,23 +76,10 @@ const AddSchedule: React.FC<IAddProps<ISchedule>> = ({
           <Form.Item<ISchedule> name="mode" hidden>
             <Input />
           </Form.Item>
+          <Form.Item name="admin_id" hidden>
+            <Input />
+          </Form.Item>
           <Col xs={24} sm={24} md={12}>
-            <Form.Item<ISchedule>
-              label="Select a provider"
-              name="admin_id"
-              rules={[{ required: true, message: "Please select a provider!" }]}
-            >
-              <Select
-                onChange={(value) => setProviderId(value)}
-                loading={isPending}
-              >
-                {providers?.map((item: IUser) => (
-                  <Option key={item.id} value={item.id}>
-                    {item.companyName}
-                  </Option>
-                ))}
-              </Select>
-            </Form.Item>
             <Form.Item<ISchedule>
               name="bus_id"
               label="Trip Bus"
@@ -113,7 +92,6 @@ const AddSchedule: React.FC<IAddProps<ISchedule>> = ({
             >
               <Select
                 loading={loadingBuses}
-                disabled={!providerId}
                 placeholder="Select trip bus"
                 showSearch
                 optionFilterProp="children"
@@ -176,7 +154,6 @@ const AddSchedule: React.FC<IAddProps<ISchedule>> = ({
             >
               <Select
                 loading={loadingRoutes}
-                disabled={!providerId}
                 placeholder="Select trip route"
                 showSearch
                 optionFilterProp="children"
@@ -214,19 +191,6 @@ const AddSchedule: React.FC<IAddProps<ISchedule>> = ({
               />
             </Form.Item>
             <Form.Item<ISchedule>
-              name="trip_Date"
-              label="Trip Date "
-              rules={[{ required: true, message: "Please enter trip date!" }]}
-            >
-              <DatePicker
-                style={{ width: "100%" }}
-                defaultValue={dayjs()}
-                minDate={dayjs()}
-                //maxDate={dayjs("2020-10-31", dateFormat)}
-                maxDate={dayjs().add(5, "day")}
-              />
-            </Form.Item>
-            <Form.Item<ISchedule>
               name="departureTime"
               label="Departure time"
               rules={[
@@ -241,6 +205,19 @@ const AddSchedule: React.FC<IAddProps<ISchedule>> = ({
             </Form.Item>
           </Col>
           <Col xs={24} sm={24} md={24}>
+            <Form.Item<ISchedule>
+              name="trip_Date"
+              label="Trip Date "
+              rules={[{ required: true, message: "Please enter trip date!" }]}
+            >
+              <DatePicker
+                style={{ width: "100%" }}
+                defaultValue={dayjs()}
+                minDate={dayjs()}
+                //maxDate={dayjs("2020-10-31", dateFormat)}
+                maxDate={dayjs().add(5, "day")}
+              />
+            </Form.Item>
             <Form.Item>
               <Button
                 block

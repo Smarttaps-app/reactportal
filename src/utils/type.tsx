@@ -251,6 +251,7 @@ export interface IBus {
   airCondition: boolean;
   base_price: string;
   bus_capacity: number;
+  bus_type_id: number;
   availabilityStatus: string;
   seatCount: string;
   types: string | null;
@@ -277,9 +278,14 @@ export interface IBusSeat {
   updated_at: string;
 }
 export interface ISchedule {
-  identifier: string;
+  id: number;
   admin_id: number;
+  bus_route_id: number;
+  bus_id: number;
+  identifier: string;
   mode: string;
+  status: string;
+  trip_Date: string;
   daysOfOperation: string | null;
   timeOfOperation: string | null;
   departureTime: string;

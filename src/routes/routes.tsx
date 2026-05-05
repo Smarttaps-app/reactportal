@@ -53,7 +53,12 @@ import AdminPaymentsScreen from "../pages/admin/payment/AdminpaymentsScreen";
 import AdminCashoutsScreen from "../pages/admin/cashout/AdminCashouts";
 import ProviderIndex from "../pages/admin/provider";
 import RoleIndex from "../pages/admin/role";
-import BusTypesScreen from "../pages/admin/transport/bus/busTypes";
+import BusTypesScreen from "../pages/admin/transport/bus/BusTypes";
+import ProviderBusesScreen from "../pages/bus_provider/bus/ProviderBuses";
+import ProviderBusTypesScreen from "../pages/bus_provider/bus/ProviderBusTypes";
+import ProviderBusRoutesScreen from "../pages/bus_provider/bus/ProviderBusRoutes";
+import ProviderBusStationsScreen from "../pages/bus_provider/bus/ProviderParks";
+import ProviderBusSchedulesScreen from "../pages/bus_provider/bus/ProviderBusSchedules";
 
 export const protectedRoutes: IAppRoute[] = [
   {
@@ -222,13 +227,32 @@ export const busproviderRoutes: IAppRoute[] = [
     icon: <ImportOutlined />,
   },
   {
-    path: "bus-services",
+    path: "bus",
     Component: TransportScreen,
     title: "Bus",
     icon: <CarOutlined />,
     children: [
-      { path: "buses", Component: BusesScreen, showInMenu: true },
-      { path: "bus-parks", Component: BusStationsScreen, showInMenu: true },
+      {
+        path: "bus-types",
+        Component: ProviderBusTypesScreen,
+        showInMenu: true,
+      },
+      { path: "bus-list", Component: ProviderBusesScreen, showInMenu: true },
+      {
+        path: "bus-routes",
+        Component: ProviderBusRoutesScreen,
+        showInMenu: true,
+      },
+      {
+        path: "bus-parks",
+        Component: ProviderBusStationsScreen,
+        showInMenu: true,
+      },
+      {
+        path: "bus-trips",
+        Component: ProviderBusSchedulesScreen,
+        showInMenu: true,
+      },
     ],
   },
   {

@@ -1,13 +1,13 @@
 import { Button, Card, Empty, Flex, Input, Row, Space, Table } from "antd";
 import { useMemo, useState } from "react";
-import { Common } from "../../../../utils/Common";
+import { Common } from "../../../utils/Common";
 import { DeleteOutlined, EyeOutlined, PlusOutlined } from "@ant-design/icons";
-import { ISchedule } from "../../../../utils/type";
+import { ISchedule } from "../../../utils/type";
 import { useBusSchedules, useDeleteBusSchedule } from "./useBus";
 import AddSchedule from "./AddSchedule";
 import { Search } from "lucide-react";
 
-export default function BusSchedulesScreen() {
+export default function ProviderBusSchedulesScreen() {
   const [searchTerm, setSearchTerm] = useState("");
   const [add, setAdd] = useState(false);
   const [item, setItem] = useState<ISchedule>();

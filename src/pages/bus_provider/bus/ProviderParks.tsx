@@ -1,100 +1,90 @@
 import { Button, Card, Empty, Flex, Input, Row, Space, Table } from "antd";
 import { useMemo, useState } from "react";
-import { Common } from "../../../../utils/Common";
 import { DeleteOutlined, EyeOutlined, PlusOutlined } from "@ant-design/icons";
-import { ISchedule } from "../../../../utils/type";
-import { useBusSchedules, useDeleteBusSchedule } from "./useBus";
-import AddSchedule from "./AddSchedule";
 import { Search } from "lucide-react";
+import { useDeleteStation, useStations } from "./useBus";
+import { IStation } from "../../../utils/type";
+import AddProviderStation from "./AddProviderStation";
+import { Common } from "../../../utils/Common";
 
-export default function BusSchedulesScreen() {
+const { VITE_API_IBASE_URL } = import.meta.env;
+export default function ProviderBusStationsScreen() {
   const [searchTerm, setSearchTerm] = useState("");
   const [add, setAdd] = useState(false);
-  const [item, setItem] = useState<ISchedule>();
-  const { loading, schedules, error } = useBusSchedules();
-  const { isdeleting, deleteSchedule } = useDeleteBusSchedule();
+  const [item, setItem] = useState<IStation>();
+  const { loading, stations, error } = useStations();
+  const { isdeleting, deleteStation } = useDeleteStation();
+
   const columns = useMemo(
     () => [
       {
         title: "",
+        dataIndex: "parkImage",
+        key: "parkImage",
+        render: (parkImage: string) => (
+          <img className="w-12" src={`${VITE_API_IBASE_URL}${parkImage}`} />
+        ),
+      },
+      {
+        title: "ID",
         dataIndex: "identifier",
         key: "identifier",
       },
       {
-        title: "Company",
+        title: "Park Name",
+        dataIndex: "stationName",
+        key: "stationName",
+      },
+      {
+        title: "Location",
+        dataIndex: "location",
+        key: "location",
+      },
+      {
+        title: "Mode",
+        dataIndex: "mode",
+        key: "mode",
+      },
+      {
+        title: "Contact",
+        dataIndex: "contact",
+        key: "contact",
+      },
+      {
+        title: "companyName",
         dataIndex: "companyName",
         key: "companyName",
       },
       {
-        title: "Route",
-        dataIndex: "routeName",
-        key: "routeName",
-      },
-      {
-        title: "Bus",
-        dataIndex: "busName",
-        key: "busName",
-      },
-      {
-        title: "Trip Date",
-        dataIndex: "trip_Date",
-        key: "trip_Date",
-      },
-      {
-        title: "Arrival",
-        dataIndex: "arrivalTime",
-        key: "arrivalTime",
-      },
-      {
-        title: "Departure",
-        dataIndex: "departureTime",
-        key: "departureTime",
-      },
-      {
-        title: "Status",
-        dataIndex: "status",
-        key: "status",
-      },
-      {
-        title: "Seat",
-        dataIndex: "total_seats",
-        key: "total_seats",
-      },
-      {
-        title: "Booked",
-        dataIndex: "booked_seats",
-        key: "booked_seats",
-      },
-      {
-        title: "Date",
-        dataIndex: "created_at",
-        key: "created_at",
-        render: (created: string) => Common.formatDate(created),
+        title: "Updated",
+        dataIndex: "updated_at",
+        key: "updated_at",
+        render: (updated: string) => Common.formatDate(updated),
         ellipsis: true,
       },
       {
         title: "Actions",
         dataIndex: "",
-        render: (schedule: ISchedule) => (
+        render: (station: IStation) => (
           <Flex gap="small" align="center" wrap>
             <Button
               color="cyan"
-              size="small"
-              icon={<EyeOutlined />}
               variant="solid"
+              icon={<EyeOutlined />}
+              size="small"
               onClick={() => {
-                setItem(schedule);
+                setItem(station);
                 setAdd(true);
               }}
             />
             <Button
               type="primary"
               size="small"
-              danger
               icon={<DeleteOutlined />}
+              danger
               disabled={isdeleting}
               loading={isdeleting}
-              onClick={() => deleteSchedule(schedule.identifier)}
+              onClick={() => deleteStation(station.identifier)}
             />
           </Flex>
         ),
@@ -110,18 +100,17 @@ export default function BusSchedulesScreen() {
     );
 
   const data =
-    schedules.filter(
-      (schedule: ISchedule) =>
-        schedule?.daysOfOperation
-          ?.toLowerCase()
-          .includes(searchTerm.toLowerCase()) ||
-        schedule.arrivalTime.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        schedule.departureTime.toLowerCase().includes(searchTerm.toLowerCase()),
+    stations.filter(
+      (payment: IStation) =>
+        payment.stationName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        payment.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        payment.mode.toLowerCase().includes(searchTerm.toLowerCase()),
     ) || [];
+
   return (
     <>
       <Card
-        title="Available Trip"
+        title="Parks"
         className="!shadow-sm !rounded-lg"
         loading={loading}
         extra={
@@ -138,14 +127,14 @@ export default function BusSchedulesScreen() {
             <span className="text-sm text-gray-500">Total: {data.length}</span>
             <Button
               icon={<PlusOutlined />}
-              title="New Bus Trip"
+              title="New Park"
               type="primary"
               onClick={() => {
                 setItem(undefined);
                 setAdd(true);
               }}
             >
-              New Schedule
+              New Park
             </Button>
           </Space>
         }
@@ -159,7 +148,11 @@ export default function BusSchedulesScreen() {
           scroll={{ x: "max-content" }}
         />
       </Card>
-      <AddSchedule payload={item} isOpen={add} onCancel={() => setAdd(false)} />
+      <AddProviderStation
+        payload={item}
+        isOpen={add}
+        onCancel={() => setAdd(false)}
+      />
     </>
   );
 }

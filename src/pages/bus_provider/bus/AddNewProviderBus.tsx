@@ -11,20 +11,21 @@ import {
   UploadProps,
 } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
-import { IAddProps, IBus, IBusType, IUser } from "../../../../utils/type";
-import { useAddBus, useBusProviders, useBusTypes } from "./useBus";
+import { IAddProps, IBus, IBusType } from "../../../utils/type";
+import { useAddBus, useBusTypes } from "./useBus";
 import { useEffect } from "react";
+import { useUser } from "../../../context/useUser";
 
 const { Option } = Select;
 
-const AddNewBus: React.FC<IAddProps<IBus>> = ({
+const AddNewProviderBus: React.FC<IAddProps<IBus>> = ({
   payload,
   isOpen = false,
   onCancel,
 }) => {
   const { addBus, isAdding } = useAddBus();
-  const { isPending, busProviders: providers } = useBusProviders();
   const { loading, busTypes } = useBusTypes();
+  const { user } = useUser();
 
   const [form] = Form.useForm<IBus>();
 
@@ -38,8 +39,9 @@ const AddNewBus: React.FC<IAddProps<IBus>> = ({
         bus_number: payload?.bus_number,
         description: payload?.description,
         base_price: payload?.base_price,
+        bus_type_id: payload?.bus_type_id,
         availabilityStatus: payload?.availabilityStatus || "ACTIVE",
-        admin_id: payload?.admin_id,
+        admin_id: user?.id,
         airCondition: payload?.airCondition ?? false,
         tv: payload?.tv ?? false,
         camera: payload?.camera ?? false,
@@ -106,6 +108,9 @@ const AddNewBus: React.FC<IAddProps<IBus>> = ({
           <Form.Item name="identifier" hidden>
             <Input />
           </Form.Item>
+          <Form.Item name="admin_id" hidden>
+            <Input />
+          </Form.Item>
 
           <Col xs={24} md={12}>
             <Form.Item
@@ -137,21 +142,15 @@ const AddNewBus: React.FC<IAddProps<IBus>> = ({
                 <Option value="CLOSED">Closed</Option>
               </Select>
             </Form.Item>
-
             <Form.Item
-              name="admin_id"
-              label="Provider"
-              rules={[{ required: true, message: "Please select a provider" }]}
+              label="Select a Bus Type"
+              name="bus_type_id"
+              rules={[{ required: true, message: "Please select a bus type!" }]}
             >
-              <Select
-                loading={isPending}
-                placeholder="Select bus provider"
-                showSearch
-                optionFilterProp="children"
-              >
-                {providers?.map((provider: IUser) => (
-                  <Option key={provider.id} value={provider.id}>
-                    {provider.companyName}
+              <Select loading={loading}>
+                {busTypes?.map((item: IBusType) => (
+                  <Option key={item.id} value={item.id}>
+                    {item.name}
                   </Option>
                 ))}
               </Select>
@@ -181,19 +180,6 @@ const AddNewBus: React.FC<IAddProps<IBus>> = ({
 
             <Form.Item name="camera" label="Camera" valuePropName="checked">
               <Switch checkedChildren="Yes" unCheckedChildren="No" />
-            </Form.Item>
-            <Form.Item
-              label="Select a Bus Type"
-              name="bus_type_id"
-              rules={[{ required: true, message: "Please select a bus type!" }]}
-            >
-              <Select loading={loading}>
-                {busTypes?.map((item: IBusType) => (
-                  <Option key={item.id} value={item.id}>
-                    {item.name}
-                  </Option>
-                ))}
-              </Select>
             </Form.Item>
           </Col>
 
@@ -241,4 +227,4 @@ const AddNewBus: React.FC<IAddProps<IBus>> = ({
   );
 };
 
-export default AddNewBus;
+export default AddNewProviderBus;

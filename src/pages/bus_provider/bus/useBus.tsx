@@ -1,6 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
-  getBusStationsAction,
   getParksAction,
   getBusesAction,
   addStationAction,
@@ -12,9 +11,10 @@ import {
   getBusRoutesAction,
   addBusRouteAction,
   deleteBusRouteAction,
-} from "../../../../serviceAction/TrainActions";
+  getBusStationsAction,
+} from "../../../serviceAction/TrainActions";
 import { App } from "antd";
-import { Common } from "../../../../utils/Common";
+import { Common } from "../../../utils/Common";
 import {
   addBusScheduleAction,
   addBusTypeAction,
@@ -25,7 +25,7 @@ import {
   getBusSchedulesAction,
   getBusTypesAction,
   getRouteViaAdminAction,
-} from "../../../../serviceAction/BusActions";
+} from "../../../serviceAction/BusActions";
 export function useBusProviders() {
   const {
     isPending,
