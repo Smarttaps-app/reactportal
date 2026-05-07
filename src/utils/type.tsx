@@ -283,6 +283,7 @@ export interface ISchedule {
   bus_route_id: number;
   bus_id: number;
   identifier: string;
+  companyName: string;
   mode: string;
   status: string;
   trip_Date: string;

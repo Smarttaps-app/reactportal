@@ -6,8 +6,10 @@ import {
   Grid,
   Input,
   Modal,
+  Radio,
   Row,
   Select,
+  Switch,
   TimePicker,
 } from "antd";
 import { IAddProps, IBus, IBusRoute, ISchedule } from "../../../utils/type";
@@ -19,7 +21,13 @@ import {
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import { useUser } from "../../../context/useUser";
+import type { CheckboxGroupProps } from "antd/es/checkbox";
 
+const options: CheckboxGroupProps<string>["options"] = [
+  { label: "Daily", value: "1" },
+  { label: "Weekly", value: "2" },
+  { label: "Monthly", value: "3" },
+];
 dayjs.extend(customParseFormat);
 
 const dateFormat = "YYYY-MM-DD";
@@ -139,6 +147,26 @@ const AddSchedule: React.FC<IAddProps<ISchedule>> = ({
                 format="h:mm a"
               />
             </Form.Item>
+            <Form.Item<ISchedule>
+              name="trip_Date"
+              label="Trip Date "
+              rules={[{ required: true, message: "Please enter trip date!" }]}
+            >
+              <DatePicker
+                style={{ width: "100%" }}
+                defaultValue={dayjs()}
+                minDate={dayjs()}
+                //maxDate={dayjs("2020-10-31", dateFormat)}
+                maxDate={dayjs().add(5, "day")}
+              />
+            </Form.Item>
+            <Form.Item name="auto" label="Auto Run" valuePropName="checked">
+              <Switch
+                checkedChildren="Yes"
+                unCheckedChildren="No"
+                className="!w-full"
+              />
+            </Form.Item>
           </Col>
 
           <Col xs={24} sm={24} md={12}>
@@ -203,21 +231,28 @@ const AddSchedule: React.FC<IAddProps<ISchedule>> = ({
                 format="h:mm a"
               />
             </Form.Item>
-          </Col>
-          <Col xs={24} sm={24} md={24}>
-            <Form.Item<ISchedule>
-              name="trip_Date"
-              label="Trip Date "
-              rules={[{ required: true, message: "Please enter trip date!" }]}
+            <Form.Item
+              name="returned"
+              label="Return Trip"
+              valuePropName="checked"
             >
-              <DatePicker
-                style={{ width: "100%" }}
-                defaultValue={dayjs()}
-                minDate={dayjs()}
-                //maxDate={dayjs("2020-10-31", dateFormat)}
-                maxDate={dayjs().add(5, "day")}
+              <Switch
+                checkedChildren="Yes"
+                unCheckedChildren="No"
+                className="!w-full"
               />
             </Form.Item>
+            <Form.Item name="recuring" label="Recuring">
+              <Radio.Group
+                block
+                options={options}
+                defaultValue="1"
+                optionType="button"
+                buttonStyle="solid"
+              />
+            </Form.Item>
+          </Col>
+          <Col xs={24} sm={24} md={24}>
             <Form.Item>
               <Button
                 block

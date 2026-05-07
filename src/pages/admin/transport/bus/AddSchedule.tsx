@@ -6,8 +6,10 @@ import {
   Grid,
   Input,
   Modal,
+  Radio,
   Row,
   Select,
+  Switch,
   TimePicker,
 } from "antd";
 import {
@@ -26,7 +28,13 @@ import {
 import { useState } from "react";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
+import type { CheckboxGroupProps } from "antd/es/checkbox";
 
+const options: CheckboxGroupProps<string>["options"] = [
+  { label: "Daily", value: "1" },
+  { label: "Weekly", value: "2" },
+  { label: "Monthly", value: "3" },
+];
 dayjs.extend(customParseFormat);
 
 const dateFormat = "YYYY-MM-DD";
@@ -161,6 +169,13 @@ const AddSchedule: React.FC<IAddProps<ISchedule>> = ({
                 format="h:mm a"
               />
             </Form.Item>
+            <Form.Item name="auto" label="Auto Run" valuePropName="checked">
+              <Switch
+                checkedChildren="Yes"
+                unCheckedChildren="No"
+                className="!w-full"
+              />
+            </Form.Item>
           </Col>
 
           <Col xs={24} sm={24} md={12}>
@@ -239,8 +254,28 @@ const AddSchedule: React.FC<IAddProps<ISchedule>> = ({
                 format="h:mm a"
               />
             </Form.Item>
+            <Form.Item
+              name="returned"
+              label="Return Trip"
+              valuePropName="checked"
+            >
+              <Switch
+                checkedChildren="Yes"
+                unCheckedChildren="No"
+                className="!w-full"
+              />
+            </Form.Item>
           </Col>
           <Col xs={24} sm={24} md={24}>
+            <Form.Item name="recuring" label="Recuring">
+              <Radio.Group
+                block
+                options={options}
+                defaultValue="1"
+                optionType="button"
+                buttonStyle="solid"
+              />
+            </Form.Item>
             <Form.Item>
               <Button
                 block

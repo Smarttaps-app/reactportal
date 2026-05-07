@@ -22,6 +22,8 @@ export const addSchedule = async (payload: ISchedule) =>
   await api.post(`admin/bus-schedule/add`, payload);
 export const deleteSchedule = async (id: string) =>
   await api.delete(`admin/bus-schedule/${id}/delete`);
+export const getBusManifest = async (id: number) =>
+  await api.get(`admin/bus-manifest/${id}`);
 // service for Payments
 export function getPayments(
   startDate?: string | null,

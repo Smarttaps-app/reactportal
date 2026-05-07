@@ -24,6 +24,7 @@ import {
   getBusProvidersAction,
   getBusSchedulesAction,
   getBusTypesAction,
+  getBusManifestAction,
   getRouteViaAdminAction,
 } from "../../../../serviceAction/BusActions";
 export function useBusProviders() {
@@ -346,6 +347,19 @@ export function useDeleteBusSchedule() {
     onSettled: () => client.invalidateQueries({ queryKey: ["schedules"] }),
   });
   return { isdeleting, deleteSchedule };
+}
+export function useManifest(tripId: number) {
+  const {
+    isPending: loading,
+    data: manifest = [],
+    error,
+  } = useQuery({
+    queryKey: ["manifest", tripId],
+    queryFn: () => getBusManifestAction(tripId),
+    enabled: !!tripId, // only run when selected
+    staleTime: 5 * 60 * 1000, // cache for 5 mins
+  });
+  return { loading, manifest, error };
 }
 export function useRoutesViaAdmin(providerId: number) {
   const {

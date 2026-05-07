@@ -1,15 +1,32 @@
-import { Button, Card, Empty, Flex, Input, Row, Space, Table } from "antd";
+import {
+  Button,
+  Card,
+  Empty,
+  Flex,
+  Input,
+  Result,
+  Row,
+  Space,
+  Table,
+} from "antd";
 import { useMemo, useState } from "react";
 import { Common } from "../../../../utils/Common";
-import { DeleteOutlined, EyeOutlined, PlusOutlined } from "@ant-design/icons";
+import {
+  DeleteOutlined,
+  EyeOutlined,
+  PlusOutlined,
+  SwitcherOutlined,
+} from "@ant-design/icons";
 import { ISchedule } from "../../../../utils/type";
 import { useBusSchedules, useDeleteBusSchedule } from "./useBus";
 import AddSchedule from "./AddSchedule";
 import { Search } from "lucide-react";
+import ManifestScreen from "./ManifestScreen";
 
 export default function BusSchedulesScreen() {
   const [searchTerm, setSearchTerm] = useState("");
   const [add, setAdd] = useState(false);
+  const [open, setOpen] = useState(false);
   const [item, setItem] = useState<ISchedule>();
   const { loading, schedules, error } = useBusSchedules();
   const { isdeleting, deleteSchedule } = useDeleteBusSchedule();
@@ -78,6 +95,17 @@ export default function BusSchedulesScreen() {
         render: (schedule: ISchedule) => (
           <Flex gap="small" align="center" wrap>
             <Button
+              color="primary"
+              size="small"
+              icon={<SwitcherOutlined />}
+              variant="solid"
+              onClick={() => {
+                setItem(undefined);
+                setItem(schedule);
+                setOpen(true);
+              }}
+            />
+            <Button
               color="cyan"
               size="small"
               icon={<EyeOutlined />}
@@ -102,12 +130,6 @@ export default function BusSchedulesScreen() {
     ],
     [],
   );
-  if (error)
-    return (
-      <Row justify="center" className="my-3">
-        <Empty description={Common.formatError(error)} />
-      </Row>
-    );
 
   const data =
     schedules.filter(
@@ -138,14 +160,14 @@ export default function BusSchedulesScreen() {
             <span className="text-sm text-gray-500">Total: {data.length}</span>
             <Button
               icon={<PlusOutlined />}
-              title="New Bus Trip"
+              title="New Trip"
               type="primary"
               onClick={() => {
                 setItem(undefined);
                 setAdd(true);
               }}
             >
-              New Schedule
+              New Trip
             </Button>
           </Space>
         }
@@ -156,9 +178,21 @@ export default function BusSchedulesScreen() {
           loading={loading}
           columns={columns}
           dataSource={data}
+          locale={{
+            emptyText: error ? (
+              <Result status="error" subTitle={Common.formatError(error)} />
+            ) : (
+              "No data available"
+            ),
+          }}
           scroll={{ x: "max-content" }}
         />
       </Card>
+      <ManifestScreen
+        trip={item}
+        isOpen={open}
+        onCancel={() => setOpen(false)}
+      />
       <AddSchedule payload={item} isOpen={add} onCancel={() => setAdd(false)} />
     </>
   );

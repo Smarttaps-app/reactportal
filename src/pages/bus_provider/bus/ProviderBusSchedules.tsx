@@ -1,14 +1,21 @@
 import { Button, Card, Empty, Flex, Input, Row, Space, Table } from "antd";
 import { useMemo, useState } from "react";
 import { Common } from "../../../utils/Common";
-import { DeleteOutlined, EyeOutlined, PlusOutlined } from "@ant-design/icons";
+import {
+  DeleteOutlined,
+  EyeOutlined,
+  PlusOutlined,
+  SwitcherOutlined,
+} from "@ant-design/icons";
 import { ISchedule } from "../../../utils/type";
 import { useBusSchedules, useDeleteBusSchedule } from "./useBus";
 import AddSchedule from "./AddSchedule";
 import { Search } from "lucide-react";
+import ManifestScreen from "../../admin/transport/bus/ManifestScreen";
 
 export default function ProviderBusSchedulesScreen() {
   const [searchTerm, setSearchTerm] = useState("");
+  const [open, setOpen] = useState(false);
   const [add, setAdd] = useState(false);
   const [item, setItem] = useState<ISchedule>();
   const { loading, schedules, error } = useBusSchedules();
@@ -77,6 +84,17 @@ export default function ProviderBusSchedulesScreen() {
         dataIndex: "",
         render: (schedule: ISchedule) => (
           <Flex gap="small" align="center" wrap>
+            <Button
+              color="primary"
+              size="small"
+              icon={<SwitcherOutlined />}
+              variant="solid"
+              onClick={() => {
+                setItem(undefined);
+                setItem(schedule);
+                setOpen(true);
+              }}
+            />
             <Button
               color="cyan"
               size="small"
@@ -159,6 +177,11 @@ export default function ProviderBusSchedulesScreen() {
           scroll={{ x: "max-content" }}
         />
       </Card>
+      <ManifestScreen
+        trip={item}
+        isOpen={open}
+        onCancel={() => setOpen(false)}
+      />
       <AddSchedule payload={item} isOpen={add} onCancel={() => setAdd(false)} />
     </>
   );

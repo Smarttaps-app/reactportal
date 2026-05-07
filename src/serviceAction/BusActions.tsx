@@ -9,6 +9,7 @@ import {
   addSchedule,
   deleteSchedule,
   getSchedules,
+  getBusManifest,
 } from "../services/BusService";
 import { IBusType, ISchedule } from "../utils/type";
 // action for Bus Types
@@ -90,6 +91,15 @@ export async function deleteBusScheduleAction(id: string) {
   if (response.status == 200) {
     console.log(response.data);
     return response.data;
+  }
+  throw new Error(response.data);
+}
+
+export async function getBusManifestAction(id: number) {
+  const response = await getBusManifest(id);
+  if (response.status == 200) {
+    console.log(response.data);
+    return response.data.data;
   }
   throw new Error(response.data);
 }
