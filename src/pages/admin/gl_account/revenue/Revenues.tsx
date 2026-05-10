@@ -13,25 +13,24 @@ import dayjs, { Dayjs } from "dayjs";
 import { useMemo, useState } from "react";
 import { SearchOutlined } from "@ant-design/icons";
 import { Search } from "lucide-react";
-import { IPayment } from "../../../../utils/type";
+import { IRevenue } from "../../../../utils/type";
 import { Common } from "../../../../utils/Common";
 import PaymentCard from "../../payment/PaymentCard";
-import { usePayments } from "../../../../hooks/usePayments";
+import { useRevenue } from "../useAccounting";
 const { RangePicker } = DatePicker;
 
 export default function RevenuesScreen() {
   const [searchTerm, setSearchTerm] = useState("");
   const [show, setShow] = useState(false);
-  const [payment, setPayment] = useState<IPayment>();
-  const [selectedDates, setSelectedDates] = useState<
-    [dayjs.Dayjs, dayjs.Dayjs]
-  >([dayjs().subtract(30, "day"), dayjs()]);
+  const [payment, setPayment] = useState<IRevenue>();
+  const [selectedDates, setSelectedDates] =
+    useState<[dayjs.Dayjs, dayjs.Dayjs]>();
   const {
     loading,
     payments,
     error,
     refetch: refetchPayments,
-  } = usePayments(selectedDates);
+  } = useRevenue(selectedDates);
   const handleDateChange = (dates: [Dayjs | null, Dayjs | null] | null) => {
     if (dates && dates[0] && dates[1]) {
       setSelectedDates([dates[0], dates[1]]);
@@ -46,19 +45,29 @@ export default function RevenuesScreen() {
         key: "id",
       },
       {
-        title: "Wallet",
+        title: "Customer",
+        dataIndex: "",
+        key: "firstname",
+        render: (reve: IRevenue) => (
+          <span className="text-xs text-gray-500">
+            {reve.lastname} {reve.firstname}
+          </span>
+        ),
+      },
+      {
+        title: "Recipient",
         dataIndex: "recipient",
         key: "recipient",
       },
       {
         title: "Product",
-        dataIndex: "product",
-        key: "product",
+        dataIndex: "productName",
+        key: "productName",
       },
       {
         title: "Service",
-        dataIndex: "service",
-        key: "service",
+        dataIndex: "billerName",
+        key: "billerName",
       },
       {
         title: "Amount",
@@ -86,6 +95,16 @@ export default function RevenuesScreen() {
         key: "channel",
       },
       {
+        title: "TrnxRef",
+        dataIndex: "reference",
+        key: "reference",
+      },
+      {
+        title: "Message",
+        dataIndex: "statusMessage",
+        key: "statusMessage",
+      },
+      {
         title: "Status",
         dataIndex: "status",
         key: "status",
@@ -100,24 +119,6 @@ export default function RevenuesScreen() {
         render: (updated: string) => Common.formatDate(updated),
         ellipsis: true,
       },
-      {
-        title: "Actions",
-        dataIndex: "",
-        render: (key: string, payment: IPayment) => (
-          <Button
-            type="primary"
-            color="green"
-            size="small"
-            variant="filled"
-            onClick={() => {
-              setPayment(payment);
-              setShow(true);
-            }}
-          >
-            view
-          </Button>
-        ),
-      },
     ],
     [],
   );
@@ -130,7 +131,7 @@ export default function RevenuesScreen() {
 
   const data =
     payments.filter(
-      (payment: IPayment) =>
+      (payment: IRevenue) =>
         payment.recipient.toLowerCase().includes(searchTerm.toLowerCase()) ||
         payment.payment_type.toLowerCase().includes(searchTerm.toLowerCase()) ||
         payment.product.toLowerCase().includes(searchTerm.toLowerCase()) ||

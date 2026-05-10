@@ -12,7 +12,7 @@ export const getBanks = () => api.get(`admin/banks`);
 // service for Payments
 export function getPayments(
   startDate?: string | null,
-  endDate?: string | null
+  endDate?: string | null,
 ) {
   console.log(startDate, endDate);
   const params: { [key: string]: string } = {};
@@ -33,7 +33,7 @@ export const getPayment = async (id: string) =>
 // service for cashout
 export function getCashouts(
   startDate?: string | null,
-  endDate?: string | null
+  endDate?: string | null,
 ) {
   console.log(startDate, endDate);
   const params: { [key: string]: string } = {};
@@ -63,3 +63,16 @@ export const cashout = async (id: number) =>
 
 export const addCashout = async (payload: ICashout) =>
   await api.post(`admin/cashout/add`, payload);
+export function getRevenues(
+  startDate?: string | null,
+  endDate?: string | null,
+) {
+  console.log(startDate, endDate);
+  const params: { [key: string]: string } = {};
+  if (startDate) params.startDate = startDate;
+  if (endDate) params.endDate = endDate;
+
+  return api.get(`admin/revenue`, {
+    params,
+  });
+}

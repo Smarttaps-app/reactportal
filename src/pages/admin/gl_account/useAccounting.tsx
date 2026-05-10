@@ -1,4 +1,5 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
+import dayjs from "dayjs";
 import { Common } from "../../../utils/Common";
 import { App } from "antd";
 import {
@@ -20,6 +21,7 @@ import {
   getLedgersAction,
   toggleDiscountAction,
 } from "../../../serviceAction/AccountingActions";
+import { getRevenuesAction } from "../../../serviceAction/PaymentActions";
 export function useProductServices() {
   const {
     isPending: loading,
@@ -190,4 +192,20 @@ export function useDeleteDiscount() {
     },
   });
   return { isdeleting, deleteDiscount };
+}
+export function useRevenue(
+  selectedDates: [dayjs.Dayjs, dayjs.Dayjs] | undefined,
+) {
+  const {
+    isPending: loading,
+    data: payments = [],
+    isError,
+    error,
+    refetch,
+  } = useQuery({
+    queryKey: ["revenue", selectedDates],
+    queryFn: () => getRevenuesAction(selectedDates),
+    refetchOnWindowFocus: false,
+  });
+  return { loading, payments, isError, error, refetch };
 }

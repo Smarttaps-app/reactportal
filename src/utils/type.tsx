@@ -25,6 +25,24 @@ export interface ICashout {
   created_at: string;
   updated_at: string;
 }
+export interface IRevenue {
+  id: number;
+  recipient: string;
+  channel: string;
+  firstname: string;
+  lastname: string;
+  productName: string;
+  billerName: string;
+  payment_type: string;
+  status: string;
+  product: string;
+  service: string;
+  reference: string;
+  updated_at: string;
+  statusMessage: string;
+  created_at: string;
+  amount: string;
+}
 export interface IPayment {
   id: number;
   recipient: string;

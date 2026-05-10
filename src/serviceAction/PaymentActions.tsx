@@ -11,6 +11,7 @@ import {
   getLastTenDaysPayments,
   getPayment,
   getPayments,
+  getRevenues,
   rejectCashout,
   verifyCashoutBank,
 } from "../services/PaymentService";
@@ -21,6 +22,7 @@ import {
   ICashoutOTP,
   ICashoutWithdraw,
 } from "../utils/type";
+import dayjs from "dayjs";
 
 // action for admin
 export async function getBanksAction() {
@@ -135,6 +137,20 @@ export async function cashoutAction(id: number) {
   const response = await cashout(id);
   if (response.status == 200) {
     console.log(response.data);
+    return response.data.data;
+  }
+  throw new Error(response.data);
+}
+// action for payment
+export async function getRevenuesAction(
+  selectedDates: [dayjs.Dayjs, dayjs.Dayjs] | undefined,
+) {
+  const response = await getRevenues(
+    selectedDates?.[0]?.format("YYYY-MM-DD"),
+    selectedDates?.[1]?.format("YYYY-MM-DD"),
+  );
+  if (response.status == 200) {
+    console.log(response.data.data);
     return response.data.data;
   }
   throw new Error(response.data);
