@@ -38,6 +38,8 @@ export interface IRevenue {
   product: string;
   service: string;
   reference: string;
+  providerAmount: string;
+  commissionAmount: string;
   updated_at: string;
   statusMessage: string;
   created_at: string;

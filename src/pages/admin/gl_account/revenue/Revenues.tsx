@@ -76,6 +76,20 @@ export default function RevenuesScreen() {
         render: (amount: string) => Common.formatAsCurrency(Number(amount)),
       },
       {
+        title: "Service Amount",
+        dataIndex: "providerAmount",
+        key: "providerAmount",
+        render: (providerAmount: string) =>
+          Common.formatAsCurrency(Number(providerAmount)),
+      },
+      {
+        title: "Com Amount",
+        dataIndex: "commissionAmount",
+        key: "commissionAmount",
+        render: (commissionAmount: string) =>
+          Common.formatAsCurrency(Number(commissionAmount)),
+      },
+      {
         title: "Payment",
         dataIndex: "payment_type",
         key: "payment_type",
