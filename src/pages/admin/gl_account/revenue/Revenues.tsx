@@ -144,7 +144,7 @@ export default function RevenuesScreen() {
       <div className="pb-8 grid grid-flow-col md:grid-flow-col gap-2">
         <PaymentCard
           title="Total Revenue"
-          sessionKey="credit"
+          sessionKey="debit"
           loading={loading}
           data={data}
           error={error ? true : false}
@@ -152,7 +152,7 @@ export default function RevenuesScreen() {
         />
         <PaymentCard
           title="Bus"
-          sessionKey="credit"
+          sessionKey="debit"
           loading={loading}
           data={data}
           error={error ? true : false}
@@ -160,7 +160,7 @@ export default function RevenuesScreen() {
         />
         <PaymentCard
           title="Train"
-          sessionKey="credit"
+          sessionKey="debit"
           loading={loading}
           data={data}
           error={error ? true : false}
@@ -168,7 +168,7 @@ export default function RevenuesScreen() {
         />
         <PaymentCard
           title="NFC"
-          sessionKey="credit"
+          sessionKey="debit"
           loading={loading}
           data={data}
           error={error ? true : false}
@@ -176,7 +176,7 @@ export default function RevenuesScreen() {
         />
         <PaymentCard
           title="Others"
-          sessionKey="credit"
+          sessionKey="debit"
           loading={loading}
           data={data}
           error={error ? true : false}
