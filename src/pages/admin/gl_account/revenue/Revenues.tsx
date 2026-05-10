@@ -140,9 +140,9 @@ export default function RevenuesScreen() {
 
   return (
     <>
-      <Row className="pb-8" gutter={[{ xs: 8, sm: 16, md: 24, lg: 32 }, 8]}>
+      <div className="pb-8 grid grid-flow-col md:grid-flow-col gap-2">
         <PaymentCard
-          title="Total Credits"
+          title="Total Revenue"
           sessionKey="credit"
           loading={loading}
           data={data}
@@ -150,30 +150,38 @@ export default function RevenuesScreen() {
           color="green"
         />
         <PaymentCard
-          title="Total Debit"
-          sessionKey="debit"
+          title="Bus"
+          sessionKey="credit"
           loading={loading}
           data={data}
           error={error ? true : false}
-          color="red"
+          color="blue"
         />
         <PaymentCard
-          title="Total Failed"
-          sessionKey="failed"
+          title="Train"
+          sessionKey="credit"
           loading={loading}
           data={data}
           error={error ? true : false}
-          color="purple"
+          color="pink"
         />
         <PaymentCard
-          title="Total Pending"
-          sessionKey="pending"
+          title="NFC"
+          sessionKey="credit"
           loading={loading}
           data={data}
           error={error ? true : false}
           color="yellow"
         />
-      </Row>
+        <PaymentCard
+          title="Others"
+          sessionKey="credit"
+          loading={loading}
+          data={data}
+          error={error ? true : false}
+          color="blue"
+        />
+      </div>
       <Card
         title="Payments"
         className=" !rounded-lg"

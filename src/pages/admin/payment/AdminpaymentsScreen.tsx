@@ -120,7 +120,7 @@ export default function AdminPaymentsScreen() {
         ),
       },
     ],
-    []
+    [],
   );
   if (error)
     return (
@@ -136,12 +136,12 @@ export default function AdminPaymentsScreen() {
         payment.payment_type.toLowerCase().includes(searchTerm.toLowerCase()) ||
         payment.product.toLowerCase().includes(searchTerm.toLowerCase()) ||
         payment.service.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        payment.channel.toLowerCase().includes(searchTerm.toLowerCase())
+        payment.channel.toLowerCase().includes(searchTerm.toLowerCase()),
     ) || [];
 
   return (
     <>
-      <Row className="pb-8" gutter={[{ xs: 8, sm: 16, md: 24, lg: 32 }, 8]}>
+      <div className="pb-8 grid grid-flow-col md:grid-flow-col gap-2">
         <PaymentCard
           title="Total Credits"
           sessionKey="credit"
@@ -174,7 +174,7 @@ export default function AdminPaymentsScreen() {
           error={error ? true : false}
           color="yellow"
         />
-      </Row>
+      </div>
       <Card
         title="Payments"
         className="!shadow-sm !rounded-lg"
