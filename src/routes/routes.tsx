@@ -12,10 +12,12 @@ import {
   InfoCircleOutlined,
   NotificationOutlined,
   ProfileOutlined,
+  RedEnvelopeOutlined,
   RocketOutlined,
   SettingOutlined,
   SubnodeOutlined,
   TagsOutlined,
+  TranslationOutlined,
 } from "@ant-design/icons";
 import PaymentsScreen from "../pages/admin/payment/paymentsScreen";
 import TicketsScreen from "../pages/admin/ticket/Index";
@@ -59,6 +61,7 @@ import ProviderBusTypesScreen from "../pages/bus_provider/bus/ProviderBusTypes";
 import ProviderBusRoutesScreen from "../pages/bus_provider/bus/ProviderBusRoutes";
 import ProviderBusStationsScreen from "../pages/bus_provider/bus/ProviderParks";
 import ProviderBusSchedulesScreen from "../pages/bus_provider/bus/ProviderBusSchedules";
+import RevenuesScreen from "../pages/admin/gl_account/revenue/Revenues";
 
 export const protectedRoutes: IAppRoute[] = [
   {
@@ -72,6 +75,12 @@ export const protectedRoutes: IAppRoute[] = [
     Component: AdminPaymentsScreen,
     title: "Payments",
     icon: <DollarOutlined />,
+  },
+  {
+    path: "revenue",
+    Component: RevenuesScreen,
+    title: "Revenue",
+    icon: <RedEnvelopeOutlined />,
   },
   {
     path: "cashouts",
@@ -137,7 +146,7 @@ export const protectedRoutes: IAppRoute[] = [
     path: "train-services",
     Component: TransportScreen,
     title: "Train",
-    icon: <TrainIcon />,
+    icon: <TranslationOutlined />,
     children: [
       { path: "trains", Component: TrainsScreen, showInMenu: true },
       { path: "train-routes", Component: TrainRoutesScreen, showInMenu: true },

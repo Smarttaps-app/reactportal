@@ -15,22 +15,22 @@ const PaymentCard: React.FC<PaymentCardProps> = ({
     error || !data
       ? []
       : data.filter(
-          (tx) => tx.payment_type.toLowerCase() === sessionKey.toLowerCase()
+          (tx) => tx.payment_type.toLowerCase() === sessionKey.toLowerCase(),
         );
   const totalSum = Common.sumTotalByKey(payments, "amount");
 
   return (
     <Col className="gutter-row" xs={24} sm={12} md={8} lg={6} xl={6}>
       <div
-        className={`text-black border-l-15 p-3 rounded-xl text-card-foreground shadow-lg transition-all duration-300 hover:shadow-xl shadow hover:-translate-y-0.5 ease-linear transition-transform duration-300 bg-${color}-50 border-${color}-600 `}
+        className={`text-black border-l-15 p-3 rounded-xl text-card-foreground shadow-sm transition-all duration-300 hover:-translate-y-0.5 ease-linear transition-transform duration-300 bg-${color}-50 border-${color}-600 `}
       >
         <div className="space-y-1">
           <p className={`mb-2 text-xl font-medium text-black`}>
             {(loading && error) || !data
               ? 0
               : totalSum < 0
-              ? Common.formatAsCurrency(0)
-              : Common.formatAsCurrency(totalSum)}
+                ? Common.formatAsCurrency(0)
+                : Common.formatAsCurrency(totalSum)}
           </p>
 
           <p
