@@ -14,8 +14,17 @@ import {
   addJournal,
   deleteJournal,
   toggleDiscount,
+  getPostingRules,
+  addPostingRule,
+  deletePostingRule,
 } from "../services/AccountingService";
-import { IDiscount, ILedger, IJournal, ICommission } from "../utils/type";
+import {
+  IDiscount,
+  ILedger,
+  IJournal,
+  ICommission,
+  IPostingRule,
+} from "../utils/type";
 // action for Ledger
 export async function getLedgersAction() {
   const response = await getLedgers();
@@ -134,6 +143,31 @@ export async function addDiscountAction(payload: IDiscount) {
 }
 export async function deleteDiscountAction(id: number) {
   const response = await deleteDiscount(id);
+  if (response.status == 200) {
+    console.log(response.data);
+    return response.data;
+  }
+  throw new Error(response.data);
+}
+// action for Park
+export async function getPostingRulesAction() {
+  const response = await getPostingRules();
+  if (response.status == 200) {
+    console.log(response.data.data);
+    return response.data.data;
+  }
+  throw new Error(response.data);
+}
+export async function addPostingRuleAction(payload: IPostingRule) {
+  const response = await addPostingRule(payload);
+  if (response.status == 200) {
+    console.log(response.data);
+    return response.data;
+  }
+  throw new Error(response.data);
+}
+export async function deletePostingRuleAction(id: string) {
+  const response = await deletePostingRule(id);
   if (response.status == 200) {
     console.log(response.data);
     return response.data;

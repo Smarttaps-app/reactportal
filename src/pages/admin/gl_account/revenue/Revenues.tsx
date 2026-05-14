@@ -21,8 +21,6 @@ const { RangePicker } = DatePicker;
 
 export default function RevenuesScreen() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [show, setShow] = useState(false);
-  const [payment, setPayment] = useState<IRevenue>();
   const [selectedDates, setSelectedDates] =
     useState<[dayjs.Dayjs, dayjs.Dayjs]>();
   const {

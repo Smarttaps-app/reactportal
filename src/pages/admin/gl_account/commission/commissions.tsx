@@ -21,13 +21,11 @@ export default function CommissionsScreen() {
         title: "ID",
         dataIndex: "glcode",
         key: "glcode",
-        width: "5%",
       },
       {
         title: "Merchant Name",
         dataIndex: "admin",
         key: "admin",
-        width: "20%",
         render: (admin: IUser) => (
           <span className="text-xs text-gray-500">
             {admin?.firstname} {admin?.lastname}
@@ -38,7 +36,6 @@ export default function CommissionsScreen() {
         title: "Product",
         dataIndex: "product_type",
         key: "product_type",
-        width: "20%",
         render: (biller: IBiller) => (
           <span className="text-xs text-gray-500">{biller?.billerName}</span>
         ),
@@ -84,7 +81,7 @@ export default function CommissionsScreen() {
         ),
       },
     ],
-    []
+    [],
   );
   if (error)
     return (

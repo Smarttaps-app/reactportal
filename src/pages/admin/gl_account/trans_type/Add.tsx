@@ -9,7 +9,6 @@ import {
   Modal,
   Row,
   Select,
-  Switch,
 } from "antd";
 import { Grid } from "antd";
 import { IAddProps, ILedger } from "../../../../utils/type";
@@ -18,7 +17,7 @@ import { Common } from "../../../../utils/Common";
 import { useAddLedger } from "../../../../hooks/useAccounting";
 const { useBreakpoint } = Grid;
 
-const AddLedger: React.FC<IAddProps<ILedger>> = ({
+const Add: React.FC<IAddProps<ILedger>> = ({
   payload,
   isOpen = false,
   onCancel,
@@ -78,23 +77,13 @@ const AddLedger: React.FC<IAddProps<ILedger>> = ({
               label="Ledger Name"
               rules={[{ required: true, message: "Please enter ledger name!" }]}
             >
-              <Input placeholder="Enter ledger name" />
-            </Form.Item>
-            <Form.Item<ILedger>
-              label="Party Type"
-              name="party_type"
-              rules={[{ required: true, message: "Please select party type!" }]}
-            >
-              <Select
-                options={[
-                  { value: "HEAD_OFFICE", label: "HEAD OFFICE" },
-                  { value: "SERVICE_PROVIDER", label: "SERVICE PROVIDER" },
-                  { value: "MERCHANT", label: "MERCHANT" },
-                  { value: "CUSTOMER", label: "CUSTOMER" },
-                  { value: "OTHERS", label: "OTHERS" },
-                ]}
+              <Input
+                placeholder="Enter ledger name"
+                className="!rounded-md !py-2"
               />
             </Form.Item>
+          </Col>
+          <Col xs={24} sm={24} md={24}>
             <Form.Item<ILedger>
               label="Ledger Type"
               name="gl_type"
@@ -103,24 +92,14 @@ const AddLedger: React.FC<IAddProps<ILedger>> = ({
               ]}
             >
               <Select
+                size="large"
                 options={[
-                  { value: "ASSET", label: "ASSET" },
-                  { value: "EXPENSE", label: "EXPENSE" },
-                  { value: "EQUITY", label: "EQUITY" },
-                  { value: "LIABILITY", label: "LIABILITY" },
-                  { value: "INCOME", label: "INCOME" },
+                  { value: "asset", label: "Asset" },
+                  { value: "expenses", label: "Expenses" },
+                  { value: "equity", label: "Equity" },
+                  { value: "liability", label: "Liability" },
+                  { value: "revenue", label: "Revenue" },
                 ]}
-              />
-            </Form.Item>
-            <Form.Item<ILedger>
-              name="is_active"
-              label="Activate "
-              valuePropName="checked"
-            >
-              <Switch
-                checkedChildren="Activate"
-                unCheckedChildren="Deactivate"
-                className="!w-full"
               />
             </Form.Item>
           </Col>
@@ -143,4 +122,4 @@ const AddLedger: React.FC<IAddProps<ILedger>> = ({
     </Modal>
   );
 };
-export default AddLedger;
+export default Add;

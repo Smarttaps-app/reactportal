@@ -416,6 +416,9 @@ export interface ILedger {
   name: string;
   gl_type: string;
   gl_balance: string;
+  party_type: string;
+  is_active: boolean;
+  created_at: string;
   journal_entries: IJournal[];
 }
 export interface IJournal {
@@ -499,6 +502,54 @@ export interface ISupportTicket {
   user: { firstname: string; lastname: string } | null;
   comments: IComment[];
   assigned_to: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ITransactionType {
+  id: number;
+  name: string;
+  code: string;
+  description: string;
+  is_active: boolean;
+  created_at: string;
+}
+export interface IPostingRule {
+  id: number;
+  transaction_type: string;
+  entry_type: string;
+  account_role: string;
+  account_code: string;
+  is_active: boolean;
+  priority: number;
+  created_at: string;
+}
+export interface IGLTransaction {
+  id: number;
+  reference: string;
+  transaction_type: string;
+  description: string;
+  total_amount: string;
+  fee_amount: string;
+  provider_cost: string;
+  commission: string;
+  merchant_com: string;
+  status: string;
+  posted_at: string;
+  created_at: string;
+  updated_at: string;
+}
+export interface IGLEntry {
+  id: number;
+  transaction_ref: string;
+  account_code: string;
+  description: string;
+  entry_type: string;
+  amount: string;
+  party_type: string;
+  customer_id: string;
+  status: string;
+  posted_at: string;
   created_at: string;
   updated_at: string;
 }

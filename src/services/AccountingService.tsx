@@ -1,5 +1,11 @@
 import { api } from "../utils/AxiosInstance";
-import { IDiscount, ICommission, ILedger, IJournal } from "../utils/type";
+import {
+  IDiscount,
+  ICommission,
+  ILedger,
+  IJournal,
+  IPostingRule,
+} from "../utils/type";
 // service for Ledgers
 export const getLedgers = async () => await api.get(`admin/ledgers`);
 export const getLedger = async (id: string) =>
@@ -34,3 +40,11 @@ export const deleteDiscount = async (id: number) =>
   await api.delete(`admin/discount/${id}/delete`);
 export const toggleDiscount = async (id: number) =>
   await api.patch(`admin/discount/${id}/toggle`);
+export const getPostingRules = async () =>
+  await api.get(`admin/accounting/posting-rules`);
+export const getPostingRule = async (id: string) =>
+  await api.get(`admin/accounting/posting-rule/${id}`);
+export const addPostingRule = async (payload: IPostingRule) =>
+  await api.post(`admin/accounting/posting-rule/add`, payload);
+export const deletePostingRule = async (id: string) =>
+  await api.delete(`admin/accounting/posting-rule/${id}/delete`);

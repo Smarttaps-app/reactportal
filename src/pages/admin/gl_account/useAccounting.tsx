@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import { Common } from "../../../utils/Common";
 import { App } from "antd";
@@ -11,14 +11,17 @@ import {
   addDiscountAction,
   addJournalAction,
   addLedgerAction,
+  addPostingRuleAction,
   deleteCommissionAction,
   deleteDiscountAction,
   deleteJournalAction,
   deleteLedgerAction,
+  deletePostingRuleAction,
   getCommissionsAction,
   getDiscountsAction,
   getJournalsAction,
   getLedgersAction,
+  getPostingRulesAction,
   toggleDiscountAction,
 } from "../../../serviceAction/AccountingActions";
 import { getRevenuesAction } from "../../../serviceAction/PaymentActions";
@@ -208,4 +211,59 @@ export function useRevenue(
     refetchOnWindowFocus: false,
   });
   return { loading, payments, isError, error, refetch };
+}
+
+export function usePostingRules() {
+  const {
+    isPending: loading,
+    data: postingRules = [],
+    error,
+  } = useQuery({
+    queryKey: ["postingrules"],
+    queryFn: getPostingRulesAction,
+    refetchOnWindowFocus: false,
+  });
+  return { loading, postingRules, error };
+}
+export function useAddPostingRule() {
+  const { notification } = App.useApp();
+  const client = useQueryClient();
+  const { mutate: add, isPending: isAdding } = useMutation({
+    mutationFn: addPostingRuleAction,
+    onSuccess: (data) => {
+      notification.success({
+        description: data.statusDescription,
+        message: "Add Posting Rule",
+      });
+    },
+    onError: (error) => {
+      notification.error({
+        message: "Add Posting Rules",
+        description: Common.formatError(error),
+      });
+    },
+    onSettled: () => client.invalidateQueries({ queryKey: ["postingrules"] }),
+  });
+  return { isAdding, add };
+}
+export function useDeletePostingRule() {
+  const { notification } = App.useApp();
+  const client = useQueryClient();
+  const { mutate: deleteSchedule, isPending: isdeleting } = useMutation({
+    mutationFn: deletePostingRuleAction,
+    onSuccess: (data) => {
+      notification.success({
+        description: data.statusDescription,
+        message: "Delete Posting Rules",
+      });
+    },
+    onError: (error) => {
+      notification.error({
+        message: "Delete Posting Rules",
+        description: Common.formatError(error),
+      });
+    },
+    onSettled: () => client.invalidateQueries({ queryKey: ["postingrules"] }),
+  });
+  return { isdeleting, deleteSchedule };
 }

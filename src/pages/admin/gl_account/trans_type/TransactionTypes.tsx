@@ -1,18 +1,10 @@
-import { Button, Card, Flex, Result, Space, Table, Tag } from "antd";
+import { Button, Result, Table } from "antd";
 import { useMemo, useState } from "react";
+import Add from "./Add";
+import { DeleteOutlined, EyeOutlined } from "@ant-design/icons";
 import { Common } from "../../../../utils/Common";
-import {
-  DeleteOutlined,
-  EditOutlined,
-  EyeOutlined,
-  PlusOutlined,
-} from "@ant-design/icons";
-import { ILedger } from "../../../../utils/type";
-import { useLedgers } from "../../../../hooks/useAccounting";
-import AddLedger from "./AddGL";
-import ListJournal from "./journal_entries";
 
-export default function GlAccountScreen() {
+export default function TransactionTypes() {
   const [add, setAdd] = useState(false);
   const [show, setShow] = useState(false);
   const [item, setItem] = useState<ILedger>();
@@ -36,24 +28,9 @@ export default function GlAccountScreen() {
         key: "code",
       },
       {
-        title: "Party Type",
-        dataIndex: "party_type",
-        key: "party_type",
-      },
-      {
         title: "GL Type",
         dataIndex: "gl_type",
         key: "gl_type",
-      },
-      {
-        title: "Status",
-        dataIndex: "is_active",
-        key: "is_active",
-        render: (is_active: boolean) => (
-          <Tag color={`${is_active ? "green" : "red"}`}>
-            {is_active ? "Active" : "Inactive"}
-          </Tag>
-        ),
       },
       {
         title: "Updated",
@@ -66,15 +43,7 @@ export default function GlAccountScreen() {
         title: "Actions",
         dataIndex: "",
         render: (key: string, ledger: ILedger) => (
-          <Flex gap="small" align="center" wrap>
-            <Button
-              type="primary"
-              icon={<EditOutlined />}
-              onClick={() => {
-                setItem(ledger);
-                setAdd(true);
-              }}
-            />
+          <div className="flex gap-5">
             <Button
               type="primary"
               icon={<EyeOutlined />}
@@ -90,7 +59,7 @@ export default function GlAccountScreen() {
               // loading={loadings[2]}
               //onClick={() => enterLoading(2)}
             />
-          </Flex>
+          </div>
         ),
       },
     ],
@@ -101,8 +70,8 @@ export default function GlAccountScreen() {
   return (
     <>
       <Card
-        title="General Ledger Accounts"
-        className="!rounded-sm"
+        title="Ledgers"
+        className="!shadow-sm !rounded-lg"
         loading={loading}
         extra={
           <Space className="flex items-center">
@@ -138,12 +107,7 @@ export default function GlAccountScreen() {
         />
       </Card>
 
-      <AddLedger payload={item} isOpen={add} onCancel={() => setAdd(false)} />
-      <ListJournal
-        payload={item}
-        isOpen={show}
-        onCancel={() => setShow(false)}
-      />
+      <Add payload={item} isOpen={add} onCancel={() => setAdd(false)} />
     </>
   );
 }

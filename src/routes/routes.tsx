@@ -62,6 +62,12 @@ import ProviderBusRoutesScreen from "../pages/bus_provider/bus/ProviderBusRoutes
 import ProviderBusStationsScreen from "../pages/bus_provider/bus/ProviderParks";
 import ProviderBusSchedulesScreen from "../pages/bus_provider/bus/ProviderBusSchedules";
 import RevenuesScreen from "../pages/admin/gl_account/revenue/Revenues";
+import PostingRulesScreen from "../pages/admin/gl_account/posting_rule/PostingRules";
+import ChartOfAccounts from "../pages/admin/gl_account/ChartOfAccounts";
+import BalanceSheet from "../pages/admin/gl_account/BalanceSheet";
+import ProfitLoss from "../pages/admin/gl_account/ProfitLoss";
+import TrialBalance from "../pages/admin/gl_account/TrialBalance";
+import TransactionTypes from "../pages/admin/gl_account/trans_type/TransactionTypes";
 
 export const protectedRoutes: IAppRoute[] = [
   {
@@ -165,6 +171,24 @@ export const protectedRoutes: IAppRoute[] = [
     title: "Accounting",
     icon: <AccountBookOutlined />,
     children: [
+      {
+        path: "transaction-type",
+        Component: TransactionTypes,
+        showInMenu: true,
+      },
+      {
+        path: "posting-rules",
+        Component: PostingRulesScreen,
+        showInMenu: true,
+      },
+      {
+        path: "chart-of-account",
+        Component: ChartOfAccounts,
+        showInMenu: true,
+      },
+      { path: "balance-sheet", Component: BalanceSheet, showInMenu: true },
+      { path: "profit-loss", Component: ProfitLoss, showInMenu: true },
+      { path: "trial-balance", Component: TrialBalance, showInMenu: true },
       { path: "general-ledger", Component: GlAccountScreen, showInMenu: true },
       { path: "commissions", Component: CommissionsScreen, showInMenu: true },
       { path: "discounts", Component: DiscountsScreen, showInMenu: true },

@@ -47,7 +47,7 @@ const ListJournal: React.FC<IAddProps<ILedger>> = ({
         ellipsis: true,
       },
     ],
-    []
+    [],
   );
   const screens = useBreakpoint();
   return (
@@ -59,16 +59,15 @@ const ListJournal: React.FC<IAddProps<ILedger>> = ({
       destroyOnHidden
       footer={null}
       width={screens.xs ? "100%" : 850}
+      title="Journal Listing"
     >
-      <Card title="Journal Listing">
-        <Table
-          rowKey="id"
-          size="small"
-          columns={columns}
-          dataSource={payload?.journal_entries}
-          scroll={{ x: "max-content" }}
-        />
-      </Card>
+      <Table
+        rowKey="id"
+        size="small"
+        columns={columns}
+        dataSource={payload?.journal_entries}
+        scroll={{ x: "max-content" }}
+      />
     </Modal>
   );
 };
