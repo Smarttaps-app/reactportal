@@ -48,3 +48,17 @@ export const addPostingRule = async (payload: IPostingRule) =>
   await api.post(`admin/accounting/posting-rule/add`, payload);
 export const deletePostingRule = async (id: string) =>
   await api.delete(`admin/accounting/posting-rule/${id}/delete`);
+
+export function getGlTransactions(
+  startDate?: string | null,
+  endDate?: string | null,
+) {
+  console.log(startDate, endDate);
+  const params: { [key: string]: string } = {};
+  if (startDate) params.startDate = startDate;
+  if (endDate) params.endDate = endDate;
+
+  return api.get(`admin/accounting/gl_transactions`, {
+    params,
+  });
+}

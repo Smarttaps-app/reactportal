@@ -19,6 +19,7 @@ import {
   deletePostingRuleAction,
   getCommissionsAction,
   getDiscountsAction,
+  getGlTransactionsAction,
   getJournalsAction,
   getLedgersAction,
   getPostingRulesAction,
@@ -266,4 +267,21 @@ export function useDeletePostingRule() {
     onSettled: () => client.invalidateQueries({ queryKey: ["postingrules"] }),
   });
   return { isdeleting, deleteSchedule };
+}
+
+export function useGlTransactions(
+  selectedDates: [dayjs.Dayjs, dayjs.Dayjs] | undefined,
+) {
+  const {
+    isPending: loading,
+    data: glTransactions = [],
+    isError,
+    error,
+    refetch,
+  } = useQuery({
+    queryKey: ["glTransactions", selectedDates],
+    queryFn: () => getGlTransactionsAction(selectedDates),
+    refetchOnWindowFocus: false,
+  });
+  return { loading, glTransactions, isError, error, refetch };
 }

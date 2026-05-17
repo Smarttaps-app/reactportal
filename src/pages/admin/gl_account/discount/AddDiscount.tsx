@@ -154,7 +154,7 @@ const AddDiscount: React.FC<IAddProps<IDiscount>> = ({
               <InputNumber
                 suffix="Rate"
                 style={{ width: "100%" }}
-                min={1}
+                min={0}
                 stringMode
               />
             </Form.Item>

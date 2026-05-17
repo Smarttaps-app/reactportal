@@ -68,6 +68,7 @@ import BalanceSheet from "../pages/admin/gl_account/BalanceSheet";
 import ProfitLoss from "../pages/admin/gl_account/ProfitLoss";
 import TrialBalance from "../pages/admin/gl_account/TrialBalance";
 import TransactionTypes from "../pages/admin/gl_account/trans_type/TransactionTypes";
+import GLTransactions from "../pages/admin/gl_account/GLTransactions";
 
 export const protectedRoutes: IAppRoute[] = [
   {
@@ -171,9 +172,10 @@ export const protectedRoutes: IAppRoute[] = [
     title: "Accounting",
     icon: <AccountBookOutlined />,
     children: [
+      { path: "general-ledger", Component: GlAccountScreen, showInMenu: true },
       {
-        path: "transaction-type",
-        Component: TransactionTypes,
+        path: "gl-transactions",
+        Component: GLTransactions,
         showInMenu: true,
       },
       {
@@ -189,7 +191,6 @@ export const protectedRoutes: IAppRoute[] = [
       { path: "balance-sheet", Component: BalanceSheet, showInMenu: true },
       { path: "profit-loss", Component: ProfitLoss, showInMenu: true },
       { path: "trial-balance", Component: TrialBalance, showInMenu: true },
-      { path: "general-ledger", Component: GlAccountScreen, showInMenu: true },
       { path: "commissions", Component: CommissionsScreen, showInMenu: true },
       { path: "discounts", Component: DiscountsScreen, showInMenu: true },
     ],

@@ -17,6 +17,7 @@ import {
   getPostingRules,
   addPostingRule,
   deletePostingRule,
+  getGlTransactions,
 } from "../services/AccountingService";
 import {
   IDiscount,
@@ -25,6 +26,7 @@ import {
   ICommission,
   IPostingRule,
 } from "../utils/type";
+import dayjs from "dayjs";
 // action for Ledger
 export async function getLedgersAction() {
   const response = await getLedgers();
@@ -171,6 +173,21 @@ export async function deletePostingRuleAction(id: string) {
   if (response.status == 200) {
     console.log(response.data);
     return response.data;
+  }
+  throw new Error(response.data);
+}
+
+// action for General ledger Transactions
+export async function getGlTransactionsAction(
+  selectedDates: [dayjs.Dayjs, dayjs.Dayjs] | undefined,
+) {
+  const response = await getGlTransactions(
+    selectedDates?.[0]?.format("YYYY-MM-DD"),
+    selectedDates?.[1]?.format("YYYY-MM-DD"),
+  );
+  if (response.status == 200) {
+    console.log(response.data.data);
+    return response.data.data;
   }
   throw new Error(response.data);
 }
