@@ -34,9 +34,14 @@ export async function getBanksAction() {
 }
 
 // action for payment
-export async function getPaymentsAction(startDate = "", endDate = "") {
-  console.log(startDate, endDate);
-  const response = await getPayments(startDate, endDate);
+export async function getPaymentsAction(
+  selectedDates: [dayjs.Dayjs, dayjs.Dayjs] | undefined,
+) {
+  const response = await getPayments(
+    selectedDates?.[0]?.format("YYYY-MM-DD"),
+    selectedDates?.[1]?.format("YYYY-MM-DD"),
+  );
+
   if (response.status == 200) {
     console.log(response.data.data);
     return response.data.data;

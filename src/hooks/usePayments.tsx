@@ -4,7 +4,10 @@ import {
   getLastTenDaysPaymentsAction,
   getPaymentsAction,
 } from "../serviceAction/PaymentActions";
-export function usePayments(selectedDates: [dayjs.Dayjs, dayjs.Dayjs]) {
+
+export function usePayments(
+  selectedDates: [dayjs.Dayjs, dayjs.Dayjs] | undefined,
+) {
   const {
     isPending: loading,
     data: payments = [],
@@ -13,15 +16,12 @@ export function usePayments(selectedDates: [dayjs.Dayjs, dayjs.Dayjs]) {
     refetch,
   } = useQuery({
     queryKey: ["payments", selectedDates],
-    queryFn: () =>
-      getPaymentsAction(
-        selectedDates?.[0]?.format("YYYY-MM-DD"),
-        selectedDates?.[1]?.format("YYYY-MM-DD")
-      ),
+    queryFn: () => getPaymentsAction(selectedDates),
     refetchOnWindowFocus: false,
   });
   return { loading, payments, isError, error, refetch };
 }
+
 export function usePayment10Days() {
   const { isPending: loading, data: payments = [] } = useQuery({
     queryKey: ["10payments"],

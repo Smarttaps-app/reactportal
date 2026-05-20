@@ -24,9 +24,8 @@ export default function PaymentsScreen() {
   const [searchTerm, setSearchTerm] = useState("");
   const [show, setShow] = useState(false);
   const [payment, setPayment] = useState<IPayment>();
-  const [selectedDates, setSelectedDates] = useState<
-    [dayjs.Dayjs, dayjs.Dayjs]
-  >([dayjs().subtract(30, "day"), dayjs()]);
+  const [selectedDates, setSelectedDates] =
+    useState<[dayjs.Dayjs, dayjs.Dayjs]>();
   const {
     loading,
     payments,
