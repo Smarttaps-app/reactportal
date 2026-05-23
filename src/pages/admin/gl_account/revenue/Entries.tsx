@@ -1,32 +1,17 @@
-import { Button, Modal, Result, Space, DatePicker, Table, Tag } from "antd";
+import { Modal, Result, Table, Tag } from "antd";
 import { Grid } from "antd";
-import dayjs, { Dayjs } from "dayjs";
-import { IAddProps, IGLEntry, ILedger } from "../../../../utils/type";
+import { IAddProps, IGLEntry, IGLTransaction } from "../../../../utils/type";
 import { Common } from "../../../../utils/Common";
-import { useMemo, useState } from "react";
-import { useGlEntries } from "../useAccounting";
-import { SearchOutlined } from "@ant-design/icons";
+import { useMemo } from "react";
+import { useGlTransactionDetails } from "../useAccounting";
 const { useBreakpoint } = Grid;
-const { RangePicker } = DatePicker;
 
-const ListJournal: React.FC<IAddProps<ILedger>> = ({
+const JournalEntries: React.FC<IAddProps<IGLTransaction>> = ({
   payload,
   isOpen = false,
   onCancel,
 }) => {
-  const [selectedDates, setSelectedDates] =
-    useState<[dayjs.Dayjs, dayjs.Dayjs]>();
-  const {
-    loading,
-    entries,
-    error,
-    refetch: refetchPayments,
-  } = useGlEntries(payload?.code, selectedDates);
-  const handleDateChange = (dates: [Dayjs | null, Dayjs | null] | null) => {
-    if (dates && dates[0] && dates[1]) {
-      setSelectedDates([dates[0], dates[1]]);
-    }
-  };
+  const { loading, entries, error } = useGlTransactionDetails(payload?.id ?? 0);
   const columns = useMemo(
     () => [
       {
@@ -80,22 +65,6 @@ const ListJournal: React.FC<IAddProps<ILedger>> = ({
       width={screens.xs ? "100%" : 850}
       title="Journal Listing"
     >
-      <div className="my-5 flex justify-between">
-        <h5>Total Entries {data.length}</h5>
-        <Space>
-          <RangePicker onChange={handleDateChange} />
-          <Button
-            type="primary"
-            icon={<SearchOutlined />}
-            onClick={() => refetchPayments()}
-            htmlType="submit"
-            loading={loading}
-            disabled={loading}
-          >
-            Search
-          </Button>
-        </Space>
-      </div>
       <Table
         rowKey="id"
         columns={columns}
@@ -112,4 +81,4 @@ const ListJournal: React.FC<IAddProps<ILedger>> = ({
     </Modal>
   );
 };
-export default ListJournal;
+export default JournalEntries;

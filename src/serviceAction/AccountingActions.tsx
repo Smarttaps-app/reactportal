@@ -18,6 +18,8 @@ import {
   addPostingRule,
   deletePostingRule,
   getGlTransactions,
+  getGlTransactionDetail,
+  glTransactionDetail,
 } from "../services/AccountingService";
 import {
   IDiscount,
@@ -187,6 +189,30 @@ export async function getGlTransactionsAction(
   );
   if (response.status == 200) {
     console.log(response.data.data);
+    return response.data.data;
+  }
+  throw new Error(response.data);
+}
+export async function getGlEntriesAction(
+  code: string | undefined,
+  selectedDates: [dayjs.Dayjs, dayjs.Dayjs] | undefined,
+) {
+  const response = await getGlTransactionDetail(
+    code,
+    selectedDates?.[0]?.format("YYYY-MM-DD"),
+    selectedDates?.[1]?.format("YYYY-MM-DD"),
+  );
+  if (response.status == 200) {
+    console.log(response.data.data);
+    return response.data.data;
+  }
+  throw new Error(response.data);
+}
+
+export async function getGlTransactionDetails(id: string | number) {
+  const response = await glTransactionDetail(id);
+  if (response.status == 200) {
+    console.log(response.data);
     return response.data.data;
   }
   throw new Error(response.data);

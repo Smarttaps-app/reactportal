@@ -62,3 +62,21 @@ export function getGlTransactions(
     params,
   });
 }
+export function getGlTransactionDetail(
+  code?: string | null,
+  startDate?: string | null,
+  endDate?: string | null,
+) {
+  console.log(startDate, endDate);
+  const params: { [key: string]: string } = {};
+  if (startDate) params.startDate = startDate;
+  if (endDate) params.endDate = endDate;
+  if (code) params.code = code;
+
+  return api.get(`admin/accounting/entries`, {
+    params,
+  });
+}
+
+export const glTransactionDetail = async (id: string | number) =>
+  await api.get(`admin/accounting/gl_transaction/${id}`);

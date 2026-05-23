@@ -27,8 +27,8 @@ const Add: React.FC<IAddProps<IPostingRule>> = ({
   onCancel,
 }) => {
   const screens = useBreakpoint();
-  const { loading, products, error } = useProducts();
-  const { loading: pending, ledgers, error: err } = useLedgers();
+  const { loading, products } = useProducts();
+  const { loading: pending, ledgers } = useLedgers();
   const { add, isAdding } = useAddPostingRule();
   const onFinish: FormProps<IPostingRule>["onFinish"] = (values) =>
     add(values, {
@@ -98,7 +98,15 @@ const Add: React.FC<IAddProps<IPostingRule>> = ({
                 { required: true, message: "Please enter account role!" },
               ]}
             >
-              <Input placeholder="Enter account role" />
+              <Select
+                options={[
+                  { value: "CUSTOMER_WALLET", label: "CUSTOMER WALLET" },
+                  { value: "PROVIDER_PAYABLE", label: "PROVIDER PAYABLE" },
+                  { value: "COMMISSION_REVENUE", label: "COMMISSION REVENUE" },
+                  { value: "WALLET_FUNDING", label: "WALLET FUNDING" },
+                  { value: "WALLET_CASHOUT", label: "WALLET CASHOUT" },
+                ]}
+              />
             </Form.Item>
             <Form.Item<IPostingRule>
               label="Select GL Account"

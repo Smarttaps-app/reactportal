@@ -46,6 +46,13 @@ export default function GlAccountScreen() {
         key: "gl_type",
       },
       {
+        title: "GL Balance",
+        dataIndex: "gl_balance",
+        key: "gl_balance",
+        render: (gl_balance: string) =>
+          Common.formatAsCurrency(Number(gl_balance)),
+      },
+      {
         title: "Status",
         dataIndex: "is_active",
         key: "is_active",
@@ -69,6 +76,7 @@ export default function GlAccountScreen() {
           <Flex gap="small" align="center" wrap>
             <Button
               type="primary"
+              size="small"
               icon={<EditOutlined />}
               onClick={() => {
                 setItem(ledger);
@@ -76,6 +84,9 @@ export default function GlAccountScreen() {
               }}
             />
             <Button
+              variant="solid"
+              color="cyan"
+              size="small"
               type="primary"
               icon={<EyeOutlined />}
               onClick={() => {
@@ -84,11 +95,11 @@ export default function GlAccountScreen() {
               }}
             />
             <Button
-              type="primary"
+              variant="solid"
+              size="small"
+              color="red"
               danger
               icon={<DeleteOutlined />}
-              // loading={loadings[2]}
-              //onClick={() => enterLoading(2)}
             />
           </Flex>
         ),

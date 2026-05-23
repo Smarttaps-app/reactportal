@@ -7,9 +7,11 @@ import { Common } from "../../../../utils/Common";
 import dayjs, { Dayjs } from "dayjs";
 import { Search } from "lucide-react";
 import RevenueCard from "../../../../widgets/RevenueCard";
+import JournalEntries from "./entries";
 const { RangePicker } = DatePicker;
 
 export default function GLTransactions() {
+  const [add, setAdd] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [item, setItem] = useState<IGLTransaction>();
   const [selectedDates, setSelectedDates] = useState<
@@ -122,14 +124,14 @@ export default function GLTransactions() {
           sessionKey="provider_cost"
           loading={loading}
           data={data}
-          color="blue"
+          color="red"
         />
         <RevenueCard
           title="Total Revenues"
           sessionKey="commission"
           loading={loading}
           data={data}
-          color="pink"
+          color="blue"
         />
       </div>
       <Card
@@ -177,6 +179,11 @@ export default function GLTransactions() {
           scroll={{ x: "max-content" }}
         />
       </Card>
+      <JournalEntries
+        payload={item}
+        isOpen={add}
+        onCancel={() => setAdd(false)}
+      />
     </>
   );
 }

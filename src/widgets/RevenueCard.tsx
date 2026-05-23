@@ -68,24 +68,7 @@ const RevenueCard: React.FC<RevenueCardProps> = ({
           <span
             className={`inline-flex items-center gap-0.5 rounded-md bg-${color}-50 px-1.5 py-0.5 text-xs font-medium text-${color}-700 dark:bg-${color}-950/60 dark:text-${color}-400`}
           >
-            <svg
-              xmlns="http://w3.org"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="2.5"
-              stroke="currentColor"
-              className="h-3 w-3"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M4.5 10.5 12 3m0 0 7.5 7.5M12 3v18"
-              />
-            </svg>
             {data.length > 0 ? data.length : 0}
-          </span>
-          <span className="text-xs text-slate-400 dark:text-slate-500">
-            from last month
           </span>
         </div>
       </div>

@@ -19,6 +19,8 @@ import {
   deletePostingRuleAction,
   getCommissionsAction,
   getDiscountsAction,
+  getGlEntriesAction,
+  getGlTransactionDetails,
   getGlTransactionsAction,
   getJournalsAction,
   getLedgersAction,
@@ -284,4 +286,35 @@ export function useGlTransactions(
     refetchOnWindowFocus: false,
   });
   return { loading, glTransactions, isError, error, refetch };
+}
+export function useGlEntries(
+  code: string | undefined,
+  selectedDates: [dayjs.Dayjs, dayjs.Dayjs] | undefined,
+) {
+  const {
+    isPending: loading,
+    data: entries = [],
+    isError,
+    error,
+    refetch,
+  } = useQuery({
+    queryKey: ["glEntries", code, selectedDates],
+    queryFn: () => getGlEntriesAction(code, selectedDates),
+    refetchOnWindowFocus: false,
+  });
+  return { loading, entries, isError, error, refetch };
+}
+
+export function useGlTransactionDetails(id: number) {
+  console.log("Fetching GL Transaction with ID:", id);
+  const {
+    isPending: loading,
+    data: entries = [],
+    error,
+  } = useQuery({
+    queryKey: ["entries", id],
+    queryFn: () => getGlTransactionDetails(id),
+    refetchOnWindowFocus: false,
+  });
+  return { loading, entries, error };
 }

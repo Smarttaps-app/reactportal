@@ -88,6 +88,12 @@ export const protectedRoutes: IAppRoute[] = [
     icon: <RedEnvelopeOutlined />,
   },
   {
+    path: "general-ledger",
+    Component: GlAccountScreen,
+    title: "Ledger",
+    icon: <RedEnvelopeOutlined />,
+  },
+  {
     path: "cashouts",
     Component: AdminCashoutsScreen,
     title: "cashouts",
@@ -170,12 +176,6 @@ export const protectedRoutes: IAppRoute[] = [
     title: "Accounting",
     icon: <AccountBookOutlined />,
     children: [
-      { path: "general-ledger", Component: GlAccountScreen, showInMenu: true },
-      {
-        path: "gl-transactions",
-        Component: GLTransactions,
-        showInMenu: true,
-      },
       {
         path: "posting-rules",
         Component: PostingRulesScreen,
