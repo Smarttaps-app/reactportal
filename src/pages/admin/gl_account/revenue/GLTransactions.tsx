@@ -1,11 +1,12 @@
 import { useMemo, useState } from "react";
-import { useGlTransactions } from "./useAccounting";
-import { IGLTransaction } from "../../../utils/type";
+import { useGlTransactions } from "../useAccounting";
+import { IGLTransaction } from "../../../../utils/type";
 import { Button, Card, Result, Space, DatePicker, Input, Table } from "antd";
 import { EyeOutlined, SearchOutlined } from "@ant-design/icons";
-import { Common } from "../../../utils/Common";
+import { Common } from "../../../../utils/Common";
 import dayjs, { Dayjs } from "dayjs";
 import { Search } from "lucide-react";
+import RevenueCard from "../../../../widgets/RevenueCard";
 const { RangePicker } = DatePicker;
 
 export default function GLTransactions() {
@@ -108,6 +109,29 @@ export default function GLTransactions() {
 
   return (
     <>
+      <div className="pb-8 grid grid-flow-col md:grid-flow-col gap-2">
+        <RevenueCard
+          title="Total Income"
+          sessionKey="total_amount"
+          loading={loading}
+          data={data}
+          color="green"
+        />
+        <RevenueCard
+          title="Total Liabilities"
+          sessionKey="provider_cost"
+          loading={loading}
+          data={data}
+          color="blue"
+        />
+        <RevenueCard
+          title="Total Revenues"
+          sessionKey="commission"
+          loading={loading}
+          data={data}
+          color="pink"
+        />
+      </div>
       <Card
         title="General Ledger Transactions"
         className="!rounded-sm"
@@ -140,7 +164,6 @@ export default function GLTransactions() {
       >
         <Table
           rowKey="id"
-          size="small"
           loading={loading}
           columns={columns}
           dataSource={data}

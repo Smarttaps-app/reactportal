@@ -2,7 +2,6 @@ import {
   Button,
   Card,
   DatePicker,
-  Empty,
   Flex,
   Input,
   App,
@@ -10,6 +9,7 @@ import {
   Space,
   Table,
   Tag,
+  Result,
 } from "antd";
 import dayjs, { Dayjs } from "dayjs";
 import { useMemo, useState } from "react";
@@ -42,7 +42,7 @@ export default function AdminCashoutsScreen() {
     refetch: refetchPayments,
   } = useCashouts(selectedDates);
   const handleDateChange = (
-    dates: [Dayjs | null, Dayjs | null] | null
+    dates: [Dayjs | null, Dayjs | null] | null,
     // dateStrings: [string, string]
   ) => {
     if (dates && dates[0] && dates[1]) {
@@ -156,21 +156,15 @@ export default function AdminCashoutsScreen() {
           ),
       },
     ],
-    []
+    [],
   );
-  if (error)
-    return (
-      <Row justify="center" className="my-3">
-        <Empty description={Common.formatError(error)} />
-      </Row>
-    );
 
   const data =
     cashouts.filter(
       (cashout: ICashout) =>
         cashout.recipient?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         cashout.reason?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        cashout.message?.toLowerCase().includes(searchTerm.toLowerCase())
+        cashout.message?.toLowerCase().includes(searchTerm.toLowerCase()),
     ) || [];
 
   return (
@@ -211,7 +205,7 @@ export default function AdminCashoutsScreen() {
       </Row>
       <Card
         title="Cashout Histories"
-        className="!shadow-sm !rounded-lg"
+        className="!rounded-sm"
         loading={loading}
         extra={
           <Space>
@@ -243,6 +237,13 @@ export default function AdminCashoutsScreen() {
           loading={loading}
           columns={columns}
           dataSource={data}
+          locale={{
+            emptyText: error ? (
+              <Result status="error" subTitle={Common.formatError(error)} />
+            ) : (
+              "No data available"
+            ),
+          }}
           scroll={{ x: "max-content" }}
         />
       </Card>

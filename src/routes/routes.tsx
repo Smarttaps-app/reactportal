@@ -34,7 +34,7 @@ import AccountingScreen from "../pages/admin/gl_account/Index";
 import GlAccountScreen from "../pages/admin/gl_account/ledger/glaccounting";
 import CommissionsScreen from "../pages/admin/gl_account/commission/commissions";
 import DiscountsScreen from "../pages/admin/gl_account/discount/discounts";
-import { PersonStanding, TrainIcon } from "lucide-react";
+import { PersonStanding } from "lucide-react";
 import TrainsScreen from "../pages/admin/transport/train/Trains";
 import BusRoutesScreen from "../pages/admin/transport/bus/BusRoutes";
 import BusStationsScreen from "../pages/admin/transport/bus/parks";
@@ -61,14 +61,12 @@ import ProviderBusTypesScreen from "../pages/bus_provider/bus/ProviderBusTypes";
 import ProviderBusRoutesScreen from "../pages/bus_provider/bus/ProviderBusRoutes";
 import ProviderBusStationsScreen from "../pages/bus_provider/bus/ProviderParks";
 import ProviderBusSchedulesScreen from "../pages/bus_provider/bus/ProviderBusSchedules";
-import RevenuesScreen from "../pages/admin/gl_account/revenue/Revenues";
 import PostingRulesScreen from "../pages/admin/gl_account/posting_rule/PostingRules";
 import ChartOfAccounts from "../pages/admin/gl_account/ChartOfAccounts";
 import BalanceSheet from "../pages/admin/gl_account/BalanceSheet";
 import ProfitLoss from "../pages/admin/gl_account/ProfitLoss";
 import TrialBalance from "../pages/admin/gl_account/TrialBalance";
-import TransactionTypes from "../pages/admin/gl_account/trans_type/TransactionTypes";
-import GLTransactions from "../pages/admin/gl_account/GLTransactions";
+import GLTransactions from "../pages/admin/gl_account/revenue/GLTransactions";
 
 export const protectedRoutes: IAppRoute[] = [
   {
@@ -85,7 +83,7 @@ export const protectedRoutes: IAppRoute[] = [
   },
   {
     path: "revenue",
-    Component: RevenuesScreen,
+    Component: GLTransactions,
     title: "Revenue",
     icon: <RedEnvelopeOutlined />,
   },

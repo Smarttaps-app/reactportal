@@ -123,7 +123,6 @@ export default function GlAccountScreen() {
       >
         <Table
           rowKey="id"
-          size="small"
           loading={loading}
           columns={columns}
           dataSource={data}

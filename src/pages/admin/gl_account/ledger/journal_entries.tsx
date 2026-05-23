@@ -1,4 +1,4 @@
-import { Card, Modal, Table, Tag } from "antd";
+import { Modal, Table, Tag } from "antd";
 import { Grid } from "antd";
 import { IAddProps, ILedger } from "../../../../utils/type";
 import { Common } from "../../../../utils/Common";
@@ -63,7 +63,6 @@ const ListJournal: React.FC<IAddProps<ILedger>> = ({
     >
       <Table
         rowKey="id"
-        size="small"
         columns={columns}
         dataSource={payload?.journal_entries}
         scroll={{ x: "max-content" }}

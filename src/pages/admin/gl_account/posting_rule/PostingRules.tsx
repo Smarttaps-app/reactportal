@@ -104,7 +104,6 @@ export default function PostingRulesScreen() {
       >
         <Table
           rowKey="id"
-          size="small"
           loading={loading}
           columns={columns}
           dataSource={data}

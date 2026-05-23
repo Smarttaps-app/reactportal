@@ -1,4 +1,4 @@
-import { Button, Card, Empty, Flex, Row, Space, Table } from "antd";
+import { Button, Card, Flex, Result, Space, Table } from "antd";
 import { useMemo, useState } from "react";
 import { Common } from "../../../../utils/Common";
 import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
@@ -83,12 +83,6 @@ export default function CommissionsScreen() {
     ],
     [],
   );
-  if (error)
-    return (
-      <Row justify="center" className="my-3">
-        <Empty description={Common.formatError(error)} />
-      </Row>
-    );
 
   const data: ICommission[] = commissions || [];
 
@@ -117,10 +111,16 @@ export default function CommissionsScreen() {
       >
         <Table
           rowKey="id"
-          size="small"
           loading={loading}
           columns={columns}
           dataSource={data}
+          locale={{
+            emptyText: error ? (
+              <Result status="error" subTitle={Common.formatError(error)} />
+            ) : (
+              "No data available"
+            ),
+          }}
           scroll={{ x: "max-content" }}
         />
       </Card>

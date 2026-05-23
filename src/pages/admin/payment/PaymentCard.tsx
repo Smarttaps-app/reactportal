@@ -1,4 +1,4 @@
-import { Col, Tag } from "antd";
+import { Tag } from "antd";
 import { Common } from "../../../utils/Common";
 import { PaymentCardProps } from "../../../utils/type";
 import { ArrowDownOutlined, ArrowUpOutlined } from "@ant-design/icons";

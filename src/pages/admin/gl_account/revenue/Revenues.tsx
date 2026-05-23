@@ -2,9 +2,8 @@ import {
   Button,
   Card,
   DatePicker,
-  Empty,
   Input,
-  Row,
+  Result,
   Space,
   Table,
   Tag,
@@ -134,12 +133,6 @@ export default function RevenuesScreen() {
     ],
     [],
   );
-  if (error)
-    return (
-      <Row justify="center" className="my-3">
-        <Empty description={Common.formatError(error)} />
-      </Row>
-    );
 
   const data =
     payments.filter(
@@ -229,6 +222,13 @@ export default function RevenuesScreen() {
           loading={loading}
           columns={columns}
           dataSource={data}
+          locale={{
+            emptyText: error ? (
+              <Result status="error" subTitle={Common.formatError(error)} />
+            ) : (
+              "No data available"
+            ),
+          }}
           scroll={{ x: "max-content" }}
         />
       </Card>

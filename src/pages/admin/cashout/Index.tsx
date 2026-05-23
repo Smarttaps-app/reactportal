@@ -2,8 +2,8 @@ import {
   Button,
   Card,
   DatePicker,
-  Empty,
   Input,
+  Result,
   Row,
   Space,
   Table,
@@ -77,14 +77,8 @@ export default function CashoutsScreen() {
         ellipsis: true,
       },
     ],
-    []
+    [],
   );
-  if (error)
-    return (
-      <Row justify="center" className="my-3">
-        <Empty description={Common.formatError(error)} />
-      </Row>
-    );
 
   const data =
     cashouts.filter(
@@ -93,7 +87,7 @@ export default function CashoutsScreen() {
           ?.toLowerCase()
           .includes(searchTerm.toLowerCase()) ||
         cashout.reference?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        cashout.message?.toLowerCase().includes(searchTerm.toLowerCase())
+        cashout.message?.toLowerCase().includes(searchTerm.toLowerCase()),
     ) || [];
 
   return (
@@ -166,6 +160,13 @@ export default function CashoutsScreen() {
           loading={loading}
           columns={columns}
           dataSource={data}
+          locale={{
+            emptyText: error ? (
+              <Result status="error" subTitle={Common.formatError(error)} />
+            ) : (
+              "No data available"
+            ),
+          }}
           scroll={{ x: "max-content" }}
         />
       </Card>

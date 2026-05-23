@@ -2,10 +2,9 @@ import {
   App,
   Button,
   Card,
-  Empty,
   Flex,
   Input,
-  Row,
+  Result,
   Space,
   Table,
   Tag,
@@ -142,12 +141,6 @@ export default function DiscountsScreen() {
     ],
     [],
   );
-  if (error)
-    return (
-      <Row justify="center" className="my-3">
-        <Empty description={Common.formatError(error)} />
-      </Row>
-    );
 
   const data =
     discounts.filter(
@@ -194,10 +187,16 @@ export default function DiscountsScreen() {
       >
         <Table
           rowKey="id"
-          size="small"
           loading={loading || changing || isdeleting}
           columns={columns}
           dataSource={data}
+          locale={{
+            emptyText: error ? (
+              <Result status="error" subTitle={Common.formatError(error)} />
+            ) : (
+              "No data available"
+            ),
+          }}
           scroll={{ x: "max-content" }}
         />
       </Card>
