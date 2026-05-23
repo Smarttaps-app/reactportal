@@ -96,10 +96,12 @@ export default function GLTransactions() {
         dataIndex: "",
         render: (t: IGLTransaction) => (
           <Button
+            size="small"
             type="primary"
             icon={<EyeOutlined />}
             onClick={() => {
               setItem(t);
+              setAdd(true);
             }}
           />
         ),

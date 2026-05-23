@@ -1,4 +1,4 @@
-import { Modal, Result, Table, Tag } from "antd";
+import { Modal, Result, Table } from "antd";
 import { Grid } from "antd";
 import { IAddProps, IGLEntry, IGLTransaction } from "../../../../utils/type";
 import { Common } from "../../../../utils/Common";
@@ -18,12 +18,26 @@ const JournalEntries: React.FC<IAddProps<IGLTransaction>> = ({
         title: "ID",
         dataIndex: "id",
         key: "id",
-        width: "5%",
       },
       {
-        title: "GL Code",
-        dataIndex: "name",
-        key: "name",
+        title: "TransactionRef",
+        dataIndex: "transaction_ref",
+        key: "transaction_ref",
+      },
+      {
+        title: "Account Code",
+        dataIndex: "account_code",
+        key: "account_code",
+      },
+      {
+        title: "Party type",
+        dataIndex: "party_type",
+        key: "party_type",
+      },
+      {
+        title: "Entry Type",
+        dataIndex: "entry_type",
+        key: "entry_type",
       },
       {
         title: "Amount",
@@ -32,14 +46,21 @@ const JournalEntries: React.FC<IAddProps<IGLTransaction>> = ({
         render: (amount: string) => Common.formatAsCurrency(Number(amount)),
       },
       {
-        title: "Payment",
-        dataIndex: "is_debit",
-        key: "is_debit",
-        render: (is_debit: boolean) => (
-          <Tag color={`${is_debit ? "red" : "green"}`}>
-            {is_debit ? "debit" : "credit"}
-          </Tag>
-        ),
+        title: "Status",
+        dataIndex: "status",
+        key: "status",
+      },
+      {
+        title: "Description",
+        dataIndex: "description",
+        key: "description",
+      },
+      {
+        title: "Posted",
+        dataIndex: "posted_at",
+        key: "posted_at",
+        render: (posted_at: string) => Common.formatDate(posted_at),
+        ellipsis: true,
       },
       {
         title: "Updated",
