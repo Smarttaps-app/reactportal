@@ -7,7 +7,7 @@ import { Common } from "../../../../utils/Common";
 import dayjs, { Dayjs } from "dayjs";
 import { Search } from "lucide-react";
 import RevenueCard from "../../../../widgets/RevenueCard";
-import JournalEntries from "./entries";
+import JournalEntries from "./Entries";
 const { RangePicker } = DatePicker;
 
 export default function GLTransactions() {
