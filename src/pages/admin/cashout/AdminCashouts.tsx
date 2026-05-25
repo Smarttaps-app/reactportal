@@ -4,7 +4,6 @@ import {
   DatePicker,
   Flex,
   Input,
-  App,
   Row,
   Space,
   Table,
@@ -24,11 +23,9 @@ import {
 } from "./useCashout";
 import ViewScreen from "./View";
 import { Search } from "lucide-react";
-import { useQueryClient } from "@tanstack/react-query";
 const { RangePicker } = DatePicker;
 
 export default function AdminCashoutsScreen() {
-  const client = useQueryClient();
   const [searchTerm, setSearchTerm] = useState("");
   const [show, setShow] = useState(false);
   const [cashout, setCashout] = useState<ICashout>();
@@ -51,7 +48,6 @@ export default function AdminCashoutsScreen() {
   };
   const { isApproving, approved } = useCashoutApproval();
   const { rejecting, rejected } = useCashoutReject();
-  const { message } = App.useApp();
 
   const columns = useMemo(
     () => [
@@ -105,17 +101,7 @@ export default function AdminCashoutsScreen() {
                 size="small"
                 disabled={rejecting || isApproving}
                 loading={isApproving}
-                onClick={() =>
-                  approved(cashout.id.toString(), {
-                    onSuccess: (response) => {
-                      message.success(response.statusDescription);
-                    },
-                    onError: (error) =>
-                      message.success(Common.formatError(error)),
-                    onSettled: () =>
-                      client.invalidateQueries({ queryKey: ["cashouts"] }),
-                  })
-                }
+                onClick={() => approved(cashout.id.toString())}
               >
                 Approve
               </Button>
@@ -126,16 +112,7 @@ export default function AdminCashoutsScreen() {
                 variant="filled"
                 disabled={rejecting || isApproving}
                 loading={rejecting}
-                onClick={() =>
-                  rejected(cashout.id.toString(), {
-                    onSuccess: (response) =>
-                      message.success(response.statusDescription),
-                    onError: (error) =>
-                      message.success(Common.formatError(error)),
-                    onSettled: () =>
-                      client.invalidateQueries({ queryKey: ["cashouts"] }),
-                  })
-                }
+                onClick={() => rejected(cashout.id.toString())}
               >
                 Reject
               </Button>

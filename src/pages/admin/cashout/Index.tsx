@@ -128,7 +128,7 @@ export default function CashoutsScreen() {
       </Row>
       <Card
         title="Cashout Histories"
-        className="!shadow-sm !rounded-lg"
+        className="!rounded-sm"
         loading={loading}
         extra={
           <Space>

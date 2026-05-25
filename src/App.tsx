@@ -16,9 +16,9 @@ function App() {
               components: {
                 Table: {
                   cellPaddingBlock: 5,
-                  cellFontSize: 10,
-                  headerBg: "#ff9900",
-                  headerColor: "#ffffff",
+                  cellFontSize: 12,
+                  headerBg: "#ffffff",
+                  headerColor: "#4B5563",
                 },
                 Card: {
                   borderRadius: 12,
