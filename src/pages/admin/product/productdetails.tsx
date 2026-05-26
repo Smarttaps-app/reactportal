@@ -230,10 +230,11 @@ export default function ProductDetailScreen() {
       >
         <Table
           rowKey="id"
-          size="small"
-          //loading={loading}
           columns={columns}
           dataSource={data}
+          locale={{
+            emptyText: "No data available",
+          }}
           scroll={{ x: "max-content" }}
         />
       </Card>

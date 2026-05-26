@@ -13,7 +13,9 @@ import {
 } from "../../../serviceAction/PaymentActions";
 import { App } from "antd";
 import { Common } from "../../../utils/Common";
-export function useCashouts(selectedDates: [dayjs.Dayjs, dayjs.Dayjs]) {
+export function useCashouts(
+  selectedDates: [dayjs.Dayjs, dayjs.Dayjs] | undefined,
+) {
   const {
     isPending: loading,
     data: cashouts = [],
@@ -179,7 +181,7 @@ export function useCashoutReject() {
   });
   return { rejecting, rejected };
 }
-export function useCashout(id: number) {
+export function useCashout(id: number | undefined) {
   const {
     isPending: loading,
     data: cashout,

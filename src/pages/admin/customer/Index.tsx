@@ -14,9 +14,8 @@ export default function CustomersScreen() {
   const [searchTerm, setSearchTerm] = useState("");
   const [show, setShow] = useState(false);
   const [customer, setCustomer] = useState<ICustomer>();
-  const [selectedDates, setSelectedDates] = useState<
-    [dayjs.Dayjs, dayjs.Dayjs]
-  >([dayjs().subtract(30, "day"), dayjs()]);
+  const [selectedDates, setSelectedDates] =
+    useState<[dayjs.Dayjs, dayjs.Dayjs]>();
   const {
     loading,
     customers,
@@ -114,7 +113,7 @@ export default function CustomersScreen() {
         ),
       },
     ],
-    []
+    [],
   );
   const data =
     customers?.filter(
@@ -127,7 +126,7 @@ export default function CustomersScreen() {
         customer?.account_type
           .toLowerCase()
           .includes(searchTerm.toLowerCase()) ||
-        customer?.email.toLowerCase().includes(searchTerm.toLowerCase())
+        customer?.email.toLowerCase().includes(searchTerm.toLowerCase()),
     ) || [];
 
   return (

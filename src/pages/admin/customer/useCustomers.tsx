@@ -8,7 +8,9 @@ import {
 } from "../../../serviceAction/CustomerActions";
 import { App } from "antd";
 import { Common } from "../../../utils/Common";
-export function useCustomers(selectedDates: [dayjs.Dayjs, dayjs.Dayjs]) {
+export function useCustomers(
+  selectedDates: [dayjs.Dayjs, dayjs.Dayjs] | undefined,
+) {
   const {
     isPending: loading,
     data: customers,
@@ -19,7 +21,7 @@ export function useCustomers(selectedDates: [dayjs.Dayjs, dayjs.Dayjs]) {
     queryFn: () =>
       getCustomersAction(
         selectedDates?.[0]?.format("YYYY-MM-DD"),
-        selectedDates?.[1]?.format("YYYY-MM-DD")
+        selectedDates?.[1]?.format("YYYY-MM-DD"),
       ),
     refetchOnWindowFocus: false,
   });

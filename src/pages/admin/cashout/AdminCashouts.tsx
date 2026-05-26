@@ -29,19 +29,15 @@ export default function AdminCashoutsScreen() {
   const [searchTerm, setSearchTerm] = useState("");
   const [show, setShow] = useState(false);
   const [cashout, setCashout] = useState<ICashout>();
-  const [selectedDates, setSelectedDates] = useState<
-    [dayjs.Dayjs, dayjs.Dayjs]
-  >([dayjs().subtract(30, "day"), dayjs()]);
+  const [selectedDates, setSelectedDates] =
+    useState<[dayjs.Dayjs, dayjs.Dayjs]>();
   const {
     loading,
     cashouts,
     error,
     refetch: refetchPayments,
   } = useCashouts(selectedDates);
-  const handleDateChange = (
-    dates: [Dayjs | null, Dayjs | null] | null,
-    // dateStrings: [string, string]
-  ) => {
+  const handleDateChange = (dates: [Dayjs | null, Dayjs | null] | null) => {
     if (dates && dates[0] && dates[1]) {
       setSelectedDates([dates[0], dates[1]]);
     }

@@ -1,14 +1,4 @@
-import {
-  Avatar,
-  Button,
-  Card,
-  Empty,
-  Flex,
-  message,
-  Row,
-  Spin,
-  Table,
-} from "antd";
+import { Avatar, Button, Card, Flex, message, Result, Spin, Table } from "antd";
 import { useMemo, useState } from "react";
 import { Common } from "../../../utils/Common";
 import { useAdmins, useDeleteAdmin } from "../../../hooks/useAdmin";
@@ -84,11 +74,13 @@ export default function ProviderIndex() {
         render: (key: string, data: IUser) => (
           <Flex gap="small" align="center" wrap>
             <Button
+              size="small"
               type="primary"
               icon={<EditOutlined />}
               onClick={() => (setUser(data), setAdd(true))}
             />
             <Button
+              size="small"
               type="primary"
               icon={<DeleteOutlined />}
               onClick={() => deleted(data.id)}
@@ -110,12 +102,6 @@ export default function ProviderIndex() {
     });
   };
   const [add, setAdd] = useState(false);
-  if (error)
-    return (
-      <Row justify="center" className="my-3">
-        <Empty description={Common.formatError(error)} />
-      </Row>
-    );
 
   const players: IUser[] = data || [];
 
@@ -146,6 +132,13 @@ export default function ProviderIndex() {
           loading={isPending}
           columns={columns}
           dataSource={players}
+          locale={{
+            emptyText: error ? (
+              <Result status="error" subTitle={Common.formatError(error)} />
+            ) : (
+              "No data available"
+            ),
+          }}
           scroll={{ x: "max-content" }}
         />
       </Card>

@@ -1,4 +1,4 @@
-import { Avatar, Button, Card, Empty, Flex, Row, Spin, Table } from "antd";
+import { Avatar, Button, Card, Flex, Result, Spin, Table } from "antd";
 import { useMemo, useState } from "react";
 import { Common } from "../../../utils/Common";
 import { useAdmins, useDeleteAdmin } from "../../../hooks/useAdmin";
@@ -11,7 +11,7 @@ import {
 } from "@ant-design/icons";
 import Add from "./add";
 export default function Index() {
-  const { isPending, data, error } = useAdmins("internal");
+  const { isPending, data: admins, error } = useAdmins("internal");
   const { deleteAdmin, isdeleting } = useDeleteAdmin();
   const [user, setUser] = useState<IUser>();
   const columns = useMemo(
@@ -80,11 +80,13 @@ export default function Index() {
           <Flex gap="small" align="center" wrap>
             <Button
               type="primary"
+              size="small"
               icon={<EditOutlined />}
               onClick={() => (setUser(data), setAdd(true))}
             />
             <Button
               type="primary"
+              size="small"
               icon={<DeleteOutlined />}
               onClick={() => deleteAdmin(data.id)}
               danger
@@ -98,14 +100,8 @@ export default function Index() {
   );
 
   const [add, setAdd] = useState(false);
-  if (error)
-    return (
-      <Row justify="center" className="my-3">
-        <Empty description={Common.formatError(error)} />
-      </Row>
-    );
 
-  const players: IUser[] = data || [];
+  const data: IUser[] = admins || [];
 
   return (
     <div className="small-spacer">
@@ -133,7 +129,14 @@ export default function Index() {
           size="small"
           loading={isPending}
           columns={columns}
-          dataSource={players}
+          dataSource={data}
+          locale={{
+            emptyText: error ? (
+              <Result status="error" subTitle={Common.formatError(error)} />
+            ) : (
+              "No data available"
+            ),
+          }}
           scroll={{ x: "max-content" }}
         />
       </Card>

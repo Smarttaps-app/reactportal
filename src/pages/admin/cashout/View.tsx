@@ -22,7 +22,7 @@ const ViewScreen: React.FC<ICashoutProps> = ({
   isOpen = false,
   onCancel,
 }) => {
-  const { loading, cashout, error } = useCashout(payload?.id ?? 0);
+  const { loading, cashout, error } = useCashout(payload?.id);
   if (error)
     return (
       <Row justify="center" className="my-3">

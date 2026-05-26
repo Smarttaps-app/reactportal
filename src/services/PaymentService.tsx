@@ -58,7 +58,7 @@ export const approveCashout = async (id: string) =>
   await api.get(`admin/cashout/${id}/approve`);
 export const rejectCashout = async (id: string) =>
   await api.get(`admin/cashout/${id}/reject`);
-export const cashout = async (id: number) =>
+export const cashout = async (id: number | undefined) =>
   await api.get(`admin/cashout/${id}`);
 
 export const addCashout = async (payload: ICashout) =>

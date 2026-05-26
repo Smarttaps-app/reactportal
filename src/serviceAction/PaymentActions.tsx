@@ -138,7 +138,7 @@ export async function rejectCashoutAction(id: string) {
   }
   throw new Error(response.data);
 }
-export async function cashoutAction(id: number) {
+export async function cashoutAction(id: number | undefined) {
   const response = await cashout(id);
   if (response.status == 200) {
     console.log(response.data);
