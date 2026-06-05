@@ -6,6 +6,16 @@ const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
   withCredentials: true,
 });
+
+// ADD THIS BLOCK
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem("authToken");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
 const useAxiosInterceptor = () => {
   const navigate = useNavigate();
 
@@ -16,6 +26,7 @@ const useAxiosInterceptor = () => {
         console.log(error);
         console.error("API Error:", error);
         if (error.response?.status === 401) {
+          localStorage.removeItem("authToken"); // ADD THIS
           navigate("/");
         }
         return Promise.reject(error);

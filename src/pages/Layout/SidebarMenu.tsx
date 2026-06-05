@@ -4,7 +4,7 @@ import { IUser } from "../../utils/type";
 import { roleRoutesMap } from "../../routes/routesConfig";
 type MenuItem = GetProp<MenuProps, "items">[number];
 const SidebarMenu = ({ user }: { user: IUser }) => {
-  const listOfRoutes = roleRoutesMap[user?.tag] || [];
+  const listOfRoutes = roleRoutesMap[user?.tag?.toLocaleLowerCase()] || [];
   const items: MenuItem[] = listOfRoutes
     .filter((route) => route.title)
     .map((route, index) => {

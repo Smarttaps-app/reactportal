@@ -15,17 +15,23 @@ const ProtectedRouted = ({
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
   const { user, loading } = useUser();
-  console.log(user?.tag);
+  
+  console.log("loading:", loading, "user:", user?.tag, "allowedRole:", allowedRole);
+
   if (loading) {
     return <Spin size="large">Loading...</Spin>;
   }
 
   if (!user) {
+    console.log("NO USER - redirecting to", redirectTo);
     return <Navigate to={redirectTo} replace />;
   }
-  if (allowedRole && !allowedRole.includes(user.tag)) {
+
+  if (allowedRole && !allowedRole.map(r => r.toLowerCase()).includes(user.tag.toLowerCase())) {
+    console.log("ROLE MISMATCH - user tag:", user.tag, "allowed:", allowedRole);
     return <Navigate to={from} replace />;
   }
+
   return children;
 };
 

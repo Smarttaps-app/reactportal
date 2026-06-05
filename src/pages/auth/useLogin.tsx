@@ -4,10 +4,12 @@ import { loginAction } from "../../serviceAction/AuthActions";
 import { Common } from "../../utils/Common";
 import { getProfileService } from "../../services/MenuService";
 import { useNavigate } from "react-router-dom";
+import { useUser } from "../../context/useUser"; // ADD
 
 export const useLogin = () => {
   const navigate = useNavigate();
   const { message } = App.useApp();
+  const { setUser } = useUser();
   const { mutate: login, isPending } = useMutation({
     mutationFn: loginAction,
     onSuccess: async () => {
@@ -16,10 +18,12 @@ export const useLogin = () => {
         console.log(response.data.data);
         message.success("Login successful!");
         console.log(response.data.data.tag);
-        if (response.data.data.tag === "superadmin") {
+        setUser(response.data.data);
+        const tag = response.data.data.tag.toLowerCase();
+        if (tag === "superadmin") {
           navigate("/admin", { replace: true });
         } else {
-          navigate(`/${response.data.data.tag}`, { replace: true });
+          navigate(`/${tag}`, { replace: true });
         }
         /* if (response.data.data.tag === "superadmin") {
           navigate("/admin", { replace: true });
