@@ -55,7 +55,7 @@ export default function TrainRoutesScreen() {
         dataIndex: "prices",
         key: "prices",
         width: "15%",
-        render: (price: ISeat, record: ITrainRoute) => (
+        render: (_price: ISeat, record: ITrainRoute) => (
           <span className="text-xs text-gray-500">
             {record.prices?.length > 0
               ? record?.prices.map((seat, idx) => (

@@ -92,7 +92,7 @@ export default function TicketsScreen() {
       {
         title: "Actions",
         dataIndex: "",
-        render: (key: string, ticket: ITicket) => (
+        render: (_key: string, ticket: ITicket) => (
           <Button
             type="primary"
             color="cyan"

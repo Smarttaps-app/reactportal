@@ -12,7 +12,7 @@ import {
 } from "antd";
 import { Grid } from "antd";
 import dayjs from "dayjs";
-import { IAddProps, IBus, ITrainRoute, IStation } from "../../../../utils/type";
+import { IAddProps, IBus, IStation } from "../../../../utils/type";
 import { useQueryClient } from "@tanstack/react-query";
 import { Common } from "../../../../utils/Common";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
@@ -41,7 +41,7 @@ const AddBus: React.FC<IAddProps<IBus>> = ({
       ...values,
       schedules: formattedSchedules,
     };
-    addBus(payload, {
+    addBus(payload as any, {
       onSuccess: (data) => {
         notification.success({
           description: data.statusDescription,

@@ -36,6 +36,8 @@ import {
   ISchedule,
   ISeat,
   ITrain,
+  IStation,
+  IBus,
 } from "../utils/type";
 // action for Park
 export async function getParksAction() {
@@ -120,7 +122,7 @@ export async function getStationAction(id: string) {
   }
   throw new Error(response.data);
 }
-export async function addStationAction(payload: FormData) {
+export async function addStationAction(payload: IStation | FormData) {
   const response = await addStation(payload);
   if (response.status == 200) {
     console.log(response.data);
@@ -177,7 +179,7 @@ export async function getBusesAction() {
   }
   throw new Error(response.data);
 }
-export async function addBusAction(payload: FormData) {
+export async function addBusAction(payload: IBus | FormData) {
   const response = await addBus(payload);
   if (response.status == 200) {
     console.log(response.data);

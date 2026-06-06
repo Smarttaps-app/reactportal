@@ -87,7 +87,7 @@ export default function DiscountsScreen() {
       {
         title: "Actions",
         dataIndex: "",
-        render: (key: string, ledger: IDiscount) => (
+        render: (_key: string, ledger: IDiscount) => (
           <Flex gap="small" align="center" wrap>
             <Button
               color="cyan"

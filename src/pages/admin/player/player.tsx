@@ -34,7 +34,7 @@ export default function Player() {
       {
         title: "View",
         dataIndex: "",
-        render: (key: string, data: IPlayer) => (
+        render: (_key: string, data: IPlayer) => (
           <Link to={`${data.id}/player`}>
             <Button className="atn-btn atn-btn-primary">View</Button>
           </Link>

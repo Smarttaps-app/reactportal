@@ -37,7 +37,6 @@ const options: CheckboxGroupProps<string>["options"] = [
 ];
 dayjs.extend(customParseFormat);
 
-const dateFormat = "YYYY-MM-DD";
 const { Option } = Select;
 const { useBreakpoint } = Grid;
 
@@ -54,12 +53,20 @@ const AddSchedule: React.FC<IAddProps<ISchedule>> = ({
   const { loadingRoutes, routes } = useRoutesViaAdmin(providerId!);
   const { loadingBuses, buses } = useBusesViaAdmin(providerId!);
 
-  const onFinish = async (values: ISchedule) => {
-    values.arrivalTime = values.arrivalTime?.format("HH:mm a").toUpperCase();
-    values.departureTime = values.departureTime
-      ?.format("HH:mm a")
-      .toUpperCase();
-    addSchedule(values, {
+  const onFinish = async (
+    values: ISchedule & {
+      arrivalTime?: dayjs.Dayjs | string;
+      departureTime?: dayjs.Dayjs | string;
+    },
+  ) => {
+    const formatTime = (time?: dayjs.Dayjs | string) =>
+      dayjs.isDayjs(time) ? time.format("HH:mm a").toUpperCase() : (time ?? "");
+    const payload: ISchedule = {
+      ...values,
+      arrivalTime: formatTime(values.arrivalTime),
+      departureTime: formatTime(values.departureTime),
+    };
+    addSchedule(payload, {
       onSuccess: () => onCancel(),
     });
   };

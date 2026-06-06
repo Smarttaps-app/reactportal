@@ -1,59 +1,43 @@
 import { App, Button, Card, Form, Input, Tag, Typography } from "antd";
 import { IAddProps, ISupportTicket, IComment } from "../../../utils/type";
-import { useNavigate } from "react-router-dom";
-import { useAddNotification } from "../../../hooks/useNotification";
-import { useAssignTicket, useCloseTicket, useReplyTicket } from "./useSupports";
+import { useCloseTicket, useReplyTicket } from "./useSupports";
 import { Common } from "../../../utils/Common";
 
 const { TextArea } = Input;
 
 const SupportTicketResponse: React.FC<IAddProps<ISupportTicket>> = ({
   payload,
-  isOpen = false,
-  onCancel,
 }) => {
-  const navigate = useNavigate();
   const { message } = App.useApp();
-  const { assigning, assignTicket } = useAssignTicket();
-  const { replying, replyTicket } = useReplyTicket();
-  const { closing, closingTicket } = useCloseTicket();
-  const replied = (id: number) => {
-    replyTicket(id, {
-      onSuccess: (response) => {
-        console.log(response);
-        message.success(response.statusDescription);
-      },
-      onError: (error) => message.error(Common.formatError(error)),
-    });
-  };
-  const assigned = (id: number) => {
-    assignTicket(id, {
-      onSuccess: (response) => {
-        console.log(response);
-        message.success(response.statusDescription);
-      },
-      onError: (error) => message.error(Common.formatError(error)),
-    });
-  };
+  const { replyTicket, replying } = useReplyTicket();
+  const { closingTicket, closing } = useCloseTicket();
+
   const closed = (id: number) => {
-    closingTicket(id, {
-      onSuccess: (response) => {
-        console.log(response);
-        message.success(response.statusDescription);
+    closingTicket(
+      { id, action: "close" },
+      {
+        onSuccess: (response) => {
+          message.success(response.statusDescription);
+        },
+        onError: (error) => message.error(Common.formatError(error)),
       },
-      onError: (error) => message.error(Common.formatError(error)),
-    });
+    );
   };
-  const { isAdding, addNotification } = useAddNotification();
-  const onFinish = async (values: ISupportTicket) => {
-    console.log("Success:", values);
-    addNotification(values, {
-      onSuccess: (data) => {
-        message.success(data.statusDescription);
+
+  const onFinish = async (values: { comment: string }) => {
+    if (!payload?.id) return;
+
+    replyTicket(
+      { id: payload.id, action: values.comment },
+      {
+        onSuccess: (data) => {
+          message.success(data.statusDescription);
+        },
+        onError: (error) => message.error(Common.formatError(error)),
       },
-      onSettled: () => navigate(-1),
-    });
+    );
   };
+
   return (
     <Card
       className="px-16"
@@ -65,8 +49,8 @@ const SupportTicketResponse: React.FC<IAddProps<ISupportTicket>> = ({
               type="primary"
               size="small"
               loading={closing}
-              disabled={closing || payload?.status !== "closed"}
-              onClick={() => closed(payload.id)}
+              disabled={closing || payload?.status === "closed"}
+              onClick={() => payload?.id && closed(payload.id)}
             >
               Close
             </Button>
@@ -132,7 +116,7 @@ const SupportTicketResponse: React.FC<IAddProps<ISupportTicket>> = ({
           <TextArea autoSize={{ minRows: 3, maxRows: 5 }} />
         </Form.Item>
         <Form.Item wrapperCol={{ span: 1 }}>
-          <Button type="primary" htmlType="submit" loading={isAdding}>
+          <Button type="primary" htmlType="submit" loading={replying}>
             Reply
           </Button>
         </Form.Item>

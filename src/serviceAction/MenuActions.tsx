@@ -118,3 +118,23 @@ export async function deleteNotificationAction(id: number) {
   }
   throw new Error(response.data);
 }
+export async function getAllPayers() {
+  const response = await getAdmins("player");
+  if (response.status == 200) return response.data.data;
+  throw new Error(response.data);
+}
+export async function getPlayerAction(id: string) {
+  const response = await getAdmins(`player/${id}`);
+  if (response.status == 200) return response.data.data;
+  throw new Error(response.data);
+}
+export async function addRuleAction(payload: import("../utils/type").IRule) {
+  const response = await addRole(payload as any);
+  if (response.status == 200) return response.data;
+  throw new Error(response.data);
+}
+export async function deleteRuleAction(id: number) {
+  const response = await deleteRole(id);
+  if (response.status == 200) return response.data;
+  throw new Error(response.data);
+}

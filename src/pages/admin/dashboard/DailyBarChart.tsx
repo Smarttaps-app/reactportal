@@ -25,15 +25,19 @@ ChartJS.register(
 export default function DailyPaymentsChart({
   payments = [],
   fillMissingDays = true,
+}: {
+  payments?: IPayment[];
+  fillMissingDays?: boolean;
 }) {
-  const formatDateKey = (d) => new Date(d).toLocaleDateString("en-CA"); // YYYY-MM-DD
+  const formatDateKey = (d: string | Date) =>
+    new Date(d).toLocaleDateString("en-CA"); // YYYY-MM-DD
 
   // 1) group by day
   const grouped = useMemo(() => {
-    const map = new Map();
+    const map = new Map<string, number>();
     payments.forEach((p: IPayment) => {
       const date = new Date(p.created_at);
-      if (isNaN(date)) return;
+      if (isNaN(date.getTime())) return;
       const key = formatDateKey(date);
       const amt = Number(p.amount) / 100 || 0;
       map.set(key, (map.get(key) || 0) + amt);
@@ -50,7 +54,7 @@ export default function DailyPaymentsChart({
     const first = new Date(grouped[0].date);
     const last = new Date(grouped[grouped.length - 1].date);
 
-    const normalize = (d) => {
+    const normalize = (d: string | Date) => {
       const dd = new Date(d);
       dd.setHours(0, 0, 0, 0);
       return dd;
@@ -98,7 +102,7 @@ export default function DailyPaymentsChart({
     scales: {
       x: {
         ticks: {
-          callback: function (val, index) {
+          callback: function (_val, index) {
             const d = new Date(labels[index]);
             return d.toLocaleDateString(undefined, {
               month: "short",

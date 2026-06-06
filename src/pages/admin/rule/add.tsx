@@ -16,13 +16,13 @@ import { toast } from "react-toastify";
 
 const { TextArea } = Input;
 
-const AddRule: React.FC<IAddProps> = ({ isOpen = false, onCancel }) => {
+const AddRule: React.FC<IAddProps<IRule>> = ({ isOpen = false, onCancel }) => {
   const navigate = useNavigate();
   const { isAdding, addRule } = useAddRule();
   const onFinish: FormProps<IRule>["onFinish"] = (values) => {
     console.log("Success:", values);
     addRule(values, {
-      onSuccess: (data) => {
+      onSuccess: (data: any) => {
         toast.success(data.statusDescription);
       },
       onSettled: () => navigate(-1),

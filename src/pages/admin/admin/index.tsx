@@ -76,7 +76,7 @@ export default function Index() {
         title: "Actions",
         dataIndex: "",
         width: "10%",
-        render: (key: string, data: IUser) => (
+        render: (_key: string, data: IUser) => (
           <Flex gap="small" align="center" wrap>
             <Button
               type="primary"

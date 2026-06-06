@@ -81,7 +81,7 @@ export default function ParksScreen() {
         title: "Actions",
         dataIndex: "",
         width: "12%",
-        render: (key: string, park: IPark) => (
+        render: (_key: string, park: IPark) => (
           <Flex gap="small" align="center" wrap>
             <Button
               type="primary"

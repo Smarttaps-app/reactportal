@@ -29,7 +29,7 @@ const AdminAddStation: React.FC<IAddProps<IStation>> = ({
   const screens = useBreakpoint();
   const { addStation, isAdding } = useAddStation();
   const onFinish = async (values: IStation) => {
-    addStation(values, {
+    addStation(values as any, {
       onSuccess: (data) => {
         message.success(data.statusDescription);
         onCancel();

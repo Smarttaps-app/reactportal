@@ -94,7 +94,7 @@ export default function JournalEntriesScreen() {
       {
         title: "Actions",
         dataIndex: "",
-        render: (key: string, payment: IPayment) => (
+        render: (_key: string, payment: IPayment) => (
           <Flex gap="small" align="center" wrap>
             <Button
               type="primary"

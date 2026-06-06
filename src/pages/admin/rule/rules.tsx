@@ -14,7 +14,6 @@ import {
   Table,
 } from "antd";
 import { useMemo, useState } from "react";
-import { Link } from "react-router-dom";
 import { Common } from "../../../utils/Common";
 import { useRules } from "../../../hooks/useRole";
 import { IRule } from "../../../utils/type";
@@ -76,7 +75,7 @@ export default function Rules() {
       {
         title: "Actions",
         dataIndex: "",
-        render: (key: string, data: IRule) => (
+        render: (_key: string, data: IRule) => (
           <Flex gap="small" align="center" wrap>
             <Button
               type="primary"
@@ -105,7 +104,7 @@ export default function Rules() {
 
   const deleted = (id: number) => {
     deleteRule(id, {
-      onSuccess: (response) => {
+      onSuccess: (response: any) => {
         console.log(response);
         toast.success(response.statusDescription);
       },

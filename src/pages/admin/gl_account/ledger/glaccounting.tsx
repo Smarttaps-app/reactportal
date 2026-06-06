@@ -72,7 +72,7 @@ export default function GlAccountScreen() {
       {
         title: "Actions",
         dataIndex: "",
-        render: (key: string, ledger: ILedger) => (
+        render: (_key: string, ledger: ILedger) => (
           <Flex gap="small" align="center" wrap>
             <Button
               type="primary"

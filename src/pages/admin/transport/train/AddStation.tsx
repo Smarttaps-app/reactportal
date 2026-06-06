@@ -22,7 +22,7 @@ const AddStation: React.FC<IAddProps<IStation>> = ({
   const { notification } = App.useApp();
   const { addStation, isAdding } = useAddStation();
   const onFinish = async (values: IStation) => {
-    addStation(values, {
+    addStation(values as any, {
       onSuccess: (data) => {
         notification.success({
           description: data.statusDescription,

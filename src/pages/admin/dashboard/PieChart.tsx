@@ -7,7 +7,7 @@ ChartJS.register(Title, Tooltip, Legend, ArcElement);
 function PaymentsPie({ payments = [] }: { payments: IPayment[] }) {
   // Group by name and sum amounts
   const grouped = payments.reduce<Record<string, number>>((acc, curr) => {
-    const name = curr.name;
+    const name = curr.product || curr.service || "Unknown";
     const amount = Number(curr.amount) / 100 || 0;
     acc[name] = (acc[name] || 0) + amount;
     return acc;

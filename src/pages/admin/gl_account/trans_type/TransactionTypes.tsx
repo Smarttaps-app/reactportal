@@ -1,12 +1,14 @@
-import { Button, Result, Table } from "antd";
+import { Button, Card, Result, Space, Table } from "antd";
 import { useMemo, useState } from "react";
 import Add from "./Add";
-import { DeleteOutlined, EyeOutlined } from "@ant-design/icons";
+import { DeleteOutlined, EyeOutlined, PlusOutlined } from "@ant-design/icons";
 import { Common } from "../../../../utils/Common";
+import { ILedger } from "../../../../utils/type";
+import { useLedgers } from "../useAccounting";
 
 export default function TransactionTypes() {
   const [add, setAdd] = useState(false);
-  const [show, setShow] = useState(false);
+  const [_show, setShow] = useState(false);
   const [item, setItem] = useState<ILedger>();
   const { loading, ledgers, error } = useLedgers();
 
@@ -42,7 +44,7 @@ export default function TransactionTypes() {
       {
         title: "Actions",
         dataIndex: "",
-        render: (key: string, ledger: ILedger) => (
+        render: (_key: string, ledger: ILedger) => (
           <div className="flex gap-5">
             <Button
               type="primary"

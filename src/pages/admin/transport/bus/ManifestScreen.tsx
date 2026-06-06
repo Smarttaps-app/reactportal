@@ -1,10 +1,6 @@
-import { Button, Form, Input, Modal, Result, Select, Table } from "antd";
+import { Modal, Result, Table } from "antd";
 import { Grid } from "antd";
-import {
-  type ISchedule,
-  type IBiller,
-  type IUser,
-} from "../../../../utils/type";
+import { type ISchedule } from "../../../../utils/type";
 import { Common } from "../../../../utils/Common";
 import { useManifest } from "./useBus";
 import { useMemo, useState } from "react";
@@ -20,7 +16,7 @@ const ManifestScreen: React.FC<IProductProps> = ({
   isOpen = false,
   onCancel,
 }) => {
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm] = useState("");
   const screens = useBreakpoint();
   const { manifest, loading, error } = useManifest(trip?.id ?? 0);
   const columns = useMemo(

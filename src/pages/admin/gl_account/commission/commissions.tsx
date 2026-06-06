@@ -60,7 +60,7 @@ export default function CommissionsScreen() {
       {
         title: "Actions",
         dataIndex: "",
-        render: (key: string, ledger: ICommission) => (
+        render: (_key: string, ledger: ICommission) => (
           <Flex gap="small" align="center" wrap>
             <Button
               type="primary"

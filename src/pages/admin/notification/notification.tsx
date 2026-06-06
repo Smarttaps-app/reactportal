@@ -88,7 +88,7 @@ export default function NotificationScreen() {
         title: "Actions",
         dataIndex: "",
         width: "15%",
-        render: (key: string, data: INotification) => (
+        render: (_key: string, data: INotification) => (
           <Flex gap="small" align="center" wrap>
             <Button
               type="primary"

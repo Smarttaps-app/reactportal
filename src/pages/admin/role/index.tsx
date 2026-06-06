@@ -51,7 +51,7 @@ export default function RoleIndex() {
       {
         title: "Actions",
         dataIndex: "",
-        render: (key: string, data: IRole) => (
+        render: (_key: string, data: IRole) => (
           <Flex gap="small" align="center" wrap>
             <Button
               type="primary"

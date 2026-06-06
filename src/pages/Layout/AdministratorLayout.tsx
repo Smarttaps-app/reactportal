@@ -33,7 +33,7 @@ const AdministratorLayout: React.FC = () => {
   const screens = useBreakpoint();
   const [collapsed, setCollapsed] = useState(false);
   const {
-    token: { colorBgContainer, borderRadiusLG },
+    token: { colorBgContainer },
   } = theme.useToken();
   const sidebarWidth = collapsed ? 80 : screens.lg ? 240 : 160;
   const { user, loading: isPending, logout } = useUser();

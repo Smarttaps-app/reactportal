@@ -3,18 +3,19 @@ import type { TableProps } from "antd";
 import { Form, Input, InputNumber, Popconfirm, Table, Typography } from "antd";
 import { IDiscount } from "../../../../utils/type";
 
-interface DataType {
-  key: string;
-  name: string;
-  age: number;
-  address: string;
-}
-
-const originData = Array.from({ length: 100 }).map<IDiscount>((_, i) => ({
-  id: i,
-  provider_discount_rate: `Edward ${i}`,
-  provider_discount_type: 32,
-}));
+const originData: IDiscount[] = Array.from({ length: 10 }).map<IDiscount>(
+  (_, i) => ({
+    id: i,
+    provider_discount_rate: `Rate ${i}`,
+    provider_discount_type: "percentage",
+    product_type_id: `PT${i}`,
+    gl_to_provider: `GL${i}`,
+    admin_id: `A${i}`,
+    active: true,
+    created_at: "",
+    updated_at: "",
+  }),
+);
 
 interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
   editing: boolean;
@@ -30,25 +31,19 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
   dataIndex,
   title,
   inputType,
-  record,
-  index,
+  record: _record,
+  index: _index,
   children,
   ...restProps
 }) => {
   const inputNode = inputType === "number" ? <InputNumber /> : <Input />;
-
   return (
     <td {...restProps}>
       {editing ? (
         <Form.Item
           name={dataIndex}
           style={{ margin: 0 }}
-          rules={[
-            {
-              required: true,
-              message: `Please Input ${title}!`,
-            },
-          ]}
+          rules={[{ required: true, message: `Please Input ${title}!` }]}
         >
           {inputNode}
         </Form.Item>
@@ -59,40 +54,29 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
   );
 };
 
-const App: React.FC = () => {
+const DiscountScreen: React.FC = () => {
   const [form] = Form.useForm();
   const [data, setData] = useState<IDiscount[]>(originData);
-  const [editingKey, setEditingKey] = useState(0);
+  const [editingKey, setEditingKey] = useState<number | null>(null);
 
   const isEditing = (record: IDiscount) => record.id === editingKey;
 
-  const edit = (record: Partial<IDiscount> & { key: React.Key }) => {
-    form.setFieldsValue({ name: "", age: "", address: "", ...record });
+  const edit = (record: IDiscount) => {
+    form.setFieldsValue({ ...record });
     setEditingKey(record.id);
   };
 
-  const cancel = () => {
-    setEditingKey(0);
-  };
+  const cancel = () => setEditingKey(null);
 
-  const save = async (key: React.Key) => {
+  const save = async (id: number) => {
     try {
-      const row = (await form.validateFields()) as IDiscount;
-
+      const row = (await form.validateFields()) as Partial<IDiscount>;
       const newData = [...data];
-      const index = newData.findIndex((item) => key === item.key);
+      const index = newData.findIndex((item) => id === item.id);
       if (index > -1) {
-        const item = newData[index];
-        newData.splice(index, 1, {
-          ...item,
-          ...row,
-        });
+        newData.splice(index, 1, { ...newData[index], ...row });
         setData(newData);
-        setEditingKey("");
-      } else {
-        newData.push(row);
-        setData(newData);
-        setEditingKey("");
+        setEditingKey(null);
       }
     } catch (errInfo) {
       console.log("Validate Failed:", errInfo);
@@ -101,32 +85,32 @@ const App: React.FC = () => {
 
   const columns = [
     {
-      title: "name",
-      dataIndex: "name",
+      title: "Rate",
+      dataIndex: "provider_discount_rate",
       width: "25%",
       editable: true,
     },
     {
-      title: "age",
-      dataIndex: "age",
-      width: "15%",
+      title: "Type",
+      dataIndex: "provider_discount_type",
+      width: "25%",
       editable: true,
     },
     {
-      title: "address",
-      dataIndex: "address",
-      width: "40%",
+      title: "GL",
+      dataIndex: "gl_to_provider",
+      width: "30%",
       editable: true,
     },
     {
-      title: "operation",
+      title: "Operation",
       dataIndex: "operation",
-      render: (_: any, record: DataType) => {
+      render: (_: any, record: IDiscount) => {
         const editable = isEditing(record);
         return editable ? (
           <span>
             <Typography.Link
-              onClick={() => save(record.key)}
+              onClick={() => save(record.id)}
               style={{ marginInlineEnd: 8 }}
             >
               Save
@@ -137,7 +121,7 @@ const App: React.FC = () => {
           </span>
         ) : (
           <Typography.Link
-            disabled={editingKey !== ""}
+            disabled={editingKey !== null}
             onClick={() => edit(record)}
           >
             Edit
@@ -148,14 +132,12 @@ const App: React.FC = () => {
   ];
 
   const mergedColumns: TableProps<IDiscount>["columns"] = columns.map((col) => {
-    if (!col.editable) {
-      return col;
-    }
+    if (!col.editable) return col;
     return {
       ...col,
       onCell: (record: IDiscount) => ({
         record,
-        inputType: col.dataIndex === "age" ? "number" : "text",
+        inputType: col.dataIndex === "provider_discount_rate" ? "number" : "text",
         dataIndex: col.dataIndex,
         title: col.title,
         editing: isEditing(record),
@@ -166,9 +148,7 @@ const App: React.FC = () => {
   return (
     <Form form={form} component={false}>
       <Table<IDiscount>
-        components={{
-          body: { cell: EditableCell },
-        }}
+        components={{ body: { cell: EditableCell } }}
         bordered
         dataSource={data}
         columns={mergedColumns}
@@ -179,4 +159,4 @@ const App: React.FC = () => {
   );
 };
 
-export default App;
+export default DiscountScreen;

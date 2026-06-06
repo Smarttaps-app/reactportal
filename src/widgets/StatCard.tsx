@@ -8,7 +8,7 @@ interface StatCardProps<T> {
   data: T[];
   error: boolean;
 }
-const StatCard = <T,>({
+const StatCard = <T extends Record<string, any>,>({
   title,
   sessionKey,
   valueKey,

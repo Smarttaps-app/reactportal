@@ -51,7 +51,7 @@ export default function Subscriptions() {
       {
         title: "Actions",
         dataIndex: "",
-        render: (key: string, data: ISubscription) => (
+        render: (_key: string, data: ISubscription) => (
           <Button
             type="primary"
             icon={<RedoOutlined />}

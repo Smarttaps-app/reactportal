@@ -99,7 +99,7 @@ export default function CustomersScreen() {
       {
         title: "Actions",
         dataIndex: "",
-        render: (key: string, customer: ICustomer) => (
+        render: (_key: string, customer: ICustomer) => (
           <Button
             color="cyan"
             variant="filled"

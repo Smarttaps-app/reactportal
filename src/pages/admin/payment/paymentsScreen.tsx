@@ -102,7 +102,7 @@ export default function PaymentsScreen() {
       {
         title: "Actions",
         dataIndex: "",
-        render: (key: string, payment: IPayment) => (
+        render: (_key: string, payment: IPayment) => (
           <Button
             type="primary"
             color="green"

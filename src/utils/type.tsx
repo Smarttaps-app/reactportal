@@ -65,7 +65,7 @@ export interface PaymentCardProps {
   loading: boolean;
   data: IPayment[];
   error: boolean;
-  color: string;
+  color?: string;
   children?: ReactNode;
 }
 export interface ProductCardProps {
@@ -352,6 +352,7 @@ export interface IBusRoute {
   buses: IBus[];
 }
 export interface ISeat {
+  id: number;
   identifier: string;
   seatNumber: string;
   classType: string;
@@ -552,4 +553,36 @@ export interface IGLEntry {
   posted_at: string;
   created_at: string;
   updated_at: string;
+}
+export interface IPlayer {
+  id: number;
+  msisdn: string;
+  status: boolean;
+  score?: number;
+  created_at: string;
+  updated_at: string;
+}
+export interface ISubscription {
+  id: number;
+  msisdn: string;
+  status: string;
+  plan: string;
+  expires_at: string;
+  created_at: string;
+  updated_at: string;
+}
+export interface IRule {
+  id: number;
+  title: string;
+  message: string;
+  code: string;
+  mode: string;
+  status: boolean;
+  created_at: string;
+  updated_at: string;
+}
+export interface ISubmitGameRequest {
+  answer: string;
+  question_id: number;
+  session_id?: string;
 }

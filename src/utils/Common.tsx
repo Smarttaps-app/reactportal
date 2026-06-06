@@ -80,7 +80,7 @@ export class Common {
     return "Daily";
   };
   static formatDate = (date?: string) => {
-    const options = {
+    const options: Intl.DateTimeFormatOptions = {
       year: "numeric",
       month: "short",
       day: "numeric",
@@ -92,7 +92,7 @@ export class Common {
     return new Intl.DateTimeFormat("en", options).format(Date.parse(date));
   };
   static getTime = (string: string) => {
-    const options = {
+    const options: Intl.DateTimeFormatOptions = {
       hour: "numeric",
       minute: "numeric",
       second: "numeric",
@@ -139,19 +139,24 @@ export class Common {
     if (status.toLocaleLowerCase() === "rejected") return "red";
     return "green";
   }
-  static formatError(error) {
+  static formatError(error: unknown) {
     console.log(error);
-    if (error.response) {
-      if (error.response.data) {
-        if (error?.response.data.statusDescription) {
-          console.log(error?.response.data.statusDescription);
-          return error?.response.data.statusDescription;
-        }
-        return error?.response.data.detail;
+    if (typeof error === "object" && error !== null && "response" in error) {
+      const axiosError = error as {
+        response?: { data?: { statusDescription?: string; detail?: string } };
+        message?: string;
+      };
+      if (axiosError.response?.data?.statusDescription) {
+        return axiosError.response.data.statusDescription;
       }
-      return error?.response;
+      if (axiosError.response?.data?.detail) {
+        return axiosError.response.data.detail;
+      }
     }
-    return error.message;
+    if (error instanceof Error) {
+      return error.message;
+    }
+    return "An unexpected error occurred";
   }
   static getToken() {
     const user = localStorage.getItem("user");

@@ -57,7 +57,7 @@ export default function TrainsScreen() {
         dataIndex: "schedules",
         key: "schedules",
         width: "15%",
-        render: (schedule: ISchedule, record: ITrain) => (
+        render: (_schedule: ISchedule, record: ITrain) => (
           <span className="text-xs text-gray-500">
             {record.schedules?.length > 0
               ? ` ${record.schedules?.length} Schedules`

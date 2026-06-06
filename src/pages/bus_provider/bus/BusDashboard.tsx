@@ -14,7 +14,11 @@ import {
 import { Bar, Doughnut, Pie } from "react-chartjs-2";
 import { Common } from "../../../utils/Common";
 import SummaryCard from "../../../widgets/SummaryCard";
-import { datas, options, useProviderAnalytics } from "../useProviderAnalytics";
+import {
+  datas,
+  options,
+  useProviderAnalytics,
+} from "../../admin/transport/useProviderAnalytics";
 
 ChartJS.register(
   ArcElement,

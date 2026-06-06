@@ -1,5 +1,4 @@
 import {
-  App,
   Button,
   Descriptions,
   DescriptionsProps,
@@ -12,7 +11,6 @@ import {
 import { ITicket } from "../../../utils/type";
 import { CloseOutlined, PrinterOutlined } from "@ant-design/icons";
 import { Common } from "../../../utils/Common";
-import { useQueryClient } from "@tanstack/react-query";
 import { useTicket } from "./useTicket";
 interface ITicketProps {
   payload?: ITicket;
@@ -25,8 +23,6 @@ const ShowTicket: React.FC<ITicketProps> = ({
   isOpen = false,
   onCancel,
 }) => {
-  const { message } = App.useApp();
-  const client = useQueryClient();
   const { loading, ticket, error } = useTicket(payload?.id ?? "");
   if (error)
     return (

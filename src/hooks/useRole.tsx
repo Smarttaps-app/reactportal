@@ -40,3 +40,16 @@ export function useDeleteRole() {
   });
   return { isdeleting, deleteRole };
 }
+export function useRules() {
+  const {
+    isPending: isLoadingRules,
+    data: rules,
+    error,
+  } = useQuery({
+    queryKey: ["rules"],
+    queryFn: getRolesAction,
+    retry: false,
+  });
+  if (error) message.error(Common.formatError(error));
+  return { isLoadingRules, rules, error };
+}

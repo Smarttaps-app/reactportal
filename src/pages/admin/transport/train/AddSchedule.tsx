@@ -17,6 +17,7 @@ import { Common } from "../../../../utils/Common";
 import { useUser } from "../../../../context/useUser";
 import { useAdmins } from "../../../../hooks/useAdmin";
 import { useAddSchedule } from "./useTrain";
+import dayjs from "dayjs";
 const { useBreakpoint } = Grid;
 const { Option } = Select;
 
@@ -30,13 +31,21 @@ const AddSchedule: React.FC<IAddProps<ISchedule>> = ({
   const client = useQueryClient();
   const screens = useBreakpoint();
   const { addSchedule, isAdding } = useAddSchedule();
-  const onFinish = async (values: ISchedule) => {
-    values.arrivalTime = values.arrivalTime?.format("HH:mm a").toUpperCase();
-    values.departureTime = values.departureTime
-      ?.format("HH:mm a")
-      .toUpperCase();
-    console.log(values);
-    addSchedule(values, {
+  const onFinish = async (
+    values: ISchedule & {
+      arrivalTime?: dayjs.Dayjs | string;
+      departureTime?: dayjs.Dayjs | string;
+    },
+  ) => {
+    const formatTime = (time?: dayjs.Dayjs | string) =>
+      dayjs.isDayjs(time) ? time.format("HH:mm a").toUpperCase() : (time ?? "");
+    const payload: ISchedule = {
+      ...values,
+      arrivalTime: formatTime(values.arrivalTime),
+      departureTime: formatTime(values.departureTime),
+    };
+    console.log(payload);
+    addSchedule(payload, {
       onSuccess: (data) => {
         message.success(data.statusDescription);
         onCancel();

@@ -83,7 +83,7 @@ export default function SeatsScreen() {
               disabled={isdeleting}
               loading={isdeleting}
               onClick={() =>
-                deleteSeat(seat.id, {
+                deleteSeat(String(seat.id), {
                   onSuccess: (response) =>
                     message.success(response.statusDescription),
                   onError: (error) => message.error(Common.formatError(error)),

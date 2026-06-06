@@ -16,8 +16,6 @@ const CustomerScreen: React.FC<ICustomerProps> = ({
 }) => {
   const client = useQueryClient();
   const [activeTab, setActiveTab] = useState<"ledger" | "security">("ledger");
-  const [ledgerPage, setLedgerPage] = useState(1);
-  const [securityPage, setSecurityPage] = useState(1);
 
   const { loading, data, error } = useCustomer(
     customer?.id ?? customer?.identifier ?? "",
