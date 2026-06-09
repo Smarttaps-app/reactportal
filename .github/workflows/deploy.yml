@@ -30,6 +30,13 @@ jobs:
 
       - name: Build
         run: npm run build
+        env:
+          # Public API URLs baked into the bundle at build time. The repo's
+          # .env files are gitignored, so CI must supply these or the portal
+          # ends up with an empty base URL and fetches no data.
+          VITE_API_BASE_URL: https://api.smarttaps.biz/api/v1/
+          VITE_API_IBASE_URL: https://api.smarttaps.biz/api/v1/static/images/
+          VITE_APP_TITLE: "SMART TAP | Providing seamless access to payment"
 
       - name: Deploy dist/ to server over SSH
         run: |
