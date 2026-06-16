@@ -25,7 +25,11 @@ export async function loginAction(payload: ILogin) {
 export async function forgotPasswordAction(payload: IForgotPasswordRequest) {
   const response = await forgotPassword(payload);
   if (response.status == 200) {
-    console.log(response.data.data);
+    // Store the short-lived reset token so the final step sends it as Bearer.
+    const token = response.data?.data?.idToken;
+    if (token) {
+      localStorage.setItem("authToken", token);
+    }
     return response.data;
   }
   throw new Error(response.data);
