@@ -35,9 +35,9 @@ export function getNotifications(
   });
 }
 export const addNotification = async (payload: INotification) =>
-  await api.post(`admin/notifications/add`, payload);
+  await api.post(`admin/notification`, payload);
 export const deleteNotification = async (id: number) =>
-  await api.delete(`admin/notifications/${id}/delete`);
+  await api.delete(`admin/notification/${id}`);
 
 // service for admins
 export function getAdmins(role?: string | null) {
