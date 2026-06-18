@@ -74,7 +74,7 @@ export default function AdminPaymentsScreen() {
         render: (payment_type: string) => (
           <Tag
             color={`${
-              payment_type.toLowerCase() === "credit" ? "green" : "red"
+              payment_type?.toLowerCase() === "credit" ? "green" : "red"
             }`}
           >
             {payment_type}
@@ -130,14 +130,16 @@ export default function AdminPaymentsScreen() {
     );
 
   const data =
-    payments.filter(
-      (payment: IPayment) =>
-        payment.recipient.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        payment.payment_type.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        payment.product.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        payment.service.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        payment.channel.toLowerCase().includes(searchTerm.toLowerCase()),
-    ) || [];
+    payments.filter((payment: IPayment) => {
+      const q = searchTerm.toLowerCase();
+      return (
+        payment.recipient?.toLowerCase().includes(q) ||
+        payment.payment_type?.toLowerCase().includes(q) ||
+        payment.product?.toLowerCase().includes(q) ||
+        payment.service?.toLowerCase().includes(q) ||
+        payment.channel?.toLowerCase().includes(q)
+      );
+    }) || [];
 
   return (
     <>

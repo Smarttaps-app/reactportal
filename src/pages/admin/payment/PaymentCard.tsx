@@ -15,7 +15,7 @@ const PaymentCard: React.FC<PaymentCardProps> = ({
     error || !data
       ? []
       : data.filter(
-          (tx) => tx.payment_type.toLowerCase() === sessionKey.toLowerCase(),
+          (tx) => tx.payment_type?.toLowerCase() === sessionKey.toLowerCase(),
         );
   const totalSum = Common.sumTotalByKey(payments, "amount");
 
